@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj": {}
+    "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj": {
+    "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
-        "projectName": "Asteroides",
-        "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
+        "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj",
+        "projectName": "Server",
+        "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\anaju\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\obj\\",
+        "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anaju\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -42,16 +42,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "MonoGame.Framework.DesktopGL": {
-              "target": "Package",
-              "version": "[3.8.1.303, )"
-            },
-            "Monogame.Processing": {
-              "target": "Package",
-              "version": "[0.2.9, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {
+    "net8.0": {
       "Microsoft.NETCore.Platforms/7.0.4": {
         "type": "package",
         "compile": {
@@ -4070,35 +4070,35 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net9.0": [
+    "net8.0": [
       "MonoGame.Framework.DesktopGL >= 3.8.1.303",
       "Monogame.Processing >= 0.2.9"
     ]
   },
   "packageFolders": {
-    "/Users/lucasalves/.nuget/packages/": {}
+    "C:\\Users\\anaju\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/lucasalves/Library/CloudStorage/OneDrive-Pessoal/UFMG/Disciplinas/2025/TAPOO/Exemplo TP2/Asteroides/Asteroides.csproj",
+      "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
       "projectName": "Asteroides",
-      "projectPath": "/Users/lucasalves/Library/CloudStorage/OneDrive-Pessoal/UFMG/Disciplinas/2025/TAPOO/Exemplo TP2/Asteroides/Asteroides.csproj",
-      "packagesPath": "/Users/lucasalves/.nuget/packages/",
-      "outputPath": "/Users/lucasalves/Library/CloudStorage/OneDrive-Pessoal/UFMG/Disciplinas/2025/TAPOO/Exemplo TP2/Asteroides/obj/",
+      "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
+      "packagesPath": "C:\\Users\\anaju\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/lucasalves/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\anaju\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net9.0"
+        "net8.0"
       ],
       "sources": {
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "projectReferences": {}
         }
       },
@@ -4111,12 +4111,11 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.200"
+      }
     },
     "frameworks": {
-      "net9.0": {
-        "targetAlias": "net9.0",
+      "net8.0": {
+        "targetAlias": "net8.0",
         "dependencies": {
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
@@ -4143,7 +4142,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -4152,10 +4151,10 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "O pacote 'MonoGame.Framework.Portable 3.7.1.189' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net9.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "message": "O pacote 'MonoGame.Framework.Portable 3.7.1.189' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net8.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
       "libraryId": "MonoGame.Framework.Portable",
       "targetGraphs": [
-        "net9.0"
+        "net8.0"
       ]
     }
   ]
