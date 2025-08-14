@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\anaju\\.nuget\\packages\\": {}
+    "/home/a2023951555/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj",
+      "projectUniqueName": "/home/a2023951555/Github/TrabalhoTAPOO2-SpaceCoders/Asteroides/Server/Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj",
-      "packagesPath": "C:\\Users\\anaju\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\obj\\",
+      "projectPath": "/home/a2023951555/Github/TrabalhoTAPOO2-SpaceCoders/Asteroides/Server/Server.csproj",
+      "packagesPath": "/home/a2023951555/.nuget/packages/",
+      "outputPath": "/home/a2023951555/Github/TrabalhoTAPOO2-SpaceCoders/Asteroides/Server/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\anaju\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/a2023951555/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -64,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/256/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
