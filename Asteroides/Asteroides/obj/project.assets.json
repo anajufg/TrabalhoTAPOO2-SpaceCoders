@@ -4076,19 +4076,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\anaju\\.nuget\\packages\\": {}
+    "C:\\Users\\FORMULA2\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
+      "projectUniqueName": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
       "projectName": "Asteroides",
-      "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
-      "packagesPath": "C:\\Users\\anaju\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\obj\\",
+      "projectPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\Asteroides.csproj",
+      "packagesPath": "C:\\Users\\FORMULA2\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Asteroides\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\anaju\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\FORMULA2\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4111,7 +4111,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -4137,12 +4138,30 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.19, 8.0.19]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[8.0.19, 8.0.19]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.19, 8.0.19]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.19, 8.0.19]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -4151,7 +4170,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "O pacote 'MonoGame.Framework.Portable 3.7.1.189' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net8.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "message": "Package 'MonoGame.Framework.Portable 3.7.1.189' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
       "libraryId": "MonoGame.Framework.Portable",
       "targetGraphs": [
         "net8.0"
