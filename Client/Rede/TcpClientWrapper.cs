@@ -30,6 +30,7 @@ public class TcpClientWrapper
     public async Task SendAsync(object message)
     {
         if (_stream == null) return;
+        Console.WriteLine($"Enviando mensagem: {message}");
         await MessageFraming.SendMessageAsync(_stream, message, _cts.Token);
     }
 
@@ -39,8 +40,8 @@ public class TcpClientWrapper
         {
             while (!_cts.Token.IsCancellationRequested)
             {
-                string? json = await MessageFraming.ReadAsync(_stream, _cts.Token);
-                if (json == null) break;
+                var json = await MessageFraming.ReadAsync(_stream, _cts.Token);
+                // if (json == null) break;
 
                 Console.WriteLine($"Mensagem recebida: {json}");
                 OnMessageReceived?.Invoke(json);

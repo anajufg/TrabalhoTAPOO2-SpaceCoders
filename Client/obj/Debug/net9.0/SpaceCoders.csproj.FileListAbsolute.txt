@@ -1,0 +1,15 @@
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\bin\Debug\net9.0\SpaceCoders.exe
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\bin\Debug\net9.0\SpaceCoders.deps.json
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\bin\Debug\net9.0\SpaceCoders.runtimeconfig.json
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\bin\Debug\net9.0\SpaceCoders.dll
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\bin\Debug\net9.0\SpaceCoders.pdb
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.AssemblyInfoInputs.cache
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.AssemblyInfo.cs
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.csproj.CoreCompileInputs.cache
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.sourcelink.json
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.dll
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\refint\SpaceCoders.dll
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.pdb
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\SpaceCoders.genruntimeconfig.cache
+C:\Users\FORMULA2\Desktop\TrabalhoTAPOO2-SpaceCoders\Client\obj\Debug\net9.0\ref\SpaceCoders.dll

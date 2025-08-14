@@ -23,15 +23,30 @@ class Program
         try
         {
             Console.WriteLine("Conectando ao servidor...");
-            await client.ConnectAsync("10.0.0.66", 9000); // IP e porta do servidor
+            await client.ConnectAsync("127.0.0.1", 9000); // IP e porta do servidor
             Console.WriteLine("Conectado!");
 
             while (true)
             {
                 Console.Write("Digite uma mensagem para enviar (ou 'sair'): ");
                 string? input = Console.ReadLine();
+
+                if (input == "ok")
+                {
+                    await client.SendAsync(new
+                    {
+                        type = "Input",
+                        thrust = 1,
+                        rotate = 0,
+                        shoot = true,
+                        dt = 0.016
+                    });
+                    continue;
+                }
+
                 if (input == null || input.ToLower() == "sair")
                 {
+                    await client.SendAsync(input);
                     break;
                 }
 

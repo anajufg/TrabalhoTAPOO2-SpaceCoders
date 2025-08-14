@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "S6K8cgBX4Vg=",
+  "dgSpecHash": "W1aywIbbJMs=",
   "success": true,
-  "projectFilePath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Asteroides\\Server\\Server.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\FORMULA2\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.19\\microsoft.netcore.app.ref.8.0.19.nupkg.sha512",
-    "C:\\Users\\FORMULA2\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.19\\microsoft.windowsdesktop.app.ref.8.0.19.nupkg.sha512",
-    "C:\\Users\\FORMULA2\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.19\\microsoft.aspnetcore.app.ref.8.0.19.nupkg.sha512",
-    "C:\\Users\\FORMULA2\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.19\\microsoft.netcore.app.host.win-x64.8.0.19.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Server\\Server.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
