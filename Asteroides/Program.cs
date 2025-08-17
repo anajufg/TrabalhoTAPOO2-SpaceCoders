@@ -16,6 +16,10 @@ public class GameAsteroids : Processing
     
     int score;
 
+    // Controle de tiro
+    int fireRate = 15; // frames entre tiros
+    int lastShotFrame = 0;
+
     /* --------------------- teclado (flags) -------------------- */
     bool esquerda, direita, cima, baixo;
 
@@ -113,7 +117,13 @@ public class GameAsteroids : Processing
             case Keys.Up: cima = true; break;
             case Keys.Down: baixo = true; break;
 
-            case Keys.Space: bullets.Add(pterosaur.Shoot()); break;
+            case Keys.Space:
+                if (frameCount - lastShotFrame >= fireRate)
+                {
+                    bullets.Add(pterosaur.Shoot());
+                    lastShotFrame = frameCount;
+                }
+                break;
             case Keys.Escape: Exit(); break;
         }
     }
