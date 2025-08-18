@@ -152,7 +152,8 @@ public class GameAsteroids : Processing
     {
         float x = rnd.Next(width);
         float velY = 2f + (float)rnd.NextDouble() * 2f;   // 2–4 px/frame
-        return new Asteroid(new Vector2(x, -30), new Vector2(0, velY), 25);
+        float size = 15f + (float)rnd.NextDouble() * 30f; // 15–45 px radius
+        return new Asteroid(new Vector2(x, -30), new Vector2(0, velY), size);
     }
 
     /* ====================== entry-point ======================= */
