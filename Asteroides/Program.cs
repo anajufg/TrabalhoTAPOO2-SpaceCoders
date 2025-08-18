@@ -150,10 +150,37 @@ public class GameAsteroids : Processing
     /* ====================== fábrica de Asteroids ============= */
     Asteroid NovoAsteroid()
     {
-        float x = rnd.Next(width);
-        float velY = 2f + (float)rnd.NextDouble() * 2f;   // 2–4 px/frame
+        // Choose a random edge: 0=top, 1=bottom, 2=left, 3=right
+        int edge = rnd.Next(4);
+        float x = 0, y = 0;
+        Vector2 dir = Vector2.Zero;
+        switch (edge)
+        {
+            case 0: // top
+                x = rnd.Next(width);
+                y = -30;
+                dir = new Vector2((float)(rnd.NextDouble() - 0.5), 1f);
+                break;
+            case 1: // bottom
+                x = rnd.Next(width);
+                y = height + 30;
+                dir = new Vector2((float)(rnd.NextDouble() - 0.5), -1f);
+                break;
+            case 2: // left
+                x = -30;
+                y = rnd.Next(height);
+                dir = new Vector2(1f, (float)(rnd.NextDouble() - 0.5));
+                break;
+            case 3: // right
+                x = width + 30;
+                y = rnd.Next(height);
+                dir = new Vector2(-1f, (float)(rnd.NextDouble() - 0.5));
+                break;
+        }
+        dir.Normalize();
+        float speed = 2f + (float)rnd.NextDouble() * 2f; // 2–4 px/frame
         float size = 15f + (float)rnd.NextDouble() * 30f; // 15–45 px radius
-        return new Asteroid(new Vector2(x, -30), new Vector2(0, velY), size);
+        return new Asteroid(new Vector2(x, y), dir * speed, size);
     }
 
     /* ====================== entry-point ======================= */
