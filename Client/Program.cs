@@ -8,6 +8,7 @@ class Program
     {
 
         var client = new TcpClientWrapper();
+        var handleGame = new HandleGame(client);
 
         // Eventos
         client.OnMessageReceived += msg =>

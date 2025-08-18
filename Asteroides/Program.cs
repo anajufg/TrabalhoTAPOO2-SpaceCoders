@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Microsoft.Xna.Framework.Graphics;
 using Monogame.Processing;
 using Asteroids;
+using Client.Rede;
 
 public class GameAsteroids : Processing
 {
@@ -13,7 +14,7 @@ public class GameAsteroids : Processing
     readonly List<Asteroid> asteroids = new();
     readonly Random rnd = new();
 
-    
+
     int score;
 
     // Controle de tiro
@@ -35,12 +36,12 @@ public class GameAsteroids : Processing
     {
         background(0);
 
-        
+
         /* ----- pterosaur ----- */
         Teclas();
         pterosaur.Update(esquerda, direita, cima, baixo, width, height);
         pterosaur.Draw(this);
-        
+
 
         /* ----- bullets ----- */
         for (int i = bullets.Count - 1; i >= 0; i--)
@@ -74,7 +75,7 @@ public class GameAsteroids : Processing
                 fill(255, 0, 0);
                 textSize(48);
                 //textAlign(CENTER, CENTER);
-                text("GAME OVER", width / 2f + -4*48, height / 2f);
+                text("GAME OVER", width / 2f + -4 * 48, height / 2f);
                 noLoop();
             }
 
@@ -91,7 +92,7 @@ public class GameAsteroids : Processing
     }
 
     /* ====================== input ============================= */
-    public void Teclas() 
+    public void Teclas()
     {
         esquerda = false;
         direita = false;
