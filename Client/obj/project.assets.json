@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\SpaceCoders.csproj",
-      "projectName": "SpaceCoders",
-      "projectPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\SpaceCoders.csproj",
+      "projectUniqueName": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
+      "projectName": "Client",
+      "projectPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
       "packagesPath": "C:\\Users\\FORMULA2\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\obj\\",
       "projectStyle": "PackageReference",
