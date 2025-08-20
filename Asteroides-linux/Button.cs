@@ -4,6 +4,7 @@ namespace ComponentsScreens;
 
 public class Button
 {
+    Processing p;
     int x, y, l, h;
     color cor, corAtual;
     color sombra, sombraAtual;
@@ -13,7 +14,9 @@ public class Button
     int textoSize;
     bool pressed;
 
-    public Button(int x, int y, int l, int h, color cor, color sombra, string texto, color corTexto, int textoSize) {
+    public Button(int x, int y, int l, int h, color cor, color sombra, string texto, color corTexto, int textoSize, Processing p)
+    {
+        this.p = p;
         this.x = x;
         this.y = y;
         this.l = l;
@@ -29,7 +32,8 @@ public class Button
         this.pressed = false;
     }
 
-    void Show(Processing p) {
+    public void Show() {
+        p.noStroke();
     
         // Sombra do botao
         p.fill(sombraAtual);
@@ -50,7 +54,7 @@ public class Button
         p.text(texto, x+l/2, y+h/2+h/4);
     }
 
-    void Select(Processing p) { 
+    public void Select() { 
         // Botao selecionado
         // Verifica se o mouse está em cima do botao
         if (p.mouseX >= x && p.mouseX <= x+l && p.mouseY >= y && p.mouseY <= y+h) {

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
 using Asteroids;
 using Screens;
+using ComponentsScreens;
 
 public class GameAsteroids : Processing
 {
@@ -12,7 +13,10 @@ public class GameAsteroids : Processing
     readonly List<Bullet> bullets = new();
     readonly List<Asteroid> asteroids = new();
     readonly Random rnd = new();
+    Button playButton;
 
+    /* --------------------- telas de jogo --------------------- */
+    MenuScreen menuScreen;
 
     int score;
 
@@ -29,15 +33,20 @@ public class GameAsteroids : Processing
 
         size(800, 600);
         pterosaur = new Pterosaur(new Vector2(width / 2f, height - 60), this);
+        //menuScreen = new MenuScreen(this, playButton);
+
+        InitializeButtons();
+
+        //menuScreen.Draw();
+    }
+    
+    public void InitializeButtons()
+    {
+        this.playButton = new Button(width / 2 - 180 / 2, height - 180, 180, 45, new color(121, 81, 38), new color(52, 33, 12), "PLAY", new color(255, 200, 90), 30, this);
     }
 
-    public override void Draw()
+    public void GameLoop()
     {
-        background(0);
-
-        /* ----- menu ----- */
-        MenuScreen.Draw(this);
-
         /* ----- pterosaur ----- */
         Teclas();
         pterosaur.Update(esquerda, direita, cima, baixo, width, height);
@@ -90,6 +99,20 @@ public class GameAsteroids : Processing
         fill(255);
         textSize(20);
         text($"Score: {score}", 10, 10);
+    }
+
+    public override void Draw()
+    {
+        background(0);
+
+        // if (playButton.pressed)
+        // {
+             GameLoop();
+        // }
+        // else
+        // {
+            // menuScreen.Draw();
+        // }
     }
 
     /* ====================== input ============================= */
