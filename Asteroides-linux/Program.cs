@@ -2,18 +2,18 @@
 using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
 using Asteroids;
+using States;
 using Screens;
-using ComponentsScreens;
 
 public class GameAsteroids : Processing
 {
     /* --------------------- estado de jogo --------------------- */
     // estado do jogo: pterosaur, bullets, Asteroids, pontuação
+    GameState currentState = GameState.Menu;
     Pterosaur pterosaur;
     readonly List<Bullet> bullets = new();
     readonly List<Asteroid> asteroids = new();
     readonly Random rnd = new();
-    Button playButton;
 
     /* --------------------- telas de jogo --------------------- */
     MenuScreen menuScreen;
@@ -30,19 +30,11 @@ public class GameAsteroids : Processing
     /* ===================== ciclo de vida ====================== */
     public override void Setup()
     {
-
         size(800, 600);
+
+        menuScreen = new MenuScreen(this);
+
         pterosaur = new Pterosaur(new Vector2(width / 2f, height - 60), this);
-        //menuScreen = new MenuScreen(this, playButton);
-
-        InitializeButtons();
-
-        //menuScreen.Draw();
-    }
-    
-    public void InitializeButtons()
-    {
-        this.playButton = new Button(width / 2 - 180 / 2, height - 180, 180, 45, new color(121, 81, 38), new color(52, 33, 12), "PLAY", new color(255, 200, 90), 30, this);
     }
 
     public void GameLoop()
@@ -105,14 +97,26 @@ public class GameAsteroids : Processing
     {
         background(0);
 
-        // if (playButton.pressed)
-        // {
-             GameLoop();
-        // }
-        // else
-        // {
-            // menuScreen.Draw();
-        // }
+        switch (currentState)
+        {
+            case GameState.Menu:
+                menuScreen.Draw();
+                // if (playButton.pressed)
+                // {
+                //     currentState = GameState.Playing;
+                // }
+                break;
+
+            case GameState.Playing:
+                GameLoop();
+                break;
+
+            case GameState.GameOver:
+                fill(255, 0, 0);
+                textSize(48);
+                text("GAME OVER", width / 2f, height / 2f);
+                break;
+        }
     }
 
     /* ====================== input ============================= */
