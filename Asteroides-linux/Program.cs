@@ -8,8 +8,8 @@ using Screens;
 public class GameAsteroids : Processing
 {
     /* --------------------- estado de jogo --------------------- */
-    // estado do jogo: pterosaur, bullets, Asteroids, pontuação
     GameState currentState = GameState.Menu;
+    
     Pterosaur pterosaur;
     readonly List<Bullet> bullets = new();
     readonly List<Asteroid> asteroids = new();
