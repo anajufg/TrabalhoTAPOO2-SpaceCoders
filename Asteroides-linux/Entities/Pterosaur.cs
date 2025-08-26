@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
 
-namespace Asteroids;
+namespace Client.Entities;
 
 class Pterosaur
 {
@@ -19,7 +19,7 @@ class Pterosaur
     public Pterosaur(Vector2 start, Processing g)
     {
         pos = start;
-        pterosaur = g.loadImage("../Content/pterosaur_yellow.png");
+        pterosaur = g.loadImage("./Content/pterosaur_yellow.png");
     }
 
     public void Update(bool left, bool right, bool up, bool down, int w , int h)

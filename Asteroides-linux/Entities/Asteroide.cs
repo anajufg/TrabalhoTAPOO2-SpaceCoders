@@ -2,12 +2,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
 
-namespace Asteroids;
+namespace Client.Entities;
 
 class Asteroid
 {
     private Vector2 pos, vel;
-    private PImage asteroidSprite;
+    private PImage? asteroidSprite;
     public float size { get; }
 
     public Asteroid(Vector2 p, Vector2 v, float r)

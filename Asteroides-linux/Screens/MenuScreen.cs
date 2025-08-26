@@ -1,22 +1,36 @@
 using Monogame.Processing;
 using Microsoft.Xna.Framework;
-using Asteroids;
+using Microsoft.Xna.Framework.Graphics;
+using Client.Entities;
 
-namespace Screens;
+namespace Cliente.Screens;
 
 public class MenuScreen
 {
     Processing p;
     PImage backgroundImage;
     PImage asteroidSprite;
+    SpriteFont titleFont;
+    SpriteFont subtitleFont;
+    SpriteBatch spriteBatch;
+
     const int MAX_ASTEROIDS = 6;
     readonly List<Asteroid> asteroids = new();
 
     public MenuScreen(Processing p)
     {
         this.p = p;
-        backgroundImage = p.loadImage("../Content/menuBackground.png");
-        asteroidSprite = p.loadImage("../Content/asteroid.png");
+    }
+
+    public void LoadContent()
+    {
+        spriteBatch = new SpriteBatch(p.GraphicsDevice);
+
+        titleFont = p.Content.Load<SpriteFont>("TitleFont");       
+        subtitleFont = p.Content.Load<SpriteFont>("SubtitleFont"); 
+
+        backgroundImage = p.loadImage("./Content/menuBackground.png");
+        asteroidSprite = p.loadImage("./Content/asteroid.png");
     }
 
     public void Draw()
@@ -25,7 +39,8 @@ public class MenuScreen
         p.image(backgroundImage, 0, 0, p.width, p.height);
 
         // Asteroides
-        if (p.frameCount % 150 == 0 && asteroids.Count < MAX_ASTEROIDS) asteroids.Add(NovoAsteroid());
+        if (p.frameCount % 150 == 0 && asteroids.Count < MAX_ASTEROIDS)
+            asteroids.Add(NovoAsteroid());
 
         for (int i = asteroids.Count - 1; i >= 0; i--)
         {
@@ -33,7 +48,6 @@ public class MenuScreen
             a.Update();
             a.Draw(p);
 
-            // Seo asteroid saiu da tela, remove e cria um novo
             if (a.getPosition().Y > p.height + 50 ||
                 a.getPosition().X < -50 ||
                 a.getPosition().X > p.width + 50)
@@ -43,38 +57,40 @@ public class MenuScreen
             }
         }
 
+        // Texto com SpriteFont
+        spriteBatch.Begin();
+
         // --- título ---
-        
-
-        // glow atrás
-        p.fill(255, 230, 120, 80); // amarelo transparente
-        p.textSize(48);
-        // p.text("ASTEROIDS", p.width / 2f + 4, p.height / 3f + 4);
-
-        // título principal
-        p.fill(255, 220, 50);
-        p.textSize(48);
-        // p.text("ASTEROIDS", p.width / 2f, p.height / 3f);
+        string title = "ASTEROIDS";
+        Vector2 titleSize = titleFont.MeasureString(title);
+        Vector2 titlePos = new(p.width / 2f, p.height / 3f);
+        spriteBatch.DrawString(titleFont, title, titlePos, Color.Yellow,
+            0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
 
         // --- subtítulo ---
-        p.fill(200);
-        p.textSize(48);
-        // p.text("Prepare-se para a batalha espacial!", p.width / 2f, p.height / 3f - 70);
+        string subtitle = "Prepare-se para a batalha espacial!";
+        Vector2 subtitleSize = subtitleFont.MeasureString(subtitle);
+        Vector2 subtitlePos = new(p.width / 2f, p.height / 3f - 70f);
+        spriteBatch.DrawString(subtitleFont, subtitle, subtitlePos, Color.LightGray,
+            0f, subtitleSize / 2f, 1f, SpriteEffects.None, 0f);
 
         // --- mensagem piscando ---
-        if (p.frameCount / 30 % 2 == 0) // alterna a cada meio segundo
+        if ((p.frameCount / 30) % 2 == 0)
         {
-            p.fill(255, 255, 0);
-            p.textSize(48);
-            // p.text("Pressione ENTER para jogar", p.width / 2f, p.height - 100);
+            string blink = "Pressione ENTER para jogar";
+            Vector2 blinkSize = subtitleFont.MeasureString(blink);
+            Vector2 blinkPos = new(p.width / 2f, p.height - 100f);
+            spriteBatch.DrawString(subtitleFont, blink, blinkPos, Color.Yellow,
+                0f, blinkSize / 2f, 1f, SpriteEffects.None, 0f);
         }
+
+        spriteBatch.End();
     }
 
     private Asteroid NovoAsteroid()
     {
         Random rnd = new Random();
-
-        float x = p.width /2 + rnd.Next(50, 400);
+        float x = p.width / 2 + rnd.Next(50, 400);
         float y = -30 - rnd.Next(0, 50);
 
         float targetX = -350;
@@ -88,5 +104,4 @@ public class MenuScreen
 
         return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite);
     }
-
 }

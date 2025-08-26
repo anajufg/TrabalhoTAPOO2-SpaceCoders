@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
-using Asteroids;
-using States;
-using Screens;
+using Client.Entities;
+using Cliente.Screens;
 
 public class GameAsteroids : Processing
 {
@@ -33,6 +32,7 @@ public class GameAsteroids : Processing
         size(800, 600);
 
         menuScreen = new MenuScreen(this);
+        menuScreen.LoadContent();
 
         pterosaur = new Pterosaur(new Vector2(width / 2f, height - 60), this);
     }

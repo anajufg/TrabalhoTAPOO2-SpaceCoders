@@ -1,4 +1,4 @@
-namespace States;
+namespace Cliente.Screens;
 
 public enum GameState
 {
