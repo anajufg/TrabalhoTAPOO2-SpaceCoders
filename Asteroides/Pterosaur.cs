@@ -67,7 +67,7 @@ class Pterosaur
         g.pushMatrix();
         g.translate(pos.X, pos.Y);
         g.rotate(angle + MathF.PI / 2);
-        g.image(this.pterosaur, pos.X -100, pos.Y -50, 200, 100);
+        g.image(this.pterosaur, -50, -25, 100, 50);
         g.popMatrix();
         //Console.WriteLine($"pos.X: {pos.X}, pos.Y: {pos.Y}, angle: {angle}");
     }
