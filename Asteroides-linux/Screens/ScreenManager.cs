@@ -1,8 +1,9 @@
 namespace Cliente.Screens;
 
-public enum GameState
+public enum ScreenManager
 {
     Menu,
     Playing,
+    StoryMode,
     GameOver
 }

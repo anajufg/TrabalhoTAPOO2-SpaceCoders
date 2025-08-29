@@ -7,24 +7,24 @@ using Cliente.Screens;
 public class GameAsteroids : Processing
 {
     /* --------------------- estado de jogo --------------------- */
-    GameState currentState = GameState.Menu;
+    private ScreenManager currentScreen = ScreenManager.Menu;
     
-    Pterosaur pterosaur;
-    readonly List<Bullet> bullets = new();
-    readonly List<Asteroid> asteroids = new();
-    readonly Random rnd = new();
+    /* --------------------- elementos d0 jogo --------------------- */
+    private Pterosaur pterosaur;
+    private readonly List<Bullet> bullets = new();
+    private readonly List<Asteroid> asteroids = new();
+    private readonly Random rnd = new();
+    private int score;
 
     /* --------------------- telas de jogo --------------------- */
-    MenuScreen menuScreen;
+    private MenuScreen menuScreen;
 
-    int score;
-
-    // Controle de tiro
-    int fireRate = 15; // frames entre tiros
-    int lastShotFrame = 0;
+    /* --------------------- configurações de jogo --------------------- */
+    private int fireRate = 15; // frames entre tiros
+    private int lastShotFrame = 0;
 
     /* --------------------- teclado (flags) -------------------- */
-    bool esquerda, direita, cima, baixo;
+    private bool esquerda, direita, cima, baixo;
 
     /* ===================== ciclo de vida ====================== */
     public override void Setup()
@@ -76,7 +76,6 @@ public class GameAsteroids : Processing
             {
                 fill(255, 0, 0);
                 textSize(48);
-                //textAlign(CENTER, CENTER);
                 text("GAME OVER", width / 2f + -4 * 48, height / 2f);
                 noLoop();
             }
@@ -97,26 +96,28 @@ public class GameAsteroids : Processing
     {
         background(0);
 
-        switch (currentState)
+        switch (currentScreen)
         {
-            case GameState.Menu:
+            case ScreenManager.Menu:
                 menuScreen.Draw();
-                // if (playButton.pressed)
-                // {
-                //     currentState = GameState.Playing;
-                // }
+                menuScreen.HandleInput(); 
                 break;
 
-            case GameState.Playing:
+            case ScreenManager.Playing:
                 GameLoop();
                 break;
 
-            case GameState.GameOver:
+            case ScreenManager.GameOver:
                 fill(255, 0, 0);
                 textSize(48);
                 text("GAME OVER", width / 2f, height / 2f);
                 break;
         }
+    }
+
+    public void setCurrentScreen(ScreenManager newScreen) 
+    {
+        currentScreen = newScreen;
     }
 
     /* ====================== input ============================= */

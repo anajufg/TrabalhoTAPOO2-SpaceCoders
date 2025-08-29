@@ -1,22 +1,26 @@
 using Monogame.Processing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Client.Entities;
 
 namespace Cliente.Screens;
 
 public class MenuScreen
 {
-    Processing p;
-    PImage backgroundImage;
-    PImage asteroidSprite;
-    SpriteFont font;
-    SpriteBatch spriteBatch;
+    private GameAsteroids p;
+    private PImage backgroundImage;
+    private PImage asteroidSprite;
+    private SpriteFont font;
+    private SpriteBatch spriteBatch;
 
-    const int MAX_ASTEROIDS = 6;
-    readonly List<Asteroid> asteroids = new();
+    private enum MenuOption { Play, StoryMode };
+    private MenuOption selectedOption = MenuOption.Play;
 
-    public MenuScreen(Processing p)
+    private const int MAX_ASTEROIDS = 6;
+    private readonly List<Asteroid> asteroids = new();
+
+    public MenuScreen(GameAsteroids p)
     {
         this.p = p;
     }
@@ -24,18 +28,41 @@ public class MenuScreen
     public void LoadContent()
     {
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
-
         font = p.Content.Load<SpriteFont>("PressStart"); 
-
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
         asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
     }
 
-    public void Draw()
+    public void HandleInput()
     {
-        // Fundo
-        p.image(backgroundImage, 0, 0, p.width, p.height);
+        if (p.keyPressed)
+        {
+            switch (p.keyCode)
+            {
+                case Keys.Up: 
+                    if (selectedOption == MenuOption.StoryMode) selectedOption = MenuOption.Play;
+                    break;
+                case Keys.Down: 
+                    if (selectedOption == MenuOption.Play) selectedOption = MenuOption.StoryMode;
+                    break;
+            }
+        }
 
+        if (p.keyPressed && p.keyCode == Keys.Space)
+        {
+            if (selectedOption == MenuOption.Play)
+            {
+                p.setCurrentScreen(ScreenManager.Playing);
+            }
+            else if (selectedOption == MenuOption.StoryMode)
+            {
+                p.setCurrentScreen(ScreenManager.StoryMode); 
+            }
+        }
+    }
+
+    private void Asteroids() 
+    {
         // Asteroides
         if (p.frameCount % 150 == 0 && asteroids.Count < MAX_ASTEROIDS)
             asteroids.Add(NovoAsteroid());
@@ -54,30 +81,63 @@ public class MenuScreen
                 asteroids.Add(NovoAsteroid());
             }
         }
+    }
+
+    public void Draw()
+    {
+        // Fundo
+        p.image(backgroundImage, 0, 0, p.width, p.height);
+
+        Asteroids();
 
         spriteBatch.Begin();
 
-        string title = "ASTEROIDS";
+        string title = "Jurassic Impact";
         Vector2 titleSize = font.MeasureString(title);
-        Vector2 titlePos = new(p.width / 2f, (p.height / 2f) - titleSize.Y);
+        Vector2 titlePos = new(p.width / 2f, p.height * 0.4f); 
         spriteBatch.DrawString(font, title, titlePos, Color.Yellow,
             0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
 
-        string subtitle = "Prepare-se para a batalha espacial!";
+        string subtitle = "Prepare-se para mudar o passado!";
         Vector2 subtitleSize = font.MeasureString(subtitle);
-        Vector2 subtitlePos = new(p.width / 2f, titlePos.Y - 100f);
+        Vector2 subtitlePos = new(p.width / 2f, titlePos.Y + titleSize.Y + 20f); 
         spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
-            0f, subtitleSize / 2f, 1f, SpriteEffects.None, 0f);
+            0f, subtitleSize / 2f, 0.7f, SpriteEffects.None, 0f); 
 
-        if ((p.frameCount / 30) % 2 == 0)
+        string play = "Play";
+        Vector2 playSize = font.MeasureString(play);
+        Vector2 playPos = new(p.width / 2f, p.height - 250f); 
+        if (selectedOption == MenuOption.Play) 
         {
-            string blink = "Pressione ENTER para jogar";
-            Vector2 blinkSize = font.MeasureString(blink);
-            Vector2 blinkPos = new(p.width / 2f, p.height - 150f);
-            spriteBatch.DrawString(font, blink, blinkPos, Color.Yellow,
-                0f, blinkSize / 2f, 1f, SpriteEffects.None, 0f);
+            if ((p.frameCount / 30) % 2 == 0)
+            {
+                spriteBatch.DrawString(font, play, playPos,  Color.White,
+                0f, playSize / 2f, 0.5f, SpriteEffects.None, 0f);
+            }
+        } 
+        else 
+        {
+            spriteBatch.DrawString(font, play, playPos,  Color.White,
+                0f, playSize / 2f, 0.5f, SpriteEffects.None, 0f);
         }
 
+        string storyMode = "Story Mode";
+        Vector2 storyModeSize = font.MeasureString(storyMode);
+        Vector2 storyModePos = new(p.width / 2f, p.height - 225f); 
+        if (selectedOption == MenuOption.StoryMode) 
+        {
+            if ((p.frameCount / 30) % 2 == 0)
+            {
+                spriteBatch.DrawString(font, storyMode, storyModePos, Color.White,
+                0f, storyModeSize / 2f, 0.5f, SpriteEffects.None, 0f);
+            }
+            
+        }
+        else 
+        {
+            spriteBatch.DrawString(font, storyMode, storyModePos, Color.White,
+            0f, storyModeSize / 2f, 0.5f, SpriteEffects.None, 0f);
+        }
         spriteBatch.End();
     }
 
