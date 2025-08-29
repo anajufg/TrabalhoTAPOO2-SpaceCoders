@@ -26,11 +26,10 @@ public class MenuScreen
     {
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
 
-        titleFont = p.Content.Load<SpriteFont>("TitleFont");       
         subtitleFont = p.Content.Load<SpriteFont>("SubtitleFont"); 
 
-        backgroundImage = p.loadImage("./Content/menuBackground.png");
-        asteroidSprite = p.loadImage("./Content/asteroid.png");
+        backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
+        asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
     }
 
     public void Draw()
@@ -62,9 +61,9 @@ public class MenuScreen
 
         // --- título ---
         string title = "ASTEROIDS";
-        Vector2 titleSize = titleFont.MeasureString(title);
+        Vector2 titleSize = subtitleFont.MeasureString(title);
         Vector2 titlePos = new(p.width / 2f, p.height / 3f);
-        spriteBatch.DrawString(titleFont, title, titlePos, Color.Yellow,
+        spriteBatch.DrawString(subtitleFont, title, titlePos, Color.Yellow,
             0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
 
         // --- subtítulo ---
