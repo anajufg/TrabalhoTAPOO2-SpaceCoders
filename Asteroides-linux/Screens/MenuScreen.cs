@@ -26,7 +26,7 @@ public class MenuScreen
     {
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
 
-        subtitleFont = p.Content.Load<SpriteFont>("SubtitleFont"); 
+        subtitleFont = p.Content.Load<SpriteFont>("Font"); 
 
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
         asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
