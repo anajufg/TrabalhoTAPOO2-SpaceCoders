@@ -10,8 +10,7 @@ public class MenuScreen
     Processing p;
     PImage backgroundImage;
     PImage asteroidSprite;
-    SpriteFont titleFont;
-    SpriteFont subtitleFont;
+    SpriteFont font;
     SpriteBatch spriteBatch;
 
     const int MAX_ASTEROIDS = 6;
@@ -26,7 +25,7 @@ public class MenuScreen
     {
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
 
-        subtitleFont = p.Content.Load<SpriteFont>("Font"); 
+        font = p.Content.Load<SpriteFont>("Font"); 
 
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
         asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
@@ -61,25 +60,25 @@ public class MenuScreen
 
         // --- título ---
         string title = "ASTEROIDS";
-        Vector2 titleSize = subtitleFont.MeasureString(title);
+        Vector2 titleSize = font.MeasureString(title);
         Vector2 titlePos = new(p.width / 2f, p.height / 3f);
-        spriteBatch.DrawString(subtitleFont, title, titlePos, Color.Yellow,
+        spriteBatch.DrawString(font, title, titlePos, Color.Yellow,
             0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
 
         // --- subtítulo ---
         string subtitle = "Prepare-se para a batalha espacial!";
-        Vector2 subtitleSize = subtitleFont.MeasureString(subtitle);
+        Vector2 subtitleSize = font.MeasureString(subtitle);
         Vector2 subtitlePos = new(p.width / 2f, p.height / 3f - 70f);
-        spriteBatch.DrawString(subtitleFont, subtitle, subtitlePos, Color.LightGray,
+        spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
             0f, subtitleSize / 2f, 1f, SpriteEffects.None, 0f);
 
         // --- mensagem piscando ---
         if ((p.frameCount / 30) % 2 == 0)
         {
             string blink = "Pressione ENTER para jogar";
-            Vector2 blinkSize = subtitleFont.MeasureString(blink);
+            Vector2 blinkSize = font.MeasureString(blink);
             Vector2 blinkPos = new(p.width / 2f, p.height - 100f);
-            spriteBatch.DrawString(subtitleFont, blink, blinkPos, Color.Yellow,
+            spriteBatch.DrawString(font, blink, blinkPos, Color.Yellow,
                 0f, blinkSize / 2f, 1f, SpriteEffects.None, 0f);
         }
 
