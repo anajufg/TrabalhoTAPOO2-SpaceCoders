@@ -18,6 +18,7 @@ public class GameAsteroids : Processing
 
     /* --------------------- telas de jogo --------------------- */
     private MenuScreen menuScreen;
+    private StoryScreen storyScreen;
 
     /* --------------------- configurações de jogo --------------------- */
     private int fireRate = 15; // frames entre tiros
@@ -34,7 +35,71 @@ public class GameAsteroids : Processing
         menuScreen = new MenuScreen(this);
         menuScreen.LoadContent();
 
+        storyScreen = new StoryScreen(this);
+        storyScreen.LoadContent();
+
         pterosaur = new Pterosaur(new Vector2(width / 2f, height - 60), this);
+    }
+
+    public void Update() 
+    {
+        switch (currentScreen)
+        {
+            case ScreenManager.Menu:
+                menuScreen.Update();
+                break;
+            case ScreenManager.Playing:
+                GameLoop();
+                break;
+            case ScreenManager.StoryMode:
+                storyScreen.Update(); 
+                break;
+            case ScreenManager.GameOver:
+                break;
+        }
+    }
+
+    public override void Draw()
+    {
+        background(0);
+
+        switch (currentScreen)
+        {
+            case ScreenManager.Menu:
+                menuScreen.Draw();
+                break;
+
+            case ScreenManager.Playing:
+                pterosaur.Draw(this);
+                for (int i = bullets.Count - 1; i >= 0; i--)
+                {
+                    bullets[i].Draw(this);
+                }
+                for (int i = asteroids.Count - 1; i >= 0; i--)
+                {
+                    asteroids[i].Draw(this);
+                }
+                fill(255);
+                textSize(20);
+                text($"Score: {score}", 10, 10);
+                break;
+
+            case ScreenManager.StoryMode:
+                storyScreen.Draw();
+                break;
+
+            case ScreenManager.GameOver:
+                fill(255, 0, 0);
+                textSize(48);
+                text("GAME OVER", width / 2f, height / 2f);
+                /* ----- placar ----- */
+                fill(255);
+                textSize(20);
+                text($"Score: {score}", 10, 10);
+                break;
+        }
+
+        Update();
     }
 
     public void GameLoop()
@@ -42,15 +107,12 @@ public class GameAsteroids : Processing
         /* ----- pterosaur ----- */
         Teclas();
         pterosaur.Update(esquerda, direita, cima, baixo, width, height);
-        pterosaur.Draw(this);
-
 
         /* ----- bullets ----- */
         for (int i = bullets.Count - 1; i >= 0; i--)
         {
             var t = bullets[i];
             t.Update();
-            t.Draw(this);
             if (t.OffScreen(height)) bullets.RemoveAt(i);
         }
 
@@ -59,7 +121,6 @@ public class GameAsteroids : Processing
         {
             var a = asteroids[i];
             a.Update();
-            a.Draw(this);
 
             /* colisão bullet × Asteroid */
             for (int j = bullets.Count - 1; j >= 0; j--)
@@ -74,10 +135,7 @@ public class GameAsteroids : Processing
             /* colisão pterosaur × Asteroid */
             if (a.Collide(pterosaur))
             {
-                fill(255, 0, 0);
-                textSize(48);
-                text("GAME OVER", width / 2f + -4 * 48, height / 2f);
-                noLoop();
+                setCurrentScreen(ScreenManager.GameOver);
             }
 
         proximoAst:;
@@ -86,33 +144,6 @@ public class GameAsteroids : Processing
         /* spawna novo Asteroid a cada 40 quadros */
         if (frameCount % 40 == 0) asteroids.Add(NovoAsteroid());
 
-        /* ----- placar ----- */
-        fill(255);
-        textSize(20);
-        text($"Score: {score}", 10, 10);
-    }
-
-    public override void Draw()
-    {
-        background(0);
-
-        switch (currentScreen)
-        {
-            case ScreenManager.Menu:
-                menuScreen.Draw();
-                menuScreen.HandleInput(); 
-                break;
-
-            case ScreenManager.Playing:
-                GameLoop();
-                break;
-
-            case ScreenManager.GameOver:
-                fill(255, 0, 0);
-                textSize(48);
-                text("GAME OVER", width / 2f, height / 2f);
-                break;
-        }
     }
 
     public void setCurrentScreen(ScreenManager newScreen) 
