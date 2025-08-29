@@ -25,7 +25,7 @@ public class MenuScreen
     {
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
 
-        font = p.Content.Load<SpriteFont>("Font"); 
+        font = p.Content.Load<SpriteFont>("PressStart"); 
 
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
         asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
@@ -55,29 +55,25 @@ public class MenuScreen
             }
         }
 
-        // Texto com SpriteFont
         spriteBatch.Begin();
 
-        // --- título ---
         string title = "ASTEROIDS";
         Vector2 titleSize = font.MeasureString(title);
-        Vector2 titlePos = new(p.width / 2f, p.height / 3f);
+        Vector2 titlePos = new(p.width / 2f, (p.height / 2f) - titleSize.Y);
         spriteBatch.DrawString(font, title, titlePos, Color.Yellow,
             0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
 
-        // --- subtítulo ---
         string subtitle = "Prepare-se para a batalha espacial!";
         Vector2 subtitleSize = font.MeasureString(subtitle);
-        Vector2 subtitlePos = new(p.width / 2f, p.height / 3f - 70f);
+        Vector2 subtitlePos = new(p.width / 2f, titlePos.Y - 100f);
         spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
             0f, subtitleSize / 2f, 1f, SpriteEffects.None, 0f);
 
-        // --- mensagem piscando ---
         if ((p.frameCount / 30) % 2 == 0)
         {
             string blink = "Pressione ENTER para jogar";
             Vector2 blinkSize = font.MeasureString(blink);
-            Vector2 blinkPos = new(p.width / 2f, p.height - 100f);
+            Vector2 blinkPos = new(p.width / 2f, p.height - 150f);
             spriteBatch.DrawString(font, blink, blinkPos, Color.Yellow,
                 0f, blinkSize / 2f, 1f, SpriteEffects.None, 0f);
         }
