@@ -6,7 +6,7 @@ using Client.Entities;
 
 namespace Cliente.Screens;
 
-public class MenuScreen
+public class GameOverScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
@@ -14,28 +14,31 @@ public class MenuScreen
     private SpriteFont font;
     private SpriteBatch spriteBatch;
 
-    private enum MenuOption { Play, StoryMode, Exit };
-    private readonly MenuOption[] menuOptions;
+    private enum GameOverOptions { Restart, Menu, Exit };
+    private readonly GameOverOptions[] GameOverOptionss;
     private int selectedIndex;
     private bool wasKeyPressedLastFrame;
+
+    private int score;
 
     private const int MAX_ASTEROIDS = 6;
     private readonly List<Asteroid> asteroids;
 
-    public MenuScreen(GameAsteroids p)
+    public GameOverScreen(GameAsteroids p)
     {
         this.p = p;
         asteroids = new();
-        menuOptions = [MenuOption.Play, MenuOption.StoryMode, MenuOption.Exit];
+        GameOverOptionss = [GameOverOptions.Restart, GameOverOptions.Menu, GameOverOptions.Exit];
         selectedIndex = 0;
         wasKeyPressedLastFrame = false;
+        score = 0;
     }
 
     public void LoadContent()
     {
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
         font = p.Content.Load<SpriteFont>("PressStart"); 
-        backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
+        backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
         asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
     }
 
@@ -47,28 +50,28 @@ public class MenuScreen
 
         spriteBatch.Begin();
 
-        string title = "Jurassic Impact";
-        Vector2 titleSize = font.MeasureString(title);
-        Vector2 titlePos = new(p.width / 2f, p.height * 0.4f); 
-        spriteBatch.DrawString(font, title, titlePos, Color.Yellow,
-            0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
+        string gameOver = "Game Over";
+        Vector2 gameOverSize = font.MeasureString(gameOver);
+        Vector2 gameOverPos = new(p.width / 2f, p.height * 0.2f); 
+        spriteBatch.DrawString(font, gameOver, gameOverPos, Color.Yellow,
+            0f, gameOverSize / 2f, 1.5f, SpriteEffects.None, 0f);
 
-        string subtitle = "Prepare-se para mudar o passado!";
-        Vector2 subtitleSize = font.MeasureString(subtitle);
-        Vector2 subtitlePos = new(p.width / 2f, titlePos.Y + titleSize.Y + 20f); 
-        spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
-            0f, subtitleSize / 2f, 0.7f, SpriteEffects.None, 0f); 
+        string scoreText = $"Score: {score}";
+        Vector2 scoreSize = font.MeasureString(scoreText);
+        Vector2 scorePos = new(p.width / 2f, gameOverPos.Y + gameOverSize.Y + 30f); 
+        spriteBatch.DrawString(font, scoreText, scorePos, Color.White,
+            0f, scoreSize / 2f, 0.8f, SpriteEffects.None, 0f); 
 
-        Vector2 basePos = new(p.width / 2f, subtitlePos.Y + subtitleSize.Y + 45f);
+        Vector2 basePos = new(p.width / 2f, scorePos.Y + scoreSize.Y + 90f);
         float lineSpacing = 30f; 
 
-        for (int i = 0; i < menuOptions.Length; i++)
+        for (int i = 0; i < GameOverOptionss.Length; i++)
         {
-            string text = menuOptions[i].ToString();
+            string text = GameOverOptionss[i].ToString();
             Vector2 textSize = font.MeasureString(text);
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             
-            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
+            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
             
             spriteBatch.DrawString(font, text, textPos, textColor,
                 0f, textSize / 2f, 0.5f, SpriteEffects.None, 0f);
@@ -86,23 +89,23 @@ public class MenuScreen
             switch (p.keyCode)
             {
                 case Keys.Up: 
-                    selectedIndex = (selectedIndex - 1 + menuOptions.Length) % menuOptions.Length;
+                    selectedIndex = (selectedIndex - 1 + GameOverOptionss.Length) % GameOverOptionss.Length;
                     break;
                 case Keys.Down: 
-                    selectedIndex = (selectedIndex + 1) % menuOptions.Length;
+                    selectedIndex = (selectedIndex + 1) % GameOverOptionss.Length;
                     break;
                 case Keys.Space:
-                    MenuOption currentOption = menuOptions[selectedIndex];
+                    GameOverOptions currentOption = GameOverOptionss[selectedIndex];
                     
                     switch(currentOption) 
                     {
-                        case MenuOption.Play:
-                            p.setCurrentScreen(ScreenManager.Playing);
+                        case GameOverOptions.Restart:
+                            p.setCurrentScreen(ScreenManager.Playing, true);
                             break;
-                        case MenuOption.StoryMode:
-                            p.setCurrentScreen(ScreenManager.StoryMode);
+                        case GameOverOptions.Menu:
+                            p.setCurrentScreen(ScreenManager.Menu);
                             break;
-                        case MenuOption.Exit:
+                        case GameOverOptions.Exit:
                             p.Exit();
                             break;
                     }
@@ -112,6 +115,8 @@ public class MenuScreen
         
         wasKeyPressedLastFrame = isKeyPressedNow;
     }
+
+    public void setScore(int score) { this.score = score; }
 
     private Asteroid NovoAsteroid()
     {

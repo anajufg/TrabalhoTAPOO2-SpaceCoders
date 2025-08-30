@@ -12,7 +12,7 @@ public class PauseScreen
     private SpriteFont font;
     private SpriteBatch spriteBatch;
 
-    private enum PauseOption { Continue, Restart, Exit };
+    private enum PauseOption { Continue, Restart, Menu, Exit };
     private readonly PauseOption[] pauseOptions;
     private int selectedIndex;
     private bool wasKeyPressedLastFrame;
@@ -20,7 +20,7 @@ public class PauseScreen
     public PauseScreen(GameAsteroids p)
     {
         this.p = p;
-        pauseOptions = [PauseOption.Continue, PauseOption.Restart, PauseOption.Exit];
+        pauseOptions = [PauseOption.Continue, PauseOption.Restart, PauseOption.Menu, PauseOption.Exit];
         selectedIndex = 0;
         wasKeyPressedLastFrame = false;
     }
@@ -78,6 +78,9 @@ public class PauseScreen
                             break;
                         case PauseOption.Restart:
                             p.setCurrentScreen(ScreenManager.Playing, true);
+                            break;
+                        case PauseOption.Menu:
+                            p.setCurrentScreen(ScreenManager.Menu, true);
                             break;
                         case PauseOption.Exit:
                             p.Exit();

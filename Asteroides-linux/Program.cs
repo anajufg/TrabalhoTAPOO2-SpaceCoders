@@ -7,13 +7,14 @@ using Cliente.Screens;
 public class GameAsteroids : Processing
 {
     /* --------------------- estado de jogo --------------------- */
-    private ScreenManager currentScreen = ScreenManager.Menu;
+    private ScreenManager currentScreen;
 
     /* --------------------- telas de jogo --------------------- */
     private MenuScreen menuScreen;
     private StoryScreen storyScreen;
     private GameScreen gameScreen;
     private PauseScreen pauseScreen;
+    private GameOverScreen gameOverScreen;
 
     /* --------------------- teclado (flags) -------------------- */
     public bool esquerda, direita, cima, baixo;
@@ -34,6 +35,11 @@ public class GameAsteroids : Processing
 
         pauseScreen = new PauseScreen(this);
         pauseScreen.LoadContent();
+
+        gameOverScreen = new GameOverScreen(this);
+        gameOverScreen.LoadContent();
+
+        currentScreen = ScreenManager.Menu;
     }
 
     public void Update() 
@@ -53,6 +59,7 @@ public class GameAsteroids : Processing
                 pauseScreen.Update(); 
                 break;
             case ScreenManager.GameOver:
+                gameOverScreen.Update();
                 break;
         }
     }
@@ -66,28 +73,19 @@ public class GameAsteroids : Processing
             case ScreenManager.Menu:
                 menuScreen.Draw();
                 break;
-
             case ScreenManager.Playing:
                 gameScreen.Draw();
                 break;
-
             case ScreenManager.StoryMode:
                 storyScreen.Draw();
                 break;
-
             case ScreenManager.PauseScreen:
                 gameScreen.Draw();
                 pauseScreen.Draw();
                 break;
-
             case ScreenManager.GameOver:
-                fill(255, 0, 0);
-                textSize(48);
-                text("GAME OVER", width / 2f, height / 2f);
-                /* ----- placar ----- */
-                fill(255);
-                textSize(20);
-                // text($"Score: {score}", 10, 10);
+                gameOverScreen.setScore(gameScreen.getScore());
+                gameOverScreen.Draw();
                 break;
         }
 

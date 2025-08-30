@@ -205,4 +205,6 @@ public class GameScreen
         float size = 15f + (float)rnd.NextDouble() * 30f; // 15–45 px radius
         return new Asteroid(new Vector2(x, y), dir * speed, size);
     }
+
+    public int getScore() { return this.score; }
 }
