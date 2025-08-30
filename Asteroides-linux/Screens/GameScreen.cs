@@ -59,22 +59,15 @@ public class GameScreen
             asteroids[i].Draw(p);
         }
 
-        spriteBatch.Begin();
-
         string scoreText = $"Score: {score}";
         Vector2 scoreSize = font.MeasureString(scoreText);
-        Vector2 scorePos = new(scoreSize.X / 2f + 5f, 30f); 
-        spriteBatch.DrawString(font, scoreText, scorePos, Color.Yellow,
-            0f, scoreSize / 2f, 0.6f, SpriteEffects.None, 0f);
-
-        Color pauseColor = (isPause) ? Color.Transparent : ((p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
-        string pause = "Press 'p' for pause";
-        Vector2 pauseSize = font.MeasureString(pause);
-        Vector2 pausePos = new(p.width - pauseSize.X / 3f, 30f); 
-        spriteBatch.DrawString(font, pause, pausePos, pauseColor,
-            0f, pauseSize / 2f, 0.5f, SpriteEffects.None, 0f); 
+        p.DrawText(scoreText, font, new Vector2(scoreSize.X / 2f + 5f, 30f), Color.Yellow, 0.6f);
         
-        spriteBatch.End();
+        string pauseText = "Press ESC for pause";
+        Vector2 pauseSize = font.MeasureString(pauseText);
+        Color pauseColor = (isPause) ? Color.Transparent : ((p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
+        p.DrawText(pauseText, font, new Vector2(p.width - pauseSize.X / 3f, 30f), pauseColor, 0.5f);
+
     }
 
     public void Update()
@@ -120,7 +113,8 @@ public class GameScreen
         if (p.frameCount % 40 == 0) asteroids.Add(p.NovoAsteroid(true));
 
     }
-        /* ====================== input ============================= */
+    
+    /* ====================== input ============================= */
     public void Teclas()
     {
         p.esquerda = false;
@@ -140,10 +134,6 @@ public class GameScreen
                 case 'D': p.direita = true; break;
                 case 'W': p.cima = true; break;
                 case 'S': p.baixo = true; break;
-                case 'P': 
-                    isPause = true;
-                    p.setCurrentScreen(ScreenManager.PauseScreen); 
-                    break;
             }
 
             /* teclas especiais (setas, espaço, esc) */
@@ -161,7 +151,10 @@ public class GameScreen
                         lastShotFrame = p.frameCount;
                     }
                     break;
-                case Keys.Escape: p.Exit(); break;
+                case Keys.Escape: 
+                    isPause = true;
+                    p.setCurrentScreen(ScreenManager.PauseScreen); 
+                    break;
             }
         }
         

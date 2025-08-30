@@ -45,36 +45,21 @@ public class GameOverScreen
 
         p.DrawAsteroidsBackground(asteroids);
 
-        spriteBatch.Begin();
-
-        string gameOver = "Game Over";
-        Vector2 gameOverSize = font.MeasureString(gameOver);
-        Vector2 gameOverPos = new(p.width / 2f, p.height * 0.2f); 
-        spriteBatch.DrawString(font, gameOver, gameOverPos, Color.Yellow,
-            0f, gameOverSize / 2f, 1.5f, SpriteEffects.None, 0f);
-
-        string scoreText = $"Score: {score}";
-        Vector2 scoreSize = font.MeasureString(scoreText);
-        Vector2 scorePos = new(p.width / 2f, gameOverPos.Y + gameOverSize.Y + 30f); 
-        spriteBatch.DrawString(font, scoreText, scorePos, Color.White,
-            0f, scoreSize / 2f, 0.8f, SpriteEffects.None, 0f); 
-
-        Vector2 basePos = new(p.width / 2f, scorePos.Y + scoreSize.Y + 100f);
+        p.DrawText("Game Over", font, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
+        p.DrawText($"Score: {score}", font, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
+        
+        Vector2 basePos = new(p.width / 2f, p.height * 0.5f);
         float lineSpacing = 30f; 
 
         for (int i = 0; i < GameOverOptionss.Length; i++)
         {
             string text = GameOverOptionss[i].ToString();
-            Vector2 textSize = font.MeasureString(text);
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
-            
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
             
-            spriteBatch.DrawString(font, text, textPos, textColor,
-                0f, textSize / 2f, 0.5f, SpriteEffects.None, 0f);
+            p.DrawText(text, font, textPos, textColor, 0.5f);
         }
         
-        spriteBatch.End();
     }
 
     public void Update()

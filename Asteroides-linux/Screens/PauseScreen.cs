@@ -33,24 +33,18 @@ public class PauseScreen
 
     public void Draw()
     {
-        spriteBatch.Begin();
-
-        Vector2 basePos = new(p.width / 2f, p.height / 2f);
+        Vector2 basePos = new(p.width / 2f, p.height * 0.4f);
         float lineSpacing = 40f; 
 
         for (int i = 0; i < pauseOptions.Length; i++)
         {
             string text = pauseOptions[i].ToString();
-            Vector2 textSize = font.MeasureString(text);
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
             
-            spriteBatch.DrawString(font, text, textPos, textColor,
-                0f, textSize / 2f, 0.5f, SpriteEffects.None, 0f);
+            p.DrawText(text, font, textPos, textColor, 0.5f);
         }
-        
-        spriteBatch.End();
        
     }
 

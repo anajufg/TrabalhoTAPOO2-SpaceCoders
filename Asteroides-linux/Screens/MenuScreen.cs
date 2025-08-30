@@ -43,36 +43,21 @@ public class MenuScreen
 
         p.DrawAsteroidsBackground(asteroids);
 
-        spriteBatch.Begin();
-
-        string title = "Jurassic Impact";
-        Vector2 titleSize = font.MeasureString(title);
-        Vector2 titlePos = new(p.width / 2f, p.height * 0.4f); 
-        spriteBatch.DrawString(font, title, titlePos, Color.Yellow,
-            0f, titleSize / 2f, 1f, SpriteEffects.None, 0f);
-
-        string subtitle = "Prepare-se para mudar o passado!";
-        Vector2 subtitleSize = font.MeasureString(subtitle);
-        Vector2 subtitlePos = new(p.width / 2f, titlePos.Y + titleSize.Y + 20f); 
-        spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
-            0f, subtitleSize / 2f, 0.7f, SpriteEffects.None, 0f); 
-
-        Vector2 basePos = new(p.width / 2f, subtitlePos.Y + subtitleSize.Y + 45f);
+        p.DrawText("Jurassic Impact", font, new Vector2(p.width / 2f, p.height * 0.4f), Color.Yellow, 1f);
+        p.DrawText("Prepare-se para mudar o passado!", font, new Vector2(p.width / 2f, p.height * 0.46f), Color.LightGray, 0.7f);
+      
+        Vector2 basePos = new(p.width / 2f, p.height * 0.6f);
         float lineSpacing = 30f; 
 
         for (int i = 0; i < menuOptions.Length; i++)
         {
             string text = menuOptions[i].ToString();
-            Vector2 textSize = font.MeasureString(text);
+            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             
-            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-            
-            spriteBatch.DrawString(font, text, textPos, textColor,
-                0f, textSize / 2f, 0.5f, SpriteEffects.None, 0f);
+            p.DrawText(text, font, textPos, textColor, 0.5f);
         }
         
-        spriteBatch.End();
     }
 
     public void Update()

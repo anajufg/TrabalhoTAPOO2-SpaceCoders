@@ -50,36 +50,25 @@ public class StoryScreen
 
         p.image(scenes[currentSceneIndex], 0, 0, p.width, p.height);
 
-        spriteBatch.Begin();
-
         float lineSpacing = 25f; 
         string[] wrappedDescription = WrapText(scenesDescription[currentSceneIndex], p.width - 160f, font);
         Vector2 descriptionPos = new(p.width / 2f, p.height - 150f);
         for (int i = 0; i < wrappedDescription.Length; i++)
         {
             string line = wrappedDescription[i];
-            Vector2 lineSize = font.MeasureString(line); 
             Vector2 linePos = new Vector2(
                 descriptionPos.X, 
                 descriptionPos.Y + i * lineSpacing
             );
-
-            spriteBatch.DrawString(font, line, linePos, Color.Yellow,
-                0f, lineSize / 2f, 0.55f, SpriteEffects.None, 0f);
+            p.DrawText(line, font, linePos, Color.Yellow, 0.55f);
         }
 
         string next = "Next";
         if (currentSceneIndex == NUM_SCENES - 1) next = "Start";
-        
-    
+
         Vector2 nextSize = font.MeasureString(next);
-        Vector2 nextPos = new(p.width - 80f, p.height - 180f); 
         Color nextColor = (nextScene && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-        spriteBatch.DrawString(font, next, nextPos,  nextColor,
-            0f, nextSize / 2f, 0.7f, SpriteEffects.None, 0f);
-        
-        spriteBatch.End();
-       
+        p.DrawText(next, font, new Vector2(p.width - 80f, p.height - 180f), nextColor, 0.7f);
     }
 
     public void Update()

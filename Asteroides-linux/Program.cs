@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
+using Microsoft.Xna.Framework.Graphics;
 using Monogame.Processing;
 using Client.Entities;
 using Cliente.Screens;
 
 public class GameAsteroids : Processing
 {
+    private SpriteBatch spriteBatch;
+
     /* --------------------- estado de jogo --------------------- */
     private ScreenManager currentScreen;
 
@@ -30,6 +33,8 @@ public class GameAsteroids : Processing
     public override void Setup()
     {
         size(800, 600);
+
+        spriteBatch = new SpriteBatch(GraphicsDevice);
 
         asteroidsSprites = new();
 
@@ -105,16 +110,6 @@ public class GameAsteroids : Processing
         }
 
         Update();
-    }
-
-    public void setCurrentScreen(ScreenManager newScreen, bool restart = false) 
-    {
-        if (newScreen == ScreenManager.Playing && restart)
-        {
-            gameScreen = new GameScreen(this);
-            gameScreen.LoadContent();
-        }
-        currentScreen = newScreen;
     }
 
     /* ====================== fábrica de Asteroids =================== */
@@ -200,6 +195,25 @@ public class GameAsteroids : Processing
                 asteroids.Add(NovoAsteroid(false));
             }
         }
+    }
+
+    public void setCurrentScreen(ScreenManager newScreen, bool restart = false) 
+    {
+        if (newScreen == ScreenManager.Playing && restart)
+        {
+            gameScreen = new GameScreen(this);
+            gameScreen.LoadContent();
+        }
+        currentScreen = newScreen;
+    }
+
+    public void DrawText(string text, SpriteFont font, Vector2 position, Color color, float scale)
+    {
+        spriteBatch.Begin();
+        Vector2 textSize = font.MeasureString(text);
+        spriteBatch.DrawString(font, text, position, color,
+            0f, textSize / 2f, scale, SpriteEffects.None, 0f);
+        spriteBatch.End();
     }
 
     public override void KeyReleased(Keys pkey)
