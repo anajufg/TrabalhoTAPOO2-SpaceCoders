@@ -8,6 +8,7 @@ using Cliente.Screens;
 public class GameAsteroids : Processing
 {
     private SpriteBatch spriteBatch;
+    public SpriteFont gameFont;
 
     /* --------------------- estado de jogo --------------------- */
     private ScreenManager currentScreen;
@@ -35,6 +36,7 @@ public class GameAsteroids : Processing
         size(800, 600);
 
         spriteBatch = new SpriteBatch(GraphicsDevice);
+        gameFont = Content.Load<SpriteFont>("PressStart"); 
 
         asteroidsSprites = new();
 
@@ -54,7 +56,6 @@ public class GameAsteroids : Processing
         gameScreen.LoadContent();
 
         pauseScreen = new PauseScreen(this);
-        pauseScreen.LoadContent();
 
         gameOverScreen = new GameOverScreen(this);
         gameOverScreen.LoadContent();

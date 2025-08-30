@@ -10,8 +10,6 @@ public class GameOverScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
-    private SpriteFont font;
-    private SpriteBatch spriteBatch;
 
     private enum GameOverOptions { Restart, Menu, Exit };
     private readonly GameOverOptions[] GameOverOptionss;
@@ -33,9 +31,7 @@ public class GameOverScreen
     }
 
     public void LoadContent()
-    {
-        spriteBatch = new SpriteBatch(p.GraphicsDevice);
-        font = p.Content.Load<SpriteFont>("PressStart"); 
+    { 
         backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
     }
 
@@ -45,8 +41,8 @@ public class GameOverScreen
 
         p.DrawAsteroidsBackground(asteroids);
 
-        p.DrawText("Game Over", font, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
-        p.DrawText($"Score: {score}", font, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
+        p.DrawText("Game Over", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
+        p.DrawText($"Score: {score}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
         
         Vector2 basePos = new(p.width / 2f, p.height * 0.5f);
         float lineSpacing = 30f; 
@@ -57,7 +53,7 @@ public class GameOverScreen
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
             
-            p.DrawText(text, font, textPos, textColor, 0.5f);
+            p.DrawText(text, p.gameFont, textPos, textColor, 0.5f);
         }
         
     }

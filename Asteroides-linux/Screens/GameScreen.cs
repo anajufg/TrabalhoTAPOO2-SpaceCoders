@@ -10,8 +10,6 @@ public class GameScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
-    private SpriteFont font;
-    private SpriteBatch spriteBatch;
 
     private Pterosaur pterosaur;
     private List<Bullet> bullets;
@@ -31,8 +29,6 @@ public class GameScreen
 
     public void LoadContent()
     {
-        spriteBatch = new SpriteBatch(p.GraphicsDevice);
-        font = p.Content.Load<SpriteFont>("PressStart"); 
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
 
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
@@ -63,13 +59,13 @@ public class GameScreen
         }
 
         string scoreText = $"Score: {score}";
-        Vector2 scoreSize = font.MeasureString(scoreText);
-        p.DrawText(scoreText, font, new Vector2(scoreSize.X / 2f + 5f, 30f), Color.Yellow, 0.6f);
+        Vector2 scoreSize = p.gameFont.MeasureString(scoreText);
+        p.DrawText(scoreText, p.gameFont, new Vector2(scoreSize.X / 2f + 5f, 30f), Color.Yellow, 0.6f);
         
         string pauseText = "Press ESC for pause";
-        Vector2 pauseSize = font.MeasureString(pauseText);
+        Vector2 pauseSize = p.gameFont.MeasureString(pauseText);
         Color pauseColor = (isPause) ? Color.Transparent : ((p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
-        p.DrawText(pauseText, font, new Vector2(p.width - pauseSize.X / 3f, 30f), pauseColor, 0.5f);
+        p.DrawText(pauseText, p.gameFont, new Vector2(p.width - pauseSize.X / 3f, 30f), pauseColor, 0.5f);
 
     }
 

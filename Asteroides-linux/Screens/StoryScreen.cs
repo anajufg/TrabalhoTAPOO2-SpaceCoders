@@ -9,8 +9,6 @@ namespace Cliente.Screens;
 public class StoryScreen
 {
     private GameAsteroids p;
-    private SpriteFont font;
-    private SpriteBatch spriteBatch;
     private readonly List<PImage> scenes;
     private readonly List<string> scenesDescription;
     private bool nextScene;
@@ -31,8 +29,6 @@ public class StoryScreen
 
     public void LoadContent()
     {
-        spriteBatch = new SpriteBatch(p.GraphicsDevice);
-        font = p.Content.Load<SpriteFont>("PressStart"); 
         for (int i = 0; i < NUM_SCENES; i++ )
         {
             scenes.Add(p.loadImage($"./Content/Scenes/scene{i+1}.png"));
@@ -51,8 +47,22 @@ public class StoryScreen
         p.image(scenes[currentSceneIndex], 0, 0, p.width, p.height);
 
         float lineSpacing = 25f; 
-        string[] wrappedDescription = WrapText(scenesDescription[currentSceneIndex], p.width - 160f, font);
-        Vector2 descriptionPos = new(p.width / 2f, p.height - 150f);
+        string[] wrappedDescription = WrapText(scenesDescription[currentSceneIndex], p.width - 160f);
+        float adjustsHeight;
+        switch(wrappedDescription.Length)
+        {
+            case 2:
+                adjustsHeight = 62.5f;
+                break;
+            case 6:
+                adjustsHeight = 150f;
+                break;
+            default:
+                adjustsHeight = 100f;
+                break;
+        }
+        
+        Vector2 descriptionPos = new(p.width / 2f, p.height - adjustsHeight);
         for (int i = 0; i < wrappedDescription.Length; i++)
         {
             string line = wrappedDescription[i];
@@ -60,15 +70,15 @@ public class StoryScreen
                 descriptionPos.X, 
                 descriptionPos.Y + i * lineSpacing
             );
-            p.DrawText(line, font, linePos, Color.Yellow, 0.55f);
+            p.DrawText(line, p.gameFont, linePos, Color.Yellow, 0.55f);
         }
 
         string next = "Next";
         if (currentSceneIndex == NUM_SCENES - 1) next = "Start";
 
-        Vector2 nextSize = font.MeasureString(next);
+        Vector2 nextSize = p.gameFont.MeasureString(next);
         Color nextColor = (nextScene && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-        p.DrawText(next, font, new Vector2(p.width - 80f, p.height - 180f), nextColor, 0.7f);
+        p.DrawText(next, p.gameFont, new Vector2(p.width - 80f, p.height - adjustsHeight - 35f), nextColor, 0.7f);
     }
 
     public void Update()
@@ -110,7 +120,7 @@ public class StoryScreen
         wasSpacePressedLastFrame = false;
     }
 
-    private string[] WrapText(string text, float maxLineWidth, SpriteFont font)
+    private string[] WrapText(string text, float maxLineWidth)
     {
         string[] words = text.Split(' ');
         List<string> lines = new();
@@ -119,7 +129,7 @@ public class StoryScreen
 
         foreach (string word in words)
         {
-            Vector2 wordSize = font.MeasureString(word) * 0.55f; 
+            Vector2 wordSize = p.gameFont.MeasureString(word) * 0.55f; 
             if (currentLineWidth + wordSize.X < maxLineWidth)
             {
                 sb.Append(word + " ");

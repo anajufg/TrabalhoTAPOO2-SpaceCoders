@@ -9,9 +9,7 @@ namespace Cliente.Screens;
 public class PauseScreen
 {
     private GameAsteroids p;
-    private SpriteFont font;
-    private SpriteBatch spriteBatch;
-
+    
     private enum PauseOption { Continue, Restart, Menu, Exit };
     private readonly PauseOption[] pauseOptions;
     private int selectedIndex;
@@ -23,12 +21,6 @@ public class PauseScreen
         pauseOptions = [PauseOption.Continue, PauseOption.Restart, PauseOption.Menu, PauseOption.Exit];
         selectedIndex = 0;
         wasKeyPressedLastFrame = false;
-    }
-
-    public void LoadContent()
-    {
-        spriteBatch = new SpriteBatch(p.GraphicsDevice);
-        font = p.Content.Load<SpriteFont>("PressStart"); 
     }
 
     public void Draw()
@@ -43,7 +35,7 @@ public class PauseScreen
             
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
             
-            p.DrawText(text, font, textPos, textColor, 0.5f);
+            p.DrawText(text, p.gameFont, textPos, textColor, 0.5f);
         }
        
     }

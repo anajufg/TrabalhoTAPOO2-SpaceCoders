@@ -11,9 +11,6 @@ public class MenuScreen
     private GameAsteroids p;
     private PImage backgroundImage;
 
-    private SpriteFont font;
-    private SpriteBatch spriteBatch;
-
     private enum MenuOption { Play, StoryMode, Exit };
     private readonly MenuOption[] menuOptions;
     private int selectedIndex;
@@ -32,8 +29,6 @@ public class MenuScreen
 
     public void LoadContent()
     {
-        spriteBatch = new SpriteBatch(p.GraphicsDevice);
-        font = p.Content.Load<SpriteFont>("PressStart"); 
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
     }
 
@@ -43,8 +38,8 @@ public class MenuScreen
 
         p.DrawAsteroidsBackground(asteroids);
 
-        p.DrawText("Jurassic Impact", font, new Vector2(p.width / 2f, p.height * 0.4f), Color.Yellow, 1f);
-        p.DrawText("Prepare-se para mudar o passado!", font, new Vector2(p.width / 2f, p.height * 0.46f), Color.LightGray, 0.7f);
+        p.DrawText("Jurassic Impact", p.gameFont, new Vector2(p.width / 2f, p.height * 0.4f), Color.Yellow, 1f);
+        p.DrawText("Prepare-se para mudar o passado!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.46f), Color.LightGray, 0.7f);
       
         Vector2 basePos = new(p.width / 2f, p.height * 0.6f);
         float lineSpacing = 30f; 
@@ -55,7 +50,7 @@ public class MenuScreen
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             
-            p.DrawText(text, font, textPos, textColor, 0.5f);
+            p.DrawText(text, p.gameFont, textPos, textColor, 0.5f);
         }
         
     }
