@@ -14,8 +14,8 @@ public class GameScreen
     private SpriteBatch spriteBatch;
 
     private Pterosaur pterosaur;
-    private readonly List<Bullet> bullets = new();
-    private readonly List<Asteroid> asteroids = new();
+    private List<Bullet> bullets;
+    private List<Asteroid> asteroids;
     private int score;
 
     private int fireRate;
@@ -36,9 +36,12 @@ public class GameScreen
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
 
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
+        bullets = new();
+        asteroids = new();
 
         fireRate = 15; // frames entre tiros
         lastShotFrame = 0;
+        score = 0;
 
         isPause = false;
         wasKeyPressedLastFrame = false;
@@ -159,6 +162,16 @@ public class GameScreen
         }
         
         wasKeyPressedLastFrame = isKeyPressedNow;
+    }
+
+    public void Reset()
+    {
+        pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
+        bullets = new();
+        asteroids = new();
+        score = 0;
+        isPause = false;
+        wasKeyPressedLastFrame = false;
     }
 
     public int getScore() { return this.score; }

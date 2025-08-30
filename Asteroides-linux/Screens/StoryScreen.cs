@@ -101,7 +101,13 @@ public class StoryScreen
         }
         
         wasSpacePressedLastFrame = isSpacePressedNow;
-    
+    }
+
+    public void Reset()
+    {
+        nextScene = false;
+        currentSceneIndex = 0;
+        wasSpacePressedLastFrame = false;
     }
 
     private string[] WrapText(string text, float maxLineWidth, SpriteFont font)

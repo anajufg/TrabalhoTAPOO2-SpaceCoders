@@ -87,4 +87,9 @@ public class PauseScreen
         wasKeyPressedLastFrame = isKeyPressedNow;
     }
 
+    public void Reset()
+    {
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
+    }
 }

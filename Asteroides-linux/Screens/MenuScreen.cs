@@ -19,7 +19,7 @@ public class MenuScreen
     private int selectedIndex;
     private bool wasKeyPressedLastFrame;
 
-    private readonly List<Asteroid> asteroids;
+    private List<Asteroid> asteroids;
 
     public MenuScreen(GameAsteroids p)
     {
@@ -94,5 +94,12 @@ public class MenuScreen
         }
         
         wasKeyPressedLastFrame = isKeyPressedNow;
+    }
+
+    public void Reset()
+    {
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
+        asteroids = new();
     }
 }

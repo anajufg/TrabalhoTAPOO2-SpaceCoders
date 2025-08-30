@@ -197,13 +197,21 @@ public class GameAsteroids : Processing
         }
     }
 
+    private void Reset()
+    {
+        menuScreen.Reset();
+        gameScreen.Reset();
+        gameOverScreen.Reset();
+        pauseScreen.Reset();
+        storyScreen.Reset();
+    }
+
     public void setCurrentScreen(ScreenManager newScreen, bool restart = false) 
     {
-        if (newScreen == ScreenManager.Playing && restart)
+        if (newScreen == ScreenManager.Playing || newScreen == ScreenManager.Menu && restart)
         {
-            gameScreen = new GameScreen(this);
-            gameScreen.LoadContent();
-        }
+            Reset();
+        } 
         currentScreen = newScreen;
     }
 

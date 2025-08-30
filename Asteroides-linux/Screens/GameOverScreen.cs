@@ -20,7 +20,7 @@ public class GameOverScreen
 
     private int score;
 
-    private readonly List<Asteroid> asteroids;
+    private List<Asteroid> asteroids;
 
     public GameOverScreen(GameAsteroids p)
     {
@@ -85,7 +85,7 @@ public class GameOverScreen
                             p.setCurrentScreen(ScreenManager.Playing, true);
                             break;
                         case GameOverOptions.Menu:
-                            p.setCurrentScreen(ScreenManager.Menu);
+                            p.setCurrentScreen(ScreenManager.Menu, true);
                             break;
                         case GameOverOptions.Exit:
                             p.Exit();
@@ -96,6 +96,14 @@ public class GameOverScreen
         }
         
         wasKeyPressedLastFrame = isKeyPressedNow;
+    }
+
+    public void Reset()
+    {
+        asteroids = new();
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
+        score = 0;
     }
 
     public void setScore(int score) { this.score = score; }
