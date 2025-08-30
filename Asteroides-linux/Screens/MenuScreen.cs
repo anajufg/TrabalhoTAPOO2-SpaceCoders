@@ -55,8 +55,8 @@ public class MenuScreen
         spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
             0f, subtitleSize / 2f, 0.7f, SpriteEffects.None, 0f); 
 
-        Vector2 basePos = new(p.width / 2f, p.height - 180f);
-        float lineSpacing = 30f; // Espaçamento entre as opções
+        Vector2 basePos = new(p.width / 2f, titlePos.Y + titleSize.Y + 100f);
+        float lineSpacing = 30f; 
 
         for (int i = 0; i < menuOptions.Length; i++)
         {
