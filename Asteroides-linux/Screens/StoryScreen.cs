@@ -11,17 +11,22 @@ public class StoryScreen
     private GameAsteroids p;
     private SpriteFont font;
     private SpriteBatch spriteBatch;
-    private readonly List<PImage> scenes = new();
-    private readonly List<string> scenesDescription = new();
-    private bool NextScene = false;
-    private bool wasSpacePressedLastFrame = false;
-    private int currentScene = 0;
+    private readonly List<PImage> scenes;
+    private readonly List<string> scenesDescription;
+    private bool nextScene;
+    private int currentSceneIndex;
+    private bool wasSpacePressedLastFrame;
 
     private const int NUM_SCENES = 3;
 
     public StoryScreen(GameAsteroids p)
     {
         this.p = p;
+        scenes = new();
+        scenesDescription = new();
+        nextScene = false;
+        currentSceneIndex = 0;
+        wasSpacePressedLastFrame = false;
     }
 
     public void LoadContent()
@@ -40,14 +45,14 @@ public class StoryScreen
 
     public void Draw()
     {
-        if (currentScene < 0 || currentScene >= NUM_SCENES) return;
+        if (currentSceneIndex < 0 || currentSceneIndex >= NUM_SCENES) return;
 
-        p.image(scenes[currentScene], 0, 0, p.width, p.height);
+        p.image(scenes[currentSceneIndex], 0, 0, p.width, p.height);
 
         spriteBatch.Begin();
 
         float lineSpacing = 25f; 
-        string[] wrappedDescription = WrapText(scenesDescription[currentScene], p.width - 160f, font);
+        string[] wrappedDescription = WrapText(scenesDescription[currentSceneIndex], p.width - 160f, font);
         Vector2 descriptionPos = new(p.width / 2f, p.height - 150f);
         for (int i = 0; i < wrappedDescription.Length; i++)
         {
@@ -63,12 +68,12 @@ public class StoryScreen
         }
 
         string next = "Next";
-        if (currentScene == NUM_SCENES - 1) next = "Start";
+        if (currentSceneIndex == NUM_SCENES - 1) next = "Start";
         
     
         Vector2 nextSize = font.MeasureString(next);
         Vector2 nextPos = new(p.width - 80f, p.height - 180f); 
-        Color nextColor = (NextScene && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
+        Color nextColor = (nextScene && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
         spriteBatch.DrawString(font, next, nextPos,  nextColor,
             0f, nextSize / 2f, 0.7f, SpriteEffects.None, 0f);
         
@@ -83,16 +88,16 @@ public class StoryScreen
             switch (p.keyCode)
             {
                 case Keys.Up: 
-                    NextScene = false;
+                    nextScene = false;
                     break;
                 case Keys.Down: 
-                    NextScene = true;
+                    nextScene = true;
                     break;
                 case Keys.Left: 
-                    NextScene = false;
+                    nextScene = false;
                     break;
                 case Keys.Right: 
-                    NextScene = true;
+                    nextScene = true;
                     break;
             }
         }
@@ -101,8 +106,8 @@ public class StoryScreen
         
         if (isSpacePressedNow && !wasSpacePressedLastFrame)
         {
-            if (NextScene) currentScene++;
-            if (currentScene >= NUM_SCENES) p.setCurrentScreen(ScreenManager.Playing);
+            if (nextScene) currentSceneIndex++;
+            if (currentSceneIndex >= NUM_SCENES) p.setCurrentScreen(ScreenManager.Playing);
         }
         
         wasSpacePressedLastFrame = isSpacePressedNow;

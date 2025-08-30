@@ -12,12 +12,17 @@ public class PauseScreen
     private SpriteFont font;
     private SpriteBatch spriteBatch;
 
-    private enum PauseOption { Restart, Exit };
-    private PauseOption selectedOption = PauseOption.Restart;
+    private enum PauseOption { Continue, Restart, Exit };
+    private readonly PauseOption[] pauseOptions;
+    private int selectedIndex;
+    private bool wasKeyPressedLastFrame;
 
     public PauseScreen(GameAsteroids p)
     {
         this.p = p;
+        pauseOptions = [PauseOption.Continue, PauseOption.Restart, PauseOption.Exit];
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
     }
 
     public void LoadContent()
@@ -30,19 +35,20 @@ public class PauseScreen
     {
         spriteBatch.Begin();
 
-        string restart = "Restart";
-        Vector2 restartSize = font.MeasureString(restart);
-        Vector2 restartPos = new(p.width / 2f, p.height - 250f); 
-        Color restartColor = (selectedOption == PauseOption.Restart && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-        spriteBatch.DrawString(font, restart, restartPos,  restartColor,
-            0f, restartSize / 2f, 0.5f, SpriteEffects.None, 0f);
+        Vector2 basePos = new(p.width / 2f, p.height / 2f);
+        float lineSpacing = 30f; 
 
-        string exit = "Exit";
-        Vector2 exitSize = font.MeasureString(exit);
-        Vector2 exitPos = new(p.width / 2f, p.height - 225f); 
-        Color exitColor = (selectedOption == PauseOption.Exit && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-        spriteBatch.DrawString(font, exit, exitPos, exitColor,
-        0f, exitSize / 2f, 0.5f, SpriteEffects.None, 0f);
+        for (int i = 0; i < pauseOptions.Length; i++)
+        {
+            string text = pauseOptions[i].ToString();
+            Vector2 textSize = font.MeasureString(text);
+            Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
+            
+            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
+            
+            spriteBatch.DrawString(font, text, textPos, textColor,
+                0f, textSize / 2f, 0.5f, SpriteEffects.None, 0f);
+        }
         
         spriteBatch.End();
        
@@ -50,30 +56,38 @@ public class PauseScreen
 
     public void Update()
     {
-        if (p.keyPressed)
+        bool isKeyPressedNow = p.keyPressed;
+
+        if (isKeyPressedNow && !wasKeyPressedLastFrame)
         {
             switch (p.keyCode)
             {
                 case Keys.Up: 
-                    if (selectedOption == PauseOption.Exit) selectedOption = PauseOption.Restart;
+                    selectedIndex = (selectedIndex - 1 + pauseOptions.Length) % pauseOptions.Length;
                     break;
                 case Keys.Down: 
-                    if (selectedOption == PauseOption.Restart) selectedOption = PauseOption.Exit;
+                    selectedIndex = (selectedIndex + 1) % pauseOptions.Length;
+                    break;
+                case Keys.Space:
+                    PauseOption currentOption = pauseOptions[selectedIndex];
+                    
+                    switch(currentOption) 
+                    {
+                        case PauseOption.Continue:
+                            p.setCurrentScreen(ScreenManager.Playing);
+                            break;
+                        case PauseOption.Restart:
+                            p.setCurrentScreen(ScreenManager.Playing, true);
+                            break;
+                        case PauseOption.Exit:
+                            p.Exit();
+                            break;
+                    }
                     break;
             }
         }
-
-        if (p.keyPressed && p.keyCode == Keys.Space)
-        {
-            if (selectedOption == PauseOption.Restart)
-            {
-                p.setCurrentScreen(ScreenManager.Playing);
-            }
-            else if (selectedOption == PauseOption.Exit)
-            {
-                p.setCurrentScreen(ScreenManager.Menu); 
-            }
-        }
+        
+        wasKeyPressedLastFrame = isKeyPressedNow;
     }
 
 }

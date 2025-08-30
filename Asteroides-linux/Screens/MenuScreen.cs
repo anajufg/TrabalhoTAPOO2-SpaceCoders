@@ -15,16 +15,20 @@ public class MenuScreen
     private SpriteBatch spriteBatch;
 
     private enum MenuOption { Play, StoryMode, Exit };
-    private readonly MenuOption[] menuOptions = { MenuOption.Play, MenuOption.StoryMode, MenuOption.Exit };
-    private int selectedIndex = 0;
-    private bool wasKeyPressedLastFrame = false;
+    private readonly MenuOption[] menuOptions;
+    private int selectedIndex;
+    private bool wasKeyPressedLastFrame;
 
     private const int MAX_ASTEROIDS = 6;
-    private readonly List<Asteroid> asteroids = new();
+    private readonly List<Asteroid> asteroids;
 
     public MenuScreen(GameAsteroids p)
     {
         this.p = p;
+        asteroids = new();
+        menuOptions = [MenuOption.Play, MenuOption.StoryMode, MenuOption.Exit];
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
     }
 
     public void LoadContent()
@@ -90,17 +94,17 @@ public class MenuScreen
                 case Keys.Space:
                     MenuOption currentOption = menuOptions[selectedIndex];
                     
-                    if (currentOption == MenuOption.Play)
+                    switch(currentOption) 
                     {
-                        p.setCurrentScreen(ScreenManager.Playing);
-                    }
-                    else if (currentOption == MenuOption.StoryMode)
-                    {
-                        p.setCurrentScreen(ScreenManager.StoryMode);
-                    }
-                    else if (currentOption == MenuOption.Exit)
-                    {
-                        p.Exit();
+                        case MenuOption.Play:
+                            p.setCurrentScreen(ScreenManager.Playing);
+                            break;
+                        case MenuOption.StoryMode:
+                            p.setCurrentScreen(ScreenManager.StoryMode);
+                            break;
+                        case MenuOption.Exit:
+                            p.Exit();
+                            break;
                     }
                     break;
             }

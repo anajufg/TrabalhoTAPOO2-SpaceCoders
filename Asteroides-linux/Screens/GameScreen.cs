@@ -20,8 +20,11 @@ public class GameScreen
     private readonly Random rnd = new();
     private int score;
 
-    private int fireRate = 15; // frames entre tiros
-    private int lastShotFrame = 0;
+    private int fireRate;
+    private int lastShotFrame;
+
+    private bool isPause;
+    private bool wasKeyPressedLastFrame;
 
     public GameScreen(GameAsteroids p)
     {
@@ -35,6 +38,12 @@ public class GameScreen
         backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
 
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
+
+        fireRate = 15; // frames entre tiros
+        lastShotFrame = 0;
+
+        isPause = false;
+        wasKeyPressedLastFrame = false;
     }
 
     public void Draw()
@@ -60,10 +69,11 @@ public class GameScreen
         spriteBatch.DrawString(font, scoreText, scorePos, Color.Yellow,
             0f, scoreSize / 2f, 0.6f, SpriteEffects.None, 0f);
 
+        Color pauseColor = (isPause) ? Color.Transparent : ((p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
         string pause = "Press 'p' for pause";
         Vector2 pauseSize = font.MeasureString(pause);
         Vector2 pausePos = new(p.width - pauseSize.X / 3f, 30f); 
-        spriteBatch.DrawString(font, pause, pausePos, ((p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray,
+        spriteBatch.DrawString(font, pause, pausePos, pauseColor,
             0f, pauseSize / 2f, 0.5f, SpriteEffects.None, 0f); 
         
         spriteBatch.End();
@@ -119,36 +129,45 @@ public class GameScreen
         p.direita = false;
         p.cima = false;
         p.baixo = false;
+        isPause = false;
 
-        if (!p.keyPressed) return;  // nada pressionado
+        bool isKeyPressedNow = p.keyPressed;
 
-        /* tecla “única” (letras) */
-        switch (char.ToUpperInvariant(p.key))
+        if (isKeyPressedNow && !wasKeyPressedLastFrame)
         {
-            case 'A': p.esquerda = true; break;
-            case 'D': p.direita = true; break;
-            case 'W': p.cima = true; break;
-            case 'S': p.baixo = true; break;
-            case 'P': p.setCurrentScreen(ScreenManager.PauseScreen); break;
-        }
+            /* tecla “única” (letras) */
+            switch (char.ToUpperInvariant(p.key))
+            {
+                case 'A': p.esquerda = true; break;
+                case 'D': p.direita = true; break;
+                case 'W': p.cima = true; break;
+                case 'S': p.baixo = true; break;
+                case 'P': 
+                    isPause = true;
+                    p.setCurrentScreen(ScreenManager.PauseScreen); 
+                    break;
+            }
 
-        /* teclas especiais (setas, espaço, esc) */
-        switch (p.keyCode)
-        {
-            case Keys.Left: p.esquerda = true; break;
-            case Keys.Right: p.direita = true; break;
-            case Keys.Up: p.cima = true; break;
-            case Keys.Down: p.baixo = true; break;
+            /* teclas especiais (setas, espaço, esc) */
+            switch (p.keyCode)
+            {
+                case Keys.Left: p.esquerda = true; break;
+                case Keys.Right: p.direita = true; break;
+                case Keys.Up: p.cima = true; break;
+                case Keys.Down: p.baixo = true; break;
 
-            case Keys.Space:
-                if (p.frameCount - lastShotFrame >= fireRate)
-                {
-                    bullets.Add(pterosaur.Shoot());
-                    lastShotFrame = p.frameCount;
-                }
-                break;
-            case Keys.Escape: p.Exit(); break;
+                case Keys.Space:
+                    if (p.frameCount - lastShotFrame >= fireRate)
+                    {
+                        bullets.Add(pterosaur.Shoot());
+                        lastShotFrame = p.frameCount;
+                    }
+                    break;
+                case Keys.Escape: p.Exit(); break;
+            }
         }
+        
+        wasKeyPressedLastFrame = isKeyPressedNow;
     }
 
     /* ====================== fábrica de Asteroids ============= */

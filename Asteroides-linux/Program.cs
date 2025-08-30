@@ -76,6 +76,7 @@ public class GameAsteroids : Processing
                 break;
 
             case ScreenManager.PauseScreen:
+                gameScreen.Draw();
                 pauseScreen.Draw();
                 break;
 
@@ -93,8 +94,13 @@ public class GameAsteroids : Processing
         Update();
     }
 
-    public void setCurrentScreen(ScreenManager newScreen) 
+    public void setCurrentScreen(ScreenManager newScreen, bool restart = false) 
     {
+        if (newScreen == ScreenManager.Playing && restart)
+        {
+            gameScreen = new GameScreen(this);
+            gameScreen.LoadContent();
+        }
         currentScreen = newScreen;
     }
 
