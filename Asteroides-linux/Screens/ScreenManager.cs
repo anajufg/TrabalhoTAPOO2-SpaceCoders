@@ -6,5 +6,7 @@ public enum ScreenManager
     Playing,
     StoryMode,
     PauseScreen,
-    GameOver
+    GameOver, 
+    Disconnection, 
+    Connection
 }

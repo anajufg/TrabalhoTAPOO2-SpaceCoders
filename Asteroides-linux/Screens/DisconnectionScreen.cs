@@ -1,106 +1,91 @@
-// using Monogame.Processing;
-// using Microsoft.Xna.Framework;
-// using Microsoft.Xna.Framework.Graphics;
-// using Microsoft.Xna.Framework.Input;
-// using Client.Entities;
+using Monogame.Processing;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Client.Entities;
 
-// namespace Cliente.Screens;
+namespace Cliente.Screens;
 
-// public class DisconnectionScreen
-// {
-//     private GameAsteroids p;
-//     private PImage backgroundImage;
+public class DisconnectionScreen
+{
+    private GameAsteroids p;
+    private PImage backgroundImage;
 
-//     private enum GameOverOptions { Restart, Menu, Exit };
-//     private readonly GameOverOptions[] GameOverOptionss;
-//     private int selectedIndex;
-//     private bool wasKeyPressedLastFrame;
+    private enum DisconnectionOption { Menu, Exit };
+    private readonly DisconnectionOption[] disconnectionOptions;
+    private int selectedIndex;
+    private bool wasKeyPressedLastFrame;
 
-//     private int score;
+    public DisconnectionScreen(GameAsteroids p)
+    {
+        this.p = p;
+        disconnectionOptions = [DisconnectionOption.Menu, DisconnectionOption.Exit];
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
+    }
 
-//     private List<Asteroid> asteroids;
+    public void LoadContent()
+    {
+        backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
+    }
 
-//     public DisconnectionScreen(GameAsteroids p)
-//     {
-//         this.p = p;
-//         asteroids = new();
-//         GameOverOptionss = [GameOverOptions.Restart, GameOverOptions.Menu, GameOverOptions.Exit];
-//         selectedIndex = 0;
-//         wasKeyPressedLastFrame = false;
-//         score = 0;
-//     }
+    public void Draw()
+    {
+        p.image(backgroundImage, 0, 0, p.width, p.height);
 
-//     public void LoadContent()
-//     {
-//         backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
-//     }
-
-//     public void Draw()
-//     {
-//         p.image(backgroundImage, 0, 0, p.width, p.height);
-
-//         p.DrawAsteroidsBackground(asteroids);
-
-//         p.DrawText("Game Over", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
-//         p.DrawText($"Score: {score}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
+        p.DrawText("Desconxão", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
+        p.DrawText("Tente novamente", p.gameFont, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
         
-//         Vector2 basePos = new(p.width / 2f, p.height * 0.5f);
-//         float lineSpacing = 30f; 
+        Vector2 basePos = new(p.width / 2f, p.height * 0.5f);
+        float lineSpacing = 30f; 
 
-//         for (int i = 0; i < GameOverOptionss.Length; i++)
-//         {
-//             string text = GameOverOptionss[i].ToString();
-//             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
-//             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
+        for (int i = 0; i < disconnectionOptions.Length; i++)
+        {
+            string text = disconnectionOptions[i].ToString();
+            Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
+            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
             
-//             p.DrawText(text, p.gameFont, textPos, textColor, 0.5f);
-//         }
+            p.DrawText(text, p.gameFont, textPos, textColor, 0.5f);
+        }
         
-//     }
+    }
 
-//     public void Update()
-//     {
-//         bool isKeyPressedNow = p.keyPressed;
+    public void Update()
+    {
+        bool isKeyPressedNow = p.keyPressed;
 
-//         if (isKeyPressedNow && !wasKeyPressedLastFrame)
-//         {
-//             switch (p.keyCode)
-//             {
-//                 case Keys.Up: 
-//                     selectedIndex = (selectedIndex - 1 + GameOverOptionss.Length) % GameOverOptionss.Length;
-//                     break;
-//                 case Keys.Down: 
-//                     selectedIndex = (selectedIndex + 1) % GameOverOptionss.Length;
-//                     break;
-//                 case Keys.Space:
-//                     GameOverOptions currentOption = GameOverOptionss[selectedIndex];
+        if (isKeyPressedNow && !wasKeyPressedLastFrame)
+        {
+            switch (p.keyCode)
+            {
+                case Keys.Up: 
+                    selectedIndex = (selectedIndex - 1 + disconnectionOptions.Length) % disconnectionOptions.Length;
+                    break;
+                case Keys.Down: 
+                    selectedIndex = (selectedIndex + 1) % disconnectionOptions.Length;
+                    break;
+                case Keys.Space:
+                    DisconnectionOption currentOption = disconnectionOptions[selectedIndex];
                     
-//                     switch(currentOption) 
-//                     {
-//                         case GameOverOptions.Restart:
-//                             p.setCurrentScreen(ScreenManager.Playing, true);
-//                             break;
-//                         case GameOverOptions.Menu:
-//                             p.setCurrentScreen(ScreenManager.Menu, true);
-//                             break;
-//                         case GameOverOptions.Exit:
-//                             p.Exit();
-//                             break;
-//                     }
-//                     break;
-//             }
-//         }
+                    switch(currentOption) 
+                    {
+                        case DisconnectionOption.Menu:
+                            p.setCurrentScreen(ScreenManager.Menu, true);
+                            break;
+                        case DisconnectionOption.Exit:
+                            p.Exit();
+                            break;
+                    }
+                    break;
+            }
+        }
         
-//         wasKeyPressedLastFrame = isKeyPressedNow;
-//     }
+        wasKeyPressedLastFrame = isKeyPressedNow;
+    }
 
-//     public void Reset()
-//     {
-//         asteroids = new();
-//         selectedIndex = 0;
-//         wasKeyPressedLastFrame = false;
-//         score = 0;
-//     }
-
-//     public void setScore(int score) { this.score = score; }
-// }
+    public void Reset()
+    {
+        selectedIndex = 0;
+        wasKeyPressedLastFrame = false;
+    }
+}

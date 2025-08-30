@@ -11,8 +11,8 @@ public class GameOverScreen
     private GameAsteroids p;
     private PImage backgroundImage;
 
-    private enum GameOverOptions { Restart, Menu, Exit };
-    private readonly GameOverOptions[] GameOverOptionss;
+    private enum GameOverOption { Restart, Menu, Exit };
+    private readonly GameOverOption[] gameOverOptions;
     private int selectedIndex;
     private bool wasKeyPressedLastFrame;
 
@@ -24,7 +24,7 @@ public class GameOverScreen
     {
         this.p = p;
         asteroids = new();
-        GameOverOptionss = [GameOverOptions.Restart, GameOverOptions.Menu, GameOverOptions.Exit];
+        gameOverOptions = [GameOverOption.Restart, GameOverOption.Menu, GameOverOption.Exit];
         selectedIndex = 0;
         wasKeyPressedLastFrame = false;
         score = 0;
@@ -47,9 +47,9 @@ public class GameOverScreen
         Vector2 basePos = new(p.width / 2f, p.height * 0.5f);
         float lineSpacing = 30f; 
 
-        for (int i = 0; i < GameOverOptionss.Length; i++)
+        for (int i = 0; i < gameOverOptions.Length; i++)
         {
-            string text = GameOverOptionss[i].ToString();
+            string text = gameOverOptions[i].ToString();
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
             
@@ -67,23 +67,23 @@ public class GameOverScreen
             switch (p.keyCode)
             {
                 case Keys.Up: 
-                    selectedIndex = (selectedIndex - 1 + GameOverOptionss.Length) % GameOverOptionss.Length;
+                    selectedIndex = (selectedIndex - 1 + gameOverOptions.Length) % gameOverOptions.Length;
                     break;
                 case Keys.Down: 
-                    selectedIndex = (selectedIndex + 1) % GameOverOptionss.Length;
+                    selectedIndex = (selectedIndex + 1) % gameOverOptions.Length;
                     break;
                 case Keys.Space:
-                    GameOverOptions currentOption = GameOverOptionss[selectedIndex];
+                    GameOverOption currentOption = gameOverOptions[selectedIndex];
                     
                     switch(currentOption) 
                     {
-                        case GameOverOptions.Restart:
+                        case GameOverOption.Restart:
                             p.setCurrentScreen(ScreenManager.Playing, true);
                             break;
-                        case GameOverOptions.Menu:
+                        case GameOverOption.Menu:
                             p.setCurrentScreen(ScreenManager.Menu, true);
                             break;
-                        case GameOverOptions.Exit:
+                        case GameOverOption.Exit:
                             p.Exit();
                             break;
                     }

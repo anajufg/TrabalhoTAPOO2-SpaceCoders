@@ -15,7 +15,7 @@ public class StoryScreen
     private int currentSceneIndex;
     private bool wasSpacePressedLastFrame;
 
-    private const int NUM_SCENES = 3;
+    private const int NUM_SCENES = 4;
 
     public StoryScreen(GameAsteroids p)
     {
@@ -53,6 +53,9 @@ public class StoryScreen
         {
             case 2:
                 adjustsHeight = 62.5f;
+                break;
+            case 5:
+                adjustsHeight = 125f;
                 break;
             case 6:
                 adjustsHeight = 150f;

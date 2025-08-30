@@ -19,6 +19,8 @@ public class GameAsteroids : Processing
     private GameScreen gameScreen;
     private PauseScreen pauseScreen;
     private GameOverScreen gameOverScreen;
+    private DisconnectionScreen disconnectionScreen;
+    private ConnectionScreen connectionScreen;
 
     /* --------------------- teclado (flags) --------------------- */
     public bool esquerda, direita, cima, baixo;
@@ -60,6 +62,12 @@ public class GameAsteroids : Processing
         gameOverScreen = new GameOverScreen(this);
         gameOverScreen.LoadContent();
 
+        disconnectionScreen = new DisconnectionScreen(this);
+        disconnectionScreen.LoadContent();
+
+        connectionScreen = new ConnectionScreen(this);
+        connectionScreen.LoadContent();
+
         currentScreen = ScreenManager.Menu;
     }
 
@@ -81,6 +89,12 @@ public class GameAsteroids : Processing
                 break;
             case ScreenManager.GameOver:
                 gameOverScreen.Update();
+                break;
+            case ScreenManager.Connection:
+                connectionScreen.Update();
+                break;
+            case ScreenManager.Disconnection:
+                disconnectionScreen.Update();
                 break;
         }
     }
@@ -107,6 +121,12 @@ public class GameAsteroids : Processing
             case ScreenManager.GameOver:
                 gameOverScreen.setScore(gameScreen.getScore());
                 gameOverScreen.Draw();
+                break;
+            case ScreenManager.Connection:
+                connectionScreen.Draw();
+                break;
+            case ScreenManager.Disconnection:
+                disconnectionScreen.Draw();
                 break;
         }
 
@@ -209,7 +229,7 @@ public class GameAsteroids : Processing
 
     public void setCurrentScreen(ScreenManager newScreen, bool restart = false) 
     {
-        if (newScreen == ScreenManager.Playing || newScreen == ScreenManager.Menu && restart)
+        if ((newScreen == ScreenManager.Playing || newScreen == ScreenManager.Menu) && restart)
         {
             Reset();
         } 
