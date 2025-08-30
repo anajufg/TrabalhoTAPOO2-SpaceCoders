@@ -2,16 +2,17 @@ using Monogame.Processing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Text;
 
 namespace Cliente.Screens;
 
 public class StoryScreen
 {
     private GameAsteroids p;
-    private readonly List<PImage> scenes = new();
-    private readonly List<string> scenesDescription = new();
     private SpriteFont font;
     private SpriteBatch spriteBatch;
+    private readonly List<PImage> scenes = new();
+    private readonly List<string> scenesDescription = new();
     private bool NextScene = false;
     private bool wasSpacePressedLastFrame = false;
     private int currentScene = 0;
@@ -31,15 +32,10 @@ public class StoryScreen
         {
             scenes.Add(p.loadImage($"./Content/Scenes/scene{i+1}.png"));
         }
-        // scenesDescription.Add("Em um laboratório secreto no ano 3097, cientistas humanos desenvolvem uma máquina do tempo com o objetivo de estudar dinossauros em seu habitat original.");
-        // scenesDescription.Add("Durante escavações, eles encontram um fóssil intacto de um pterossauro raro, o último de sua linhagem com traços genéticos que indicam uma consciência evoluída e uma missão codificada em seu DNA: impedir o impacto que dizimaria sua espécie.");
-        // scenesDescription.Add("Ao ser reanimado, o pterossauro desperta antes que os humanos possam controlá-lo. Ele observa, aprende e se infiltra no laboratório, absorvendo conhecimento e se equipando com a tecnologia avançada: armaduras de carbono, propulsores quânticos, canhões de plasma e um núcleo de dobra temporal.");
-        // scenesDescription.Add("O pterossauro ativa a máquina do tempo e voa rumo ao passado, direto para o Cretáceo, minutos antes da chuva de asteroides. Seu objetivo: destruir cada rocha cósmica e salvar os dinossauros da extinção.");
-        scenesDescription.Add("teste");
-        scenesDescription.Add("outro");
-        scenesDescription.Add("e mais um");
-        scenesDescription.Add("e e isso");
-
+        scenesDescription.Add("Em um laboratório secreto no ano 3097, cientistas humanos desenvolvem uma máquina do tempo com o objetivo de estudar dinossauros em seu habitat original.");
+        scenesDescription.Add("Durante escavações, eles encontram um fóssil intacto de um pterossauro raro, o último de sua linhagem com traços genéticos que indicam uma consciência evoluída e uma missão codificada em seu DNA: impedir o impacto que dizimaria sua espécie.");
+        scenesDescription.Add("Ao ser reanimado, o pterossauro desperta antes que os humanos possam controlá-lo. Ele observa, aprende e se infiltra no laboratório, absorvendo conhecimento e se equipando com a tecnologia avançada: armaduras de carbono, propulsores quânticos, canhões de plasma e um núcleo de dobra temporal.");
+        scenesDescription.Add("O pterossauro ativa a máquina do tempo e voa rumo ao passado, direto para o Cretáceo, minutos antes da chuva de asteroides. Seu objetivo: destruir cada rocha cósmica e salvar os dinossauros da extinção.");
     }
 
     public void Draw()
@@ -50,20 +46,28 @@ public class StoryScreen
 
         spriteBatch.Begin();
 
-        string description = scenesDescription[currentScene];
-        Vector2 descriptionSize = font.MeasureString(description);
-        Vector2 descriptionPos = new(p.width / 2f, p.height - 100f); 
-        spriteBatch.DrawString(font, description, descriptionPos, Color.Yellow,
-            0f, descriptionSize / 2f, 0.7f, SpriteEffects.None, 0f);
+        float lineSpacing = 25f; 
+        string[] wrappedDescription = WrapText(scenesDescription[currentScene], p.width - 160f, font);
+        Vector2 descriptionPos = new(p.width / 2f, p.height - 150f);
+        for (int i = 0; i < wrappedDescription.Length; i++)
+        {
+            string line = wrappedDescription[i];
+            Vector2 lineSize = font.MeasureString(line); 
+            Vector2 linePos = new Vector2(
+                descriptionPos.X, 
+                descriptionPos.Y + i * lineSpacing
+            );
+
+            spriteBatch.DrawString(font, line, linePos, Color.Yellow,
+                0f, lineSize / 2f, 0.55f, SpriteEffects.None, 0f);
+        }
 
         string next = "Next";
-        if (currentScene == scenes.Count - 1)
-        {
-            next = "Start";
-        }
+        if (currentScene == NUM_SCENES - 1) next = "Start";
+        
     
         Vector2 nextSize = font.MeasureString(next);
-        Vector2 nextPos = new(p.width - 50f, p.height - 100f); 
+        Vector2 nextPos = new(p.width - 80f, p.height - 180f); 
         Color nextColor = (NextScene && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
         spriteBatch.DrawString(font, next, nextPos,  nextColor,
             0f, nextSize / 2f, 0.7f, SpriteEffects.None, 0f);
@@ -97,18 +101,38 @@ public class StoryScreen
         
         if (isSpacePressedNow && !wasSpacePressedLastFrame)
         {
-            if (NextScene)
-            {
-                currentScene++;
-            }
-
-            if (currentScene >= scenesDescription.Count)
-            {
-                p.setCurrentScreen(ScreenManager.Playing);
-            }
+            if (NextScene) currentScene++;
+            if (currentScene >= NUM_SCENES) p.setCurrentScreen(ScreenManager.Playing);
         }
         
         wasSpacePressedLastFrame = isSpacePressedNow;
     
+    }
+
+    private string[] WrapText(string text, float maxLineWidth, SpriteFont font)
+    {
+        string[] words = text.Split(' ');
+        List<string> lines = new();
+        StringBuilder sb = new();
+        float currentLineWidth = 0f;
+
+        foreach (string word in words)
+        {
+            Vector2 wordSize = font.MeasureString(word) * 0.55f; 
+            if (currentLineWidth + wordSize.X < maxLineWidth)
+            {
+                sb.Append(word + " ");
+                currentLineWidth += wordSize.X;
+            }
+            else
+            {
+                lines.Add(sb.ToString());
+                sb.Clear();
+                sb.Append(word + " ");
+                currentLineWidth = wordSize.X;
+            }
+        }
+        lines.Add(sb.ToString());
+        return lines.ToArray();
     }
 }

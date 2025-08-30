@@ -14,8 +14,10 @@ public class MenuScreen
     private SpriteFont font;
     private SpriteBatch spriteBatch;
 
-    private enum MenuOption { Play, StoryMode };
-    private MenuOption selectedOption = MenuOption.Play;
+    private enum MenuOption { Play, StoryMode, Exit };
+    private readonly MenuOption[] menuOptions = { MenuOption.Play, MenuOption.StoryMode, MenuOption.Exit };
+    private int selectedIndex = 0;
+    private bool wasKeyPressedLastFrame = false;
 
     private const int MAX_ASTEROIDS = 6;
     private readonly List<Asteroid> asteroids = new();
@@ -53,49 +55,58 @@ public class MenuScreen
         spriteBatch.DrawString(font, subtitle, subtitlePos, Color.LightGray,
             0f, subtitleSize / 2f, 0.7f, SpriteEffects.None, 0f); 
 
-        string play = "Play";
-        Vector2 playSize = font.MeasureString(play);
-        Vector2 playPos = new(p.width / 2f, p.height - 250f); 
-        Color playColor = (selectedOption == MenuOption.Play && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-        spriteBatch.DrawString(font, play, playPos,  playColor,
-            0f, playSize / 2f, 0.5f, SpriteEffects.None, 0f);
+        Vector2 basePos = new(p.width / 2f, p.height - 180f);
+        float lineSpacing = 30f; // Espaçamento entre as opções
 
-        string storyMode = "Story Mode";
-        Vector2 storyModeSize = font.MeasureString(storyMode);
-        Vector2 storyModePos = new(p.width / 2f, p.height - 225f); 
-        Color storyModeColor = (selectedOption == MenuOption.StoryMode && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
-        spriteBatch.DrawString(font, storyMode, storyModePos, storyModeColor,
-        0f, storyModeSize / 2f, 0.5f, SpriteEffects.None, 0f);
-    
+        for (int i = 0; i < menuOptions.Length; i++)
+        {
+            string text = menuOptions[i].ToString();
+            Vector2 textSize = font.MeasureString(text);
+            Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
+            
+            Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
+            
+            spriteBatch.DrawString(font, text, textPos, textColor,
+                0f, textSize / 2f, 0.5f, SpriteEffects.None, 0f);
+        }
+        
         spriteBatch.End();
     }
 
     public void Update()
     {
-        if (p.keyPressed)
+        bool isKeyPressedNow = p.keyPressed;
+
+        if (isKeyPressedNow && !wasKeyPressedLastFrame)
         {
             switch (p.keyCode)
             {
                 case Keys.Up: 
-                    if (selectedOption == MenuOption.StoryMode) selectedOption = MenuOption.Play;
+                    selectedIndex = (selectedIndex - 1 + menuOptions.Length) % menuOptions.Length;
                     break;
                 case Keys.Down: 
-                    if (selectedOption == MenuOption.Play) selectedOption = MenuOption.StoryMode;
+                    selectedIndex = (selectedIndex + 1) % menuOptions.Length;
+                    break;
+                case Keys.Space:
+                    MenuOption currentOption = menuOptions[selectedIndex];
+                    
+                    if (currentOption == MenuOption.Play)
+                    {
+                        p.setCurrentScreen(ScreenManager.Playing);
+                    }
+                    else if (currentOption == MenuOption.StoryMode)
+                    {
+                        p.setCurrentScreen(ScreenManager.StoryMode);
+                    }
+                    else if (currentOption == MenuOption.Exit)
+                    {
+                        p.Exit();
+                    }
                     break;
             }
         }
-
-        if (p.keyPressed && p.keyCode == Keys.Space)
-        {
-            if (selectedOption == MenuOption.Play)
-            {
-                p.setCurrentScreen(ScreenManager.Playing);
-            }
-            else if (selectedOption == MenuOption.StoryMode)
-            {
-                p.setCurrentScreen(ScreenManager.StoryMode); 
-            }
-        }
+        
+        wasKeyPressedLastFrame = isKeyPressedNow;
     }
 
     private Asteroid NovoAsteroid()
