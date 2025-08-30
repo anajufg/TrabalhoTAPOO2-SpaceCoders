@@ -10,14 +10,12 @@ public class GameScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
-    private PImage asteroidSprite;
     private SpriteFont font;
     private SpriteBatch spriteBatch;
 
     private Pterosaur pterosaur;
     private readonly List<Bullet> bullets = new();
     private readonly List<Asteroid> asteroids = new();
-    private readonly Random rnd = new();
     private int score;
 
     private int fireRate;
@@ -119,7 +117,7 @@ public class GameScreen
         }
 
         /* spawna novo Asteroid a cada 40 quadros */
-        if (p.frameCount % 40 == 0) asteroids.Add(NovoAsteroid());
+        if (p.frameCount % 40 == 0) asteroids.Add(p.NovoAsteroid(true));
 
     }
         /* ====================== input ============================= */
@@ -168,42 +166,6 @@ public class GameScreen
         }
         
         wasKeyPressedLastFrame = isKeyPressedNow;
-    }
-
-    /* ====================== fábrica de Asteroids ============= */
-    Asteroid NovoAsteroid()
-    {
-        // Choose a random edge: 0=top, 1=bottom, 2=left, 3=right
-        int edge = rnd.Next(4);
-        float x = 0, y = 0;
-        Vector2 dir = Vector2.Zero;
-        switch (edge)
-        {
-            case 0: // top
-                x = rnd.Next(p.width);
-                y = -30;
-                dir = new Vector2((float)(rnd.NextDouble() - 0.5), 1f);
-                break;
-            case 1: // bottom
-                x = rnd.Next(p.width);
-                y = p.height + 30;
-                dir = new Vector2((float)(rnd.NextDouble() - 0.5), -1f);
-                break;
-            case 2: // left
-                x = -30;
-                y = rnd.Next(p.height);
-                dir = new Vector2(1f, (float)(rnd.NextDouble() - 0.5));
-                break;
-            case 3: // right
-                x = p.width + 30;
-                y = rnd.Next(p.height);
-                dir = new Vector2(-1f, (float)(rnd.NextDouble() - 0.5));
-                break;
-        }
-        dir.Normalize();
-        float speed = 2f + (float)rnd.NextDouble() * 2f; // 2–4 px/frame
-        float size = 15f + (float)rnd.NextDouble() * 30f; // 15–45 px radius
-        return new Asteroid(new Vector2(x, y), dir * speed, size);
     }
 
     public int getScore() { return this.score; }

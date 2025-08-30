@@ -36,7 +36,7 @@ public class PauseScreen
         spriteBatch.Begin();
 
         Vector2 basePos = new(p.width / 2f, p.height / 2f);
-        float lineSpacing = 30f; 
+        float lineSpacing = 40f; 
 
         for (int i = 0; i < pauseOptions.Length; i++)
         {

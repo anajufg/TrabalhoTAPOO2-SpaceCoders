@@ -4,7 +4,7 @@ using Monogame.Processing;
 
 namespace Client.Entities;
 
-class Asteroid
+public class Asteroid
 {
     private Vector2 pos, vel;
     private PImage? asteroidSprite;

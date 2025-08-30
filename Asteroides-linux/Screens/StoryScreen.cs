@@ -39,7 +39,8 @@ public class StoryScreen
         }
         scenesDescription.Add("Em um laboratório secreto no ano 3097, cientistas humanos desenvolvem uma máquina do tempo com o objetivo de estudar dinossauros em seu habitat original.");
         scenesDescription.Add("Durante escavações, eles encontram um fóssil intacto de um pterossauro raro, o último de sua linhagem com traços genéticos que indicam uma consciência evoluída e uma missão codificada em seu DNA: impedir o impacto que dizimaria sua espécie.");
-        scenesDescription.Add("Ao ser reanimado, o pterossauro desperta antes que os humanos possam controlá-lo. Ele observa, aprende e se infiltra no laboratório, absorvendo conhecimento e se equipando com a tecnologia avançada: armaduras de carbono, propulsores quânticos, canhões de plasma e um núcleo de dobra temporal.");
+        scenesDescription.Add("Ao ser reanimado, o pterossauro desperta antes que os humanos possam controlá-lo.");
+        scenesDescription.Add("Ele observa, aprende e se infiltra no laboratório, absorvendo conhecimento e se equipando com a tecnologia avançada: armaduras de carbono, propulsores quânticos, canhões de plasma e um núcleo de dobra temporal.");
         scenesDescription.Add("O pterossauro ativa a máquina do tempo e voa rumo ao passado, direto para o Cretáceo, minutos antes da chuva de asteroides. Seu objetivo: destruir cada rocha cósmica e salvar os dinossauros da extinção.");
     }
 

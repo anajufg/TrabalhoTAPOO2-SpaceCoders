@@ -4,7 +4,7 @@ using Monogame.Processing;
 
 namespace Client.Entities;
 
-class Pterosaur
+public class Pterosaur
 {
     public Vector2 pos;
     Vector2 velocity = Vector2.Zero;

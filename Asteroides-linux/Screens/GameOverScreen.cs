@@ -10,7 +10,6 @@ public class GameOverScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
-    private PImage asteroidSprite;
     private SpriteFont font;
     private SpriteBatch spriteBatch;
 
@@ -21,7 +20,6 @@ public class GameOverScreen
 
     private int score;
 
-    private const int MAX_ASTEROIDS = 6;
     private readonly List<Asteroid> asteroids;
 
     public GameOverScreen(GameAsteroids p)
@@ -39,14 +37,13 @@ public class GameOverScreen
         spriteBatch = new SpriteBatch(p.GraphicsDevice);
         font = p.Content.Load<SpriteFont>("PressStart"); 
         backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
-        asteroidSprite = p.loadImage("./Content/Sprites/asteroid.png");
     }
 
     public void Draw()
     {
         p.image(backgroundImage, 0, 0, p.width, p.height);
 
-        Asteroids();
+        p.DrawAsteroidsBackground(asteroids);
 
         spriteBatch.Begin();
 
@@ -62,7 +59,7 @@ public class GameOverScreen
         spriteBatch.DrawString(font, scoreText, scorePos, Color.White,
             0f, scoreSize / 2f, 0.8f, SpriteEffects.None, 0f); 
 
-        Vector2 basePos = new(p.width / 2f, scorePos.Y + scoreSize.Y + 90f);
+        Vector2 basePos = new(p.width / 2f, scorePos.Y + scoreSize.Y + 100f);
         float lineSpacing = 30f; 
 
         for (int i = 0; i < GameOverOptionss.Length; i++)
@@ -117,43 +114,4 @@ public class GameOverScreen
     }
 
     public void setScore(int score) { this.score = score; }
-
-    private Asteroid NovoAsteroid()
-    {
-        Random rnd = new Random();
-        float x = p.width / 2 + rnd.Next(50, 400);
-        float y = -30 - rnd.Next(0, 50);
-
-        float targetX = -350;
-        float targetY = p.height + 30;
-
-        Vector2 dir = new Vector2(targetX - x, targetY - y);
-        dir.Normalize();
-
-        float speed = 0.8f + (float)rnd.NextDouble() * 0.5f;
-        float size = 15f + (float)rnd.NextDouble() * 70f;
-
-        return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite);
-    }
-
-    private void Asteroids() 
-    {
-        if (p.frameCount % 150 == 0 && asteroids.Count < MAX_ASTEROIDS)
-            asteroids.Add(NovoAsteroid());
-
-        for (int i = asteroids.Count - 1; i >= 0; i--)
-        {
-            var a = asteroids[i];
-            a.Update();
-            a.Draw(p);
-
-            if (a.getPosition().Y > p.height + 50 ||
-                a.getPosition().X < -50 ||
-                a.getPosition().X > p.width + 50)
-            {
-                asteroids.RemoveAt(i);
-                asteroids.Add(NovoAsteroid());
-            }
-        }
-    }
 }
