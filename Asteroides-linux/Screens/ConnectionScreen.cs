@@ -13,7 +13,7 @@ public class ConnectionScreen
     private PImage backgroundImage;
 
     private StringBuilder ipInput; 
-    private bool isTyping; 
+    private bool isInvalidInput;
 
     private enum ConnectionOption { Play, Menu, Exit };
     private readonly ConnectionOption[] connectionOptions;
@@ -28,7 +28,7 @@ public class ConnectionScreen
         wasKeyPressedLastFrame = false;
 
         ipInput = new StringBuilder(); 
-        isTyping = true; 
+        isInvalidInput = false;
         p.Window.TextInput += OnTextInput;
     }
 
@@ -43,16 +43,16 @@ public class ConnectionScreen
 
         p.DrawText("Conexão", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
 
-        p.DrawText("Digite o IP do servidor:", p.gameFont, new Vector2(p.width / 2f, p.height * 0.45f), Color.White, 0.5f);
-        // if (!isTyping) ipInput = "|";
-        p.DrawText($"IP: {ipInput}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.4f), Color.Cyan, 0.5f);
+        p.DrawText($"Digite o IP do servidor: {(ipInput.Length > 0 ? ipInput : ((p.frameCount / 30) % 2 == 0) ? " " : "|")}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.4f), Color.Cyan, 0.5f);
 
+        if (isInvalidInput) p.DrawText("Digite um ip válido!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.75f), Color.Red, 0.6f);
+       
         Vector2 basePos = new(p.width / 2f, p.height * 0.55f);
         float lineSpacing = 30f;
 
         for (int i = 0; i < connectionOptions.Length; i++)
         {
-            string text = connectionOptions[i].ToString();
+            string text = string.Join(" ", connectionOptions[i].ToString().Split('_'));
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
 
@@ -82,7 +82,14 @@ public class ConnectionScreen
                         case ConnectionOption.Play:
                             string ip = ipInput.ToString();
                             // p.ConnectToServer(ip); // (precisa implementar)
-                            p.setCurrentScreen(ScreenManager.Playing);
+                            if (ip.Length == 0) 
+                            {
+                                isInvalidInput = true;
+                            }
+                            else 
+                            {
+                                p.setCurrentScreen(ScreenManager.Playing);
+                            }
                             break;
                         case ConnectionOption.Menu:
                             p.setCurrentScreen(ScreenManager.Menu, true);
@@ -100,8 +107,8 @@ public class ConnectionScreen
 
     private void OnTextInput(object sender, TextInputEventArgs e)
     {
-        if (!isTyping) return;
-
+        isInvalidInput = false;
+        
         char c = e.Character;
 
         if (char.IsDigit(c) || c == '.')

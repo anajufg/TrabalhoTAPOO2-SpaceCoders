@@ -41,7 +41,7 @@ public class GameOverScreen
 
         p.DrawAsteroidsBackground(asteroids);
 
-        p.DrawText("Game Over", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
+        p.DrawText("Game Over", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Red, 1.5f);
         p.DrawText($"Score: {score}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
         
         Vector2 basePos = new(p.width / 2f, p.height * 0.5f);

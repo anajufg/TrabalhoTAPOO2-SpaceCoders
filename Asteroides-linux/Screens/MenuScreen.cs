@@ -11,7 +11,7 @@ public class MenuScreen
     private GameAsteroids p;
     private PImage backgroundImage;
 
-    private enum MenuOption { Play, StoryMode, Connection, Exit };
+    private enum MenuOption { Play, Story_Mode, Connection, Exit };
     private readonly MenuOption[] menuOptions;
     private int selectedIndex;
     private bool wasKeyPressedLastFrame;
@@ -22,7 +22,7 @@ public class MenuScreen
     {
         this.p = p;
         asteroids = new();
-        menuOptions = [MenuOption.Play, MenuOption.StoryMode, MenuOption.Connection, MenuOption.Exit];
+        menuOptions = [MenuOption.Play, MenuOption.Story_Mode, MenuOption.Connection, MenuOption.Exit];
         selectedIndex = 0;
         wasKeyPressedLastFrame = false;
     }
@@ -46,7 +46,7 @@ public class MenuScreen
 
         for (int i = 0; i < menuOptions.Length; i++)
         {
-            string text = menuOptions[i].ToString();
+            string text = string.Join(" ", menuOptions[i].ToString().Split('_'));
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.White;
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             
@@ -77,7 +77,7 @@ public class MenuScreen
                         case MenuOption.Play:
                             p.setCurrentScreen(ScreenManager.Playing);
                             break;
-                        case MenuOption.StoryMode:
+                        case MenuOption.Story_Mode:
                             p.setCurrentScreen(ScreenManager.StoryMode);
                             break;
                         case MenuOption.Connection:

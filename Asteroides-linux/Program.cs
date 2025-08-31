@@ -236,6 +236,7 @@ public class GameAsteroids : Processing
             Reset();
         } 
         currentScreen = newScreen;
+        delay(150);
     }
 
     public void DrawText(string text, SpriteFont font, Vector2 position, Color color, float scale)
