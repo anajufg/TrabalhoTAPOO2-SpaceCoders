@@ -2,9 +2,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
 
-namespace Asteroids;
+namespace Client.Entities;
 
-class Pterosaur
+public class Pterosaur
 {
     public Vector2 pos;
     Vector2 velocity = Vector2.Zero;
@@ -19,10 +19,10 @@ class Pterosaur
     public Pterosaur(Vector2 start, Processing g)
     {
         pos = start;
-        pterosaur = g.loadImage("../Content/pterosaur_yellow.png");
+        pterosaur = g.loadImage("./Content/Sprites/pterosaur_yellow.png");
     }
 
-    public void Update(bool left, bool right, bool up, bool down, int w, int h)
+    public void Update(bool left, bool right, bool up, bool down, int w , int h)
     {
         // Rotation
         if (left) angle -= RotationSpeed;
@@ -64,11 +64,13 @@ class Pterosaur
     public void Draw(Processing g)
     {
         // Era pra rotar o sprite, mas não funciona
-        g.pushMatrix();
-        g.translate(pos.X, pos.Y);
+        g.push();
         g.rotate(angle + MathF.PI / 2);
-        g.image(this.pterosaur, -50, -25, 100, 50);
-        g.popMatrix();
+        g.rect(pos.X, pos.Y, 10, 10);
+        //g.image(this.pterosaur, 0, 0, 200, 100);
+        g.pop(); 
+
+
         //Console.WriteLine($"pos.X: {pos.X}, pos.Y: {pos.Y}, angle: {angle}");
     }
 
