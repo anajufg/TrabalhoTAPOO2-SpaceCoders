@@ -29,7 +29,7 @@ public class GameScreen
 
     public void LoadContent()
     {
-        backgroundImage = p.loadImage("./Content/Backgrounds/menu_background.png");
+        backgroundImage = p.loadImage("./Content/Backgrounds/game_background.png");
 
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
         bullets = new();

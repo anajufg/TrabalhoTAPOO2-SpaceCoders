@@ -34,20 +34,20 @@ public class ConnectionScreen
 
     public void LoadContent()
     {
-        backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
+        backgroundImage = p.loadImage("./Content/Scenes/scene4.png");
     }
 
     public void Draw()
     {
         p.image(backgroundImage, 0, 0, p.width, p.height);
 
-        p.DrawText("Conexão", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
+        p.DrawText("Connection", p.gameFont, new Vector2(p.width / 2f, p.height * 0.4f), Color.Cyan, 1.2f);
 
-        p.DrawText($"Digite o IP do servidor: {(ipInput.Length > 0 ? ipInput : ((p.frameCount / 30) % 2 == 0) ? " " : "|")}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.4f), Color.Cyan, 0.5f);
+        p.DrawText($"Enter the server IP: {(ipInput.Length > 0 ? ipInput : ((p.frameCount / 30) % 2 == 0) ? " " : "|")}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.5f), Color.Cyan, 0.5f);
 
-        if (isInvalidInput) p.DrawText("Digite um ip válido!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.75f), Color.Red, 0.6f);
+        if (isInvalidInput) p.DrawText("Enter a valid IP!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.8f), Color.Red, 0.6f);
        
-        Vector2 basePos = new(p.width / 2f, p.height * 0.55f);
+        Vector2 basePos = new(p.width / 2f, p.height * 0.6f);
         float lineSpacing = 30f;
 
         for (int i = 0; i < connectionOptions.Length; i++)

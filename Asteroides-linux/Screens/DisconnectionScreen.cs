@@ -26,17 +26,16 @@ public class DisconnectionScreen
 
     public void LoadContent()
     {
-        backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
+        backgroundImage = p.loadImage("./Content/Backgrounds/disconnection_background.png");
     }
 
     public void Draw()
     {
         p.image(backgroundImage, 0, 0, p.width, p.height);
 
-        p.DrawText("Desconxão", p.gameFont, new Vector2(p.width / 2f, p.height * 0.2f), Color.Yellow, 1.5f);
-        p.DrawText("Tente novamente", p.gameFont, new Vector2(p.width / 2f, p.height * 0.30f), Color.White, 0.8f);
+        p.DrawText("Try again", p.gameFont, new Vector2(p.width / 2f, p.height * 0.55f), Color.Yellow, 0.6f);
         
-        Vector2 basePos = new(p.width / 2f, p.height * 0.5f);
+        Vector2 basePos = new(p.width / 2f, p.height * 0.65f);
         float lineSpacing = 30f; 
 
         for (int i = 0; i < disconnectionOptions.Length; i++)

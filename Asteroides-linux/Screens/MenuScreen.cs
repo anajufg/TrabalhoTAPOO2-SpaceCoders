@@ -38,10 +38,10 @@ public class MenuScreen
 
         p.DrawAsteroidsBackground(asteroids);
 
-        p.DrawText("Jurassic Impact", p.gameFont, new Vector2(p.width / 2f, p.height * 0.4f), Color.Yellow, 1f);
-        p.DrawText("Prepare-se para mudar o passado!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.46f), Color.LightGray, 0.7f);
+        p.DrawText("Jurassic Impact", p.gameFont, new Vector2(p.width / 2f, p.height * 0.38f), Color.Yellow, 1f);
+        p.DrawText("Get ready to change the past!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.44f), Color.LightGray, 0.7f);
       
-        Vector2 basePos = new(p.width / 2f, p.height * 0.6f);
+        Vector2 basePos = new(p.width / 2f, p.height * 0.55f);
         float lineSpacing = 30f; 
 
         for (int i = 0; i < menuOptions.Length; i++)
