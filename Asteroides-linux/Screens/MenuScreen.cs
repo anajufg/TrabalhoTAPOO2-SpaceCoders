@@ -11,7 +11,7 @@ public class MenuScreen
     private GameAsteroids p;
     private PImage backgroundImage;
 
-    private enum MenuOption { Play, StoryMode, Exit };
+    private enum MenuOption { Play, StoryMode, Connection, Exit };
     private readonly MenuOption[] menuOptions;
     private int selectedIndex;
     private bool wasKeyPressedLastFrame;
@@ -22,7 +22,7 @@ public class MenuScreen
     {
         this.p = p;
         asteroids = new();
-        menuOptions = [MenuOption.Play, MenuOption.StoryMode, MenuOption.Exit];
+        menuOptions = [MenuOption.Play, MenuOption.StoryMode, MenuOption.Connection, MenuOption.Exit];
         selectedIndex = 0;
         wasKeyPressedLastFrame = false;
     }
@@ -79,6 +79,9 @@ public class MenuScreen
                             break;
                         case MenuOption.StoryMode:
                             p.setCurrentScreen(ScreenManager.StoryMode);
+                            break;
+                        case MenuOption.Connection:
+                            p.setCurrentScreen(ScreenManager.Connection);
                             break;
                         case MenuOption.Exit:
                             p.Exit();

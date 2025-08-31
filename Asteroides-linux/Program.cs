@@ -30,7 +30,7 @@ public class GameAsteroids : Processing
     private List<PImage> asteroidsSprites;
 
     private const int MAX_ASTEROIDS = 6;
-    private const int NUM_ASTEROIDS_SPRITES = 1;
+    private const int NUM_ASTEROIDS_SPRITES = 4;
 
     /* ===================== ciclo de vida ======================= */
     public override void Setup()
@@ -172,8 +172,10 @@ public class GameAsteroids : Processing
                     break;
             }
 
-            speed = 2f + (float)rnd.NextDouble() * 2f; // 2–4 px/frame
-            size = 15f + (float)rnd.NextDouble() * 30f; // 15–45 px radius
+            speed = 2f + (float)rnd.NextDouble() * 2f; 
+            size = 30f + (float)rnd.NextDouble() * 70f; 
+
+            asteroidSprite = asteroidsSprites[rnd.Next(asteroidsSprites.Count)];
         }
         else 
         {
@@ -186,13 +188,13 @@ public class GameAsteroids : Processing
             dir = new Vector2(targetX - x, targetY - y);
 
             speed = 0.8f + (float)rnd.NextDouble() * 0.5f;
-            size = 15f + (float)rnd.NextDouble() * 70f;
+            size = 15f + (float)rnd.NextDouble() * 50f;
+            
+            if (size < 30f) asteroidSprite = asteroidSpriteSmall;
+            else asteroidSprite = asteroidsSprites[rnd.Next(asteroidsSprites.Count)];
         }
 
         dir.Normalize();
-
-        if (size < 30f) asteroidSprite = asteroidSpriteSmall;
-        else asteroidSprite = asteroidsSprites[rnd.Next(asteroidsSprites.Count)];
         
         return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite);
     }

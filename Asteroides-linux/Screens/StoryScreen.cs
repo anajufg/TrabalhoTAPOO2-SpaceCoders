@@ -15,7 +15,7 @@ public class StoryScreen
     private int currentSceneIndex;
     private bool wasSpacePressedLastFrame;
 
-    private const int NUM_SCENES = 4;
+    private const int NUM_SCENES = 5;
 
     public StoryScreen(GameAsteroids p)
     {
