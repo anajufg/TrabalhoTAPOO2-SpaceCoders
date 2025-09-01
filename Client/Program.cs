@@ -6,7 +6,6 @@ class Program
 {
     static async Task Main(string[] args)
     {
-
         var client = new TcpClientWrapper();
         var handleGame = new HandleGame(client);
 

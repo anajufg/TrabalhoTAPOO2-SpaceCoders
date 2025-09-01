@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Text;
 using Client.Entities;
+using System.Threading.Tasks;
 
 namespace Cliente.Screens;
 
@@ -81,14 +82,25 @@ public class ConnectionScreen
                     {
                         case ConnectionOption.Play:
                             string ip = ipInput.ToString();
-                            // p.ConnectToServer(ip); // (precisa implementar)
                             if (ip.Length == 0) 
                             {
                                 isInvalidInput = true;
                             }
                             else 
                             {
-                                p.setCurrentScreen(ScreenManager.Playing);
+                                // Conectar ao servidor de forma assíncrona
+                                _ = Task.Run(async () =>
+                                {
+                                    bool connected = await p.ConnectToServer(ip);
+                                    if (connected)
+                                    {
+                                        p.setCurrentScreen(ScreenManager.Playing);
+                                    }
+                                    else
+                                    {
+                                        isInvalidInput = true;
+                                    }
+                                });
                             }
                             break;
                         case ConnectionOption.Menu:

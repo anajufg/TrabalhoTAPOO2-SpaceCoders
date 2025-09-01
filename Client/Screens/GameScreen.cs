@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Client.Entities;
+using System.Threading.Tasks;
 
 namespace Cliente.Screens;
 
@@ -74,6 +75,12 @@ public class GameScreen
         /* ----- pterosaur ----- */
         Teclas();
         pterosaur.Update(p.esquerda, p.direita, p.cima, p.baixo, p.width, p.height);
+
+        /* ----- enviar ações para o servidor se conectado ----- */
+        if (p.IsConnected())
+        {
+            _ = Task.Run(async () => await p.SendPlayerAction());
+        }
 
         /* ----- bullets ----- */
         for (int i = bullets.Count - 1; i >= 0; i--)

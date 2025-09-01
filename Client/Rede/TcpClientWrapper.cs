@@ -14,7 +14,7 @@ public class TcpClientWrapper
     private NetworkStream _stream;
     private CancellationTokenSource _cts;
 
-    public event Action<object>? OnMessageReceived;
+    public event Action<JsonElement>? OnMessageReceived;
     public event Action? OnDisconnected;
 
     public async Task ConnectAsync(string ip, int port)
@@ -41,10 +41,13 @@ public class TcpClientWrapper
             while (!_cts.Token.IsCancellationRequested)
             {
                 var json = await MessageFraming.ReadAsync(_stream, _cts.Token);
-                // if (json == null) break;
+                if (json == null) break;
 
                 Console.WriteLine($"Mensagem recebida: {json}");
-                OnMessageReceived?.Invoke(json);
+                if (json.HasValue)
+                {
+                    OnMessageReceived?.Invoke(json.Value);
+                }
             }
         }
         catch (Exception ex)

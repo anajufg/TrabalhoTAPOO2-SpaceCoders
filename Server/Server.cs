@@ -31,11 +31,21 @@ public class Server
                         try
                         {
                             var msg = await Receive(client);
-                            Console.WriteLine($"Mensagem recebida: {msg}");
+                            if (msg != null)
+                            {
+                                Console.WriteLine($"Mensagem recebida: {msg}");
+                                await ProcessMessage(client, msg);
+                            }
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Erro no cliente: {ex.Message}");
+                            lock (players)
+                            {
+                                players.Remove(client);
+                            }
+                            client.Close();
+                            Console.WriteLine($"Cliente removido devido a erro. Restantes: {players.Count}");
                         }
                     }
                 }
@@ -51,56 +61,76 @@ public class Server
                 players.Add(newClient);
             }
             Console.WriteLine($"Novo jogador conectado! Total: {players.Count}");
-            await Send(newClient,new {
-                type = "Input",
-                thrust = 1,
-                rotate = 0,
-                shoot = true,
-                dt = 0.016
+            
+            await Send(newClient, new
+            {
+                type = "Welcome",
+                message = "Conectado ao servidor Asteroids!",
+                playerId = players.Count
             });
         }
 
     }
 
-    public async Task<dynamic?> Receive(TcpClient client)
+    public async Task<JsonElement?> Receive(TcpClient client)
     {
-        var stream = client.GetStream();
-        byte[] lenBuf = new byte[4];
-        await stream.ReadAsync(lenBuf, 0, 4);
-        int len = BitConverter.ToInt32(lenBuf, 0);
-        byte[] jsonBuffer = new byte[len];
-        int readJson = 0;
-        while (readJson < len)
+        try
         {
-            int r = await stream.ReadAsync(jsonBuffer, readJson, len - readJson);
-            if (r == 0) return null;
-            readJson += r;
-        }
-
-        var json = JsonSerializer.Deserialize<dynamic>(jsonBuffer);
-
-        if (json.ToString() == "sair")
-        {
-            lock (players)
+            var stream = client.GetStream();
+            byte[] lenBuf = new byte[4];
+            int readLen = await stream.ReadAsync(lenBuf, 0, 4);
+            if (readLen == 0) return null; 
+            
+            int len = BitConverter.ToInt32(lenBuf, 0);
+            if (len <= 0 || len > 10000) 
             {
-                players.Remove(client);
+                Console.WriteLine($"Tamanho de mensagem inválido: {len}");
+                return null;
             }
-            client.Close();
-            Console.WriteLine($"Jogador desconectado. Restantes: {players.Count}");
+            
+            byte[] jsonBuffer = new byte[len];
+            int readJson = 0;
+            while (readJson < len)
+            {
+                int r = await stream.ReadAsync(jsonBuffer, readJson, len - readJson);
+                if (r == 0) return null; 
+                readJson += r;
+            }
+
+            var jsonString = Encoding.UTF8.GetString(jsonBuffer);
+            Console.WriteLine($"JSON recebido: {jsonString}");
+            
+
+            using var document = JsonDocument.Parse(jsonString);
+            return document.RootElement.Clone();
+        }
+        catch (JsonException ex)
+        {
+            Console.WriteLine($"Erro de JSON: {ex.Message}");
             return null;
         }
-
-        return json;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao receber mensagem: {ex.Message}");
+            return null;
+        }
     }
 
     public async Task Send(TcpClient client, object msg)
     {
-        var stream = client.GetStream();
-
-        var json = JsonSerializer.SerializeToUtf8Bytes(msg);
-        var len = BitConverter.GetBytes(json.Length);
-        await stream.WriteAsync(len, 0, len.Length);
-        await stream.WriteAsync(json, 0, json.Length);
+        try
+        {
+            var stream = client.GetStream();
+            var json = JsonSerializer.SerializeToUtf8Bytes(msg);
+            var len = BitConverter.GetBytes(json.Length);
+            await stream.WriteAsync(len, 0, len.Length);
+            await stream.WriteAsync(json, 0, json.Length);
+            await stream.FlushAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao enviar mensagem: {ex.Message}");
+        }
     }
     
     // public async Task SendAll(string msg)
@@ -123,4 +153,39 @@ public class Server
     //         }
     //     }
     // }
+
+    private async Task ProcessMessage(TcpClient client, JsonElement? message)
+    {
+        if (message == null) return;
+        
+        try
+        {
+            if (message.Value.TryGetProperty("Action", out var actionProp) && 
+                actionProp.ValueKind == JsonValueKind.String)
+            {
+                string action = actionProp.GetString() ?? "";
+                
+                if (action == "Move")
+                {
+                    // Processar movimento do jogador
+                    if (message.Value.TryGetProperty("Direction", out var directionProp))
+                    {
+                        var direction = directionProp.GetProperty("Left");
+                        Console.WriteLine($"Jogador movendo: {action}");
+                        
+                        
+                    }
+                }
+            }
+            
+            await Send(client, new { 
+                type = "Ack", 
+                message = "Mensagem recebida com sucesso" 
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao processar mensagem: {ex.Message}");
+        }
+    }
 }
