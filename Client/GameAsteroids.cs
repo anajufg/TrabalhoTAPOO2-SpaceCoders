@@ -15,6 +15,7 @@ public class GameAsteroids : Processing
 
     /* --------------------- estado de jogo --------------------- */
     private ScreenManager currentScreen;
+    public int level = 0;
 
     /* --------------------- telas de jogo ---------------------- */
     private MenuScreen menuScreen;
@@ -149,7 +150,7 @@ public class GameAsteroids : Processing
 
         if (isGame)
         {
-            int edge = rnd.Next(4);
+            int edge = rnd.Next((level == 0) ? 4 : 0);
             x = 0;
             y = 0;
             dir = Vector2.Zero;

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Text;
 using Client.Entities;
 using System.Threading.Tasks;
+using Client.Rede;
 
 namespace Cliente.Screens;
 
@@ -16,16 +17,21 @@ public class ConnectionScreen
     private StringBuilder ipInput; 
     private bool isInvalidInput;
 
-    private enum ConnectionOption { Play, Menu, Exit };
+    private enum ConnectionOption { Game_Level, Play, Menu, Exit };
     private readonly ConnectionOption[] connectionOptions;
+    private enum GameLevelOption { Easy, Hard };
+    private readonly GameLevelOption[] gameLevelOptions;
     private int selectedIndex;
+    private int currentLevel;
     private bool wasKeyPressedLastFrame;
 
     public ConnectionScreen(GameAsteroids p)
     {
         this.p = p;
-        connectionOptions = [ConnectionOption.Play, ConnectionOption.Menu, ConnectionOption.Exit];
+        connectionOptions = [ConnectionOption.Game_Level, ConnectionOption.Play, ConnectionOption.Menu, ConnectionOption.Exit];
+        gameLevelOptions = [GameLevelOption.Easy, GameLevelOption.Hard];
         selectedIndex = 0;
+        currentLevel = 0;
         wasKeyPressedLastFrame = false;
 
         ipInput = new StringBuilder(); 
@@ -47,13 +53,22 @@ public class ConnectionScreen
         p.DrawText($"Enter the server IP: {(ipInput.Length > 0 ? ipInput : ((p.frameCount / 30) % 2 == 0) ? " " : "|")}", p.gameFont, new Vector2(p.width / 2f, p.height * 0.5f), Color.Cyan, 0.5f);
 
         if (isInvalidInput) p.DrawText("Enter a valid IP!", p.gameFont, new Vector2(p.width / 2f, p.height * 0.8f), Color.Red, 0.6f);
-       
+
         Vector2 basePos = new(p.width / 2f, p.height * 0.6f);
         float lineSpacing = 30f;
 
         for (int i = 0; i < connectionOptions.Length; i++)
         {
-            string text = string.Join(" ", connectionOptions[i].ToString().Split('_'));
+            string text;
+            
+            if (connectionOptions[i] == ConnectionOption.Game_Level)
+            {
+                text = $"{string.Join(" ", connectionOptions[i].ToString().Split('_'))}: {gameLevelOptions[currentLevel].ToString()}";
+            }
+            else {
+                text = string.Join(" ", connectionOptions[i].ToString().Split('_'));
+            }
+
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
 
@@ -80,6 +95,9 @@ public class ConnectionScreen
 
                     switch (currentOption)
                     {
+                        case ConnectionOption.Game_Level:
+                            p.level = (currentLevel + 1) % gameLevelOptions.Length;
+                            break;  
                         case ConnectionOption.Play:
                             string ip = ipInput.ToString();
                             if (ip.Length == 0) 
@@ -91,7 +109,7 @@ public class ConnectionScreen
                                 // Conectar ao servidor de forma assíncrona
                                 _ = Task.Run(async () =>
                                 {
-                                    bool connected = await p.ConnectToServer(ip);
+                                    bool connected = await Connection.GetInstance().ConnectToServer(ip);
                                     if (connected)
                                     {
                                         p.setCurrentScreen(ScreenManager.Playing);
