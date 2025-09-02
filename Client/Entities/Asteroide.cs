@@ -8,18 +8,22 @@ public class Asteroid
 {
     private Vector2 pos, vel;
     private PImage? asteroidSprite;
-    float rotation, rotationSpeed;
+    float rotation = 0, rotationSpeed = 0;
     public float size { get; }
 
     public Asteroid(Vector2 p, Vector2 v, float r)
     { pos = p; vel = v; size = r; }
 
-    public Asteroid(Vector2 p, Vector2 v, float r, PImage sprite, Processing g)
+    public Asteroid(Vector2 p, Vector2 v, float r, PImage sprite, Processing g, bool isRotation = true)
     {
+        if (isRotation) 
+        {
+            rotation = g.random(-1, 1);
+            rotationSpeed = g.random(-1, 1)/10.0f;
+        }
+
         pos = p; vel = v; size = r;
         asteroidSprite = sprite;
-        rotation = g.random(-1, 1);
-        rotationSpeed = g.random(-1, 1)/10.0f;
     }
 
     public void Update() => pos += vel;

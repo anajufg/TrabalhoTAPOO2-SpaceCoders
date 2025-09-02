@@ -4247,19 +4247,19 @@
     ]
   },
   "packageFolders": {
-    "/home/a2023952586/.nuget/packages/": {}
+    "/home/a2023951555/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/a2023952586/Documentos/Asteroides/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
+      "projectUniqueName": "/home/a2023951555/Downloads/Github/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
       "projectName": "Client",
-      "projectPath": "/home/a2023952586/Documentos/Asteroides/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
-      "packagesPath": "/home/a2023952586/.nuget/packages/",
-      "outputPath": "/home/a2023952586/Documentos/Asteroides/TrabalhoTAPOO2-SpaceCoders/Client/obj/",
+      "projectPath": "/home/a2023951555/Downloads/Github/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
+      "packagesPath": "/home/a2023951555/.nuget/packages/",
+      "outputPath": "/home/a2023951555/Downloads/Github/TrabalhoTAPOO2-SpaceCoders/Client/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/a2023952586/.nuget/NuGet/NuGet.Config"
+        "/home/a2023951555/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

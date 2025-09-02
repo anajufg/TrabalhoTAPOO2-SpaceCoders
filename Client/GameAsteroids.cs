@@ -46,7 +46,7 @@ public class GameAsteroids : Processing
     /* ===================== ciclo de vida ======================= */
     public override void Setup()
     {
-        size(1200, 600);
+        size(800, 600);
 
         spriteBatch = new SpriteBatch(GraphicsDevice);
         gameFont = Content.Load<SpriteFont>("PressStart");
@@ -189,6 +189,8 @@ public class GameAsteroids : Processing
             size = 30f + (float)rnd.NextDouble() * 70f; 
 
             asteroidSprite = gameAsteroidsSprites[rnd.Next(gameAsteroidsSprites.Count)];
+            dir.Normalize();
+            return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite, this);
         }
         else 
         {
@@ -205,11 +207,10 @@ public class GameAsteroids : Processing
             
             if (size < 30f) asteroidSprite = asteroidSpriteSmall;
             else asteroidSprite = screenAsteroidsSprites[rnd.Next(gameAsteroidsSprites.Count)];
+            
+            dir.Normalize();
+            return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite, this, false);
         }
-
-        dir.Normalize();
-        
-        return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite, this);
     }
 
     public void DrawAsteroidsBackground(List<Asteroid> asteroids) 
