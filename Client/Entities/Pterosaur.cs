@@ -19,7 +19,7 @@ public class Pterosaur
     public Pterosaur(Vector2 start, Processing g)
     {
         pos = start;
-        pterosaur = g.loadImage("./Content/Sprites/pterosaur_yellow.png");
+        pterosaur = g.loadImage("./Content/Sprites/pterosaur.png");
     }
 
     public void Update(bool left, bool right, bool up, bool down, int w , int h)
@@ -66,8 +66,8 @@ public class Pterosaur
         // Era pra rotar o sprite, mas não funciona
         g.push();
         g.rotate(angle + MathF.PI / 2);
-        g.rect(pos.X, pos.Y, 10, 10);
-        //g.image(this.pterosaur, 0, 0, 200, 100);
+        // g.rect(pos.X, pos.Y, 10, 10);
+        g.image(this.pterosaur, pos.X, pos.Y, 200, 100);
         g.pop(); 
 
 

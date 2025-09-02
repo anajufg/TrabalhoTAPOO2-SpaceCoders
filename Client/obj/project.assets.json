@@ -4247,19 +4247,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\FORMULA2\\.nuget\\packages\\": {}
+    "C:\\Users\\anaju\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
+      "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
       "projectName": "Client",
-      "projectPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
-      "packagesPath": "C:\\Users\\FORMULA2\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\obj\\",
+      "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
+      "packagesPath": "C:\\Users\\anaju\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\FORMULA2\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\anaju\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4282,8 +4282,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.300"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -4314,7 +4313,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

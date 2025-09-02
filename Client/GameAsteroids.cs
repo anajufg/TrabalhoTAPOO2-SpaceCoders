@@ -30,7 +30,8 @@ public class GameAsteroids : Processing
 
     /* --------------------- sprites ----------------------------- */
     private PImage asteroidSpriteSmall;
-    private List<PImage> asteroidsSprites;
+    private List<PImage> gameAsteroidsSprites;
+    private List<PImage> screenAsteroidsSprites;
 
     /* --------------------- sistema de rede --------------------- */
     private TcpClientWrapper? networkClient;
@@ -50,12 +51,14 @@ public class GameAsteroids : Processing
         spriteBatch = new SpriteBatch(GraphicsDevice);
         gameFont = Content.Load<SpriteFont>("PressStart");
 
-        asteroidsSprites = new();
+        gameAsteroidsSprites = new();
+        screenAsteroidsSprites = new();
 
         asteroidSpriteSmall = loadImage("./Content/Sprites/asteroid_small.png");
         for (int i = 0; i < NUM_ASTEROIDS_SPRITES; i++ )
         {
-            asteroidsSprites.Add(loadImage($"./Content/Sprites/asteroid{i+1}.png"));
+            gameAsteroidsSprites.Add(loadImage($"./Content/Sprites/GameAsteroids/asteroid{i+1}.png"));
+            screenAsteroidsSprites.Add(loadImage($"./Content/Sprites/ScreenAsteroids/asteroid{i+1}.png"));
         }
 
         menuScreen = new MenuScreen(this);
@@ -185,7 +188,7 @@ public class GameAsteroids : Processing
             speed = 2f + (float)rnd.NextDouble() * 2f; 
             size = 30f + (float)rnd.NextDouble() * 70f; 
 
-            asteroidSprite = asteroidsSprites[rnd.Next(asteroidsSprites.Count)];
+            asteroidSprite = gameAsteroidsSprites[rnd.Next(gameAsteroidsSprites.Count)];
         }
         else 
         {
@@ -201,7 +204,7 @@ public class GameAsteroids : Processing
             size = 15f + (float)rnd.NextDouble() * 50f;
             
             if (size < 30f) asteroidSprite = asteroidSpriteSmall;
-            else asteroidSprite = asteroidsSprites[rnd.Next(asteroidsSprites.Count)];
+            else asteroidSprite = screenAsteroidsSprites[rnd.Next(gameAsteroidsSprites.Count)];
         }
 
         dir.Normalize();
