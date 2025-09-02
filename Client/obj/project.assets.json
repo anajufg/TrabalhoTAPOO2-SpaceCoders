@@ -124,7 +124,7 @@
           }
         }
       },
-      "Monogame.Processing/0.3.1": {
+      "Monogame.Processing/0.3.2": {
         "type": "package",
         "dependencies": {
           "Triangle": "0.0.6-Beta3"
@@ -1340,10 +1340,10 @@
         "runtimes/win-x64/native/SDL2.dll"
       ]
     },
-    "Monogame.Processing/0.3.1": {
-      "sha512": "rx6Ye2VGpvwFI8fCmLHmVfHR5yM8hdlqlqUnPrSdDgbJ0FYWhpDRUBkNai3krKttMJdFSBngFtP12saepW/YtQ==",
+    "Monogame.Processing/0.3.2": {
+      "sha512": "a5+eB2cX4aGadpILcm4lCkYdnUzqnSl1DA3MDcZ0ln0G5GoF+YawGWzVNjmQo1e/YACcwtps0kwnoV3YHQAljw==",
       "type": "package",
-      "path": "monogame.processing/0.3.1",
+      "path": "monogame.processing/0.3.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1353,7 +1353,7 @@
         "linqpad-samples/Example2.linq",
         "linqpad-samples/Example3.linq",
         "linqpad-samples/Example4.linq",
-        "monogame.processing.0.3.1.nupkg.sha512",
+        "monogame.processing.0.3.2.nupkg.sha512",
         "monogame.processing.nuspec"
       ]
     },
@@ -4243,23 +4243,23 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "MonoGame.Framework.DesktopGL >= 3.8.*",
-      "Monogame.Processing >= 0.3.1"
+      "Monogame.Processing >= 0.3.2"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\anaju\\.nuget\\packages\\": {}
+    "/home/a2023952586/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
+      "projectUniqueName": "/home/a2023952586/Documentos/Asteroides/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
       "projectName": "Client",
-      "projectPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
-      "packagesPath": "C:\\Users\\anaju\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anaju\\OneDrive\\Desktop\\Folder\\GitHub\\TrabalhoTAPOO2-SpaceCoders\\Client\\obj\\",
+      "projectPath": "/home/a2023952586/Documentos/Asteroides/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
+      "packagesPath": "/home/a2023952586/.nuget/packages/",
+      "outputPath": "/home/a2023952586/Documentos/Asteroides/TrabalhoTAPOO2-SpaceCoders/Client/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\anaju\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/a2023952586/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4294,7 +4294,7 @@
           },
           "Monogame.Processing": {
             "target": "Package",
-            "version": "[0.3.1, )"
+            "version": "[0.3.2, )"
           }
         },
         "imports": [
@@ -4313,7 +4313,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/256/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

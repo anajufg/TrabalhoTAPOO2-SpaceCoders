@@ -9,10 +9,12 @@ public class Pterosaur
     public Vector2 pos;
     Vector2 velocity = Vector2.Zero;
     float angle = -MathF.PI / 2; // Facing up
-    const float Acceleration = 0.25f;
+    const float Acceleration = 0.99f;
     const float MaxSpeed = 6f;
     const float Friction = 0.99f;
     const float RotationSpeed = 0.07f;
+    float animation;
+
     PImage pterosaur;
     const float HalfW = 10, HalfH = 10;
 
@@ -53,7 +55,7 @@ public class Pterosaur
         velocity *= Friction;
 
         pos += velocity;
-
+        
         // Wrap around screen
         if (pos.X < 0) pos.X += w;
         if (pos.X > w) pos.X -= w;
@@ -65,12 +67,14 @@ public class Pterosaur
     {
         // Era pra rotar o sprite, mas não funciona
         g.push();
+        g.translate(pos.X, pos.Y);
+        //g.scale((float)1+g.cos(animation)/((velocity.X+velocity.Y+10)/1.0f), 1);
         g.rotate(angle + MathF.PI / 2);
         // g.rect(pos.X, pos.Y, 10, 10);
-        g.image(this.pterosaur, pos.X, pos.Y, 200, 100);
+        g.image(this.pterosaur, -100, -50, 200, 100);
         g.pop(); 
 
-
+        animation+=.1f;
         //Console.WriteLine($"pos.X: {pos.X}, pos.Y: {pos.Y}, angle: {angle}");
     }
 

@@ -46,7 +46,7 @@ public class GameAsteroids : Processing
     /* ===================== ciclo de vida ======================= */
     public override void Setup()
     {
-        size(800, 600);
+        size(1200, 600);
 
         spriteBatch = new SpriteBatch(GraphicsDevice);
         gameFont = Content.Load<SpriteFont>("PressStart");
@@ -209,7 +209,7 @@ public class GameAsteroids : Processing
 
         dir.Normalize();
         
-        return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite);
+        return new Asteroid(new Vector2(x, y), dir * speed, size, asteroidSprite, this);
     }
 
     public void DrawAsteroidsBackground(List<Asteroid> asteroids) 

@@ -15,6 +15,7 @@ public class GameScreen
     private Pterosaur pterosaur;
     private List<Bullet> bullets;
     private List<Asteroid> asteroids;
+    private List<Particle> particles;
     private int score;
 
     private int fireRate;
@@ -33,6 +34,12 @@ public class GameScreen
         backgroundImage = p.loadImage("./Content/Backgrounds/game_background.png");
 
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
+        particles = new();
+
+        for(int i = 0; i < 1000; ++i){
+            particles.Add(new Particle(new Vector2(p.random(p.width), p.random(-p.height*2, 0)), new Vector2(0, 5+p.random(-2, 2))));
+        }
+        
         bullets = new();
         asteroids = new();
 
@@ -46,8 +53,12 @@ public class GameScreen
 
     public void Draw()
     {
-        p.image(backgroundImage, 0, 0, p.width, p.height);
-
+        //p.image(backgroundImage, 0, 0, p.width, p.height);
+        //p.background(0);
+        for (int i = particles.Count - 1; i >= 0; i--)
+        {
+            particles[i].Draw(p);
+        }
         pterosaur.Draw(p);
 
         for (int i = bullets.Count - 1; i >= 0; i--)
@@ -58,6 +69,9 @@ public class GameScreen
         {
             asteroids[i].Draw(p);
         }
+        
+
+        
 
         string scoreText = $"Score: {score}";
         Vector2 scoreSize = p.gameFont.MeasureString(scoreText);
@@ -75,7 +89,7 @@ public class GameScreen
         /* ----- pterosaur ----- */
         Teclas();
         pterosaur.Update(p.esquerda, p.direita, p.cima, p.baixo, p.width, p.height);
-
+        
         /* ----- enviar ações para o servidor se conectado ----- */
         if (p.IsConnected())
         {
@@ -88,6 +102,12 @@ public class GameScreen
             var t = bullets[i];
             t.Update();
             if (t.OffScreen(p.height)) bullets.RemoveAt(i);
+        }
+
+        for (int i = particles.Count - 1; i >= 0; i--)
+        {
+            var t = particles[i];
+            t.Update(p);
         }
 
         /* ----- Asteroids ----- */
@@ -129,43 +149,29 @@ public class GameScreen
         p.baixo = false;
         isPause = false;
 
-        bool isKeyPressedNow = p.keyPressed;
+        var state = Keyboard.GetState();
 
-        if (isKeyPressedNow && !wasKeyPressedLastFrame)
+        if (state.IsKeyDown(Keys.A)) p.esquerda = true;
+        if (state.IsKeyDown(Keys.D)) p.direita = true;
+        if (state.IsKeyDown(Keys.W)) p.cima = true;
+        if (state.IsKeyDown(Keys.S)) p.baixo = true;
+
+        if (state.IsKeyDown(Keys.Space))
         {
-            /* tecla “única” (letras) */
-            switch (char.ToUpperInvariant(p.key))
+            if (p.frameCount - lastShotFrame >= fireRate)
             {
-                case 'A': p.esquerda = true; break;
-                case 'D': p.direita = true; break;
-                case 'W': p.cima = true; break;
-                case 'S': p.baixo = true; break;
-            }
-
-            /* teclas especiais (setas, espaço, esc) */
-            switch (p.keyCode)
-            {
-                case Keys.Left: p.esquerda = true; break;
-                case Keys.Right: p.direita = true; break;
-                case Keys.Up: p.cima = true; break;
-                case Keys.Down: p.baixo = true; break;
-
-                case Keys.Space:
-                    if (p.frameCount - lastShotFrame >= fireRate)
-                    {
-                        bullets.Add(pterosaur.Shoot());
-                        lastShotFrame = p.frameCount;
-                    }
-                    break;
-                case Keys.Escape: 
-                    isPause = true;
-                    p.setCurrentScreen(ScreenManager.PauseScreen); 
-                    break;
+                bullets.Add(pterosaur.Shoot());
+                lastShotFrame = p.frameCount;
             }
         }
-        
-        wasKeyPressedLastFrame = isKeyPressedNow;
+
+        if (state.IsKeyDown(Keys.Escape))
+        {
+            isPause = true;
+            p.setCurrentScreen(ScreenManager.PauseScreen);
+        }
     }
+
 
     public void Reset()
     {
