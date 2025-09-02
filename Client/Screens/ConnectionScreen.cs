@@ -109,7 +109,7 @@ public class ConnectionScreen
                                 // Conectar ao servidor de forma assíncrona
                                 _ = Task.Run(async () =>
                                 {
-                                    bool connected = await Connection.GetInstance().ConnectToServer(ip);
+                                    bool connected = await Connection.GetInstance(p).ConnectToServer(ip);
                                     if (connected)
                                     {
                                         p.setCurrentScreen(ScreenManager.Playing);

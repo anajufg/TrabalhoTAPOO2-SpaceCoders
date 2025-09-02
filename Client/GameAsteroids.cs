@@ -14,17 +14,17 @@ public class GameAsteroids : Processing
     public SpriteFont gameFont;
 
     /* --------------------- estado de jogo --------------------- */
-    private ScreenManager currentScreen;
+    public ScreenManager currentScreen;
     public int level = 0;
 
     /* --------------------- telas de jogo ---------------------- */
-    private MenuScreen menuScreen;
-    private StoryScreen storyScreen;
-    private GameScreen gameScreen;
-    private PauseScreen pauseScreen;
-    private GameOverScreen gameOverScreen;
-    private DisconnectionScreen disconnectionScreen;
-    private ConnectionScreen connectionScreen;
+    public MenuScreen menuScreen;
+    public StoryScreen storyScreen;
+    public GameScreen gameScreen;
+    public PauseScreen pauseScreen;
+    public GameOverScreen gameOverScreen;
+    public DisconnectionScreen disconnectionScreen;
+    public ConnectionScreen connectionScreen;
 
     /* --------------------- teclado (flags) --------------------- */
     public bool esquerda, direita, cima, baixo;
@@ -247,7 +247,7 @@ public class GameAsteroids : Processing
         if ((currentScreen == ScreenManager.Playing || currentScreen == ScreenManager.Connection) && 
             (newScreen == ScreenManager.Menu || newScreen == ScreenManager.Disconnection))
         {
-            Connection.GetInstance().DisconnectFromServer();
+            Connection.GetInstance(this).DisconnectFromServer();
         }
         
         currentScreen = newScreen;
