@@ -25,6 +25,26 @@ public class GameScreen
     private bool isPause;
     private bool wasKeyPressedLastFrame;
 
+    /* ------- Estados do jogador ------- */
+    public struct State
+    {
+        public bool esq, dir, cim, baix;
+
+        public static bool operator ==(State a, State b)
+        {
+            return a.esq == b.esq && a.dir == b.dir && a.cim == b.cim && a.baix == b.baix;
+        }
+
+        public static bool operator !=(State a, State b)
+        {
+            return !(a == b);
+        }
+    }
+
+
+    State previousState;
+    State currentState;
+
     public GameScreen(GameAsteroids p)
     {
         this.p = p;
@@ -90,9 +110,18 @@ public class GameScreen
         /* ----- pterosaur ----- */
         Teclas();
         pterosaur.Update(p.esquerda, p.direita, p.cima, p.baixo, p.width, p.height);
-        
+
         /* ----- enviar ações para o servidor se conectado ----- */
-        if (Connection.GetInstance(p).IsConnected())
+        currentState = new State
+        {
+            esq = p.esquerda,
+            dir = p.direita,
+            cim = p.cima,
+            baix = p.baixo
+        };
+        previousState = currentState;
+
+        if (Connection.GetInstance(p).IsConnected() && currentState != previousState)
         {
             _ = Task.Run(async () => await Connection.GetInstance(p).SendPlayerAction());
         }

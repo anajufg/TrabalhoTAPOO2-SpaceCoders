@@ -10,8 +10,8 @@ namespace Client.Rede
         private GameAsteroids p;
         private string? serverIP;
 
-
-        private Connection(GameAsteroids p) { 
+        private Connection(GameAsteroids p)
+        {
             this.p = p;
         }
 
@@ -133,8 +133,17 @@ namespace Client.Rede
 
         public async Task SendPlayerAction()
         {
+            currentState = new State
+            {
+                esq = p.esquerda,
+                dir = p.direita,
+                cim = p.cima,
+                baix = p.baixo
+            };
+
             if (isConnected && handleGame != null)
             {
+                previousState = currentState;
                 try
                 {
                     await handleGame.Action(p.esquerda, p.direita, p.cima, p.baixo, p.width, p.height);

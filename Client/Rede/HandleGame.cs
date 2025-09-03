@@ -16,7 +16,7 @@ public class HandleGame
         this.client = client;
     }
 
-    public async Task Action(bool left, bool right, bool up, bool down, int w, int h)
+    public async Task Action(bool left, bool right, bool up, bool down)
     {
 
         Console.WriteLine("Enviando ação do jogador...");
@@ -24,8 +24,6 @@ public class HandleGame
         {
             Action = "Move",
             Direction = new { Left = left, Right = right, Up = up, Down = down },
-            Width = w,
-            Height = h
         };
 
         await client.SendAsync(msg);

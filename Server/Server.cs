@@ -170,10 +170,7 @@ public class Server
                     // Processar movimento do jogador
                     if (message.Value.TryGetProperty("Direction", out var directionProp))
                     {
-                        var direction = directionProp.GetProperty("Left");
-                        Console.WriteLine($"Jogador movendo: {action}");
-                        
-                        
+                        Console.WriteLine($"Jogador movendo: {directionProp}");
                     }
                 }
             }
