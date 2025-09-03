@@ -133,8 +133,7 @@ namespace Client.Rede
 
         public async Task SendPlayerAction()
         {
- 
-            if (true)
+            if (isConnected && handleGame != null)
             {
                 try
                 {
@@ -143,7 +142,8 @@ namespace Client.Rede
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Erro ao enviar ação: {ex.Message}");
-                    isConnected = false;
+                    // Não desconectar imediatamente por um erro de envio
+                    // isConnected = false;
                 }
             }
         }

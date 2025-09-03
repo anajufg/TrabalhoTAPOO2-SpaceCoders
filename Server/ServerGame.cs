@@ -19,7 +19,7 @@ namespace Server.ServerGame
 
         // Entities
         public List<Asteroid> asteroids = new();
-        private const int MAX_ASTEROIDS = 6;
+        private const int MAX_ASTEROIDS = 2;
 
         // Lista de balas
         public List<Bullet> bullets = new();
@@ -37,66 +37,54 @@ namespace Server.ServerGame
         // Serializa o estado do jogo para enviar aos clientes
         public object GetGameState()
         {
-            // Serializa asteroides
-            var asteroidsState = new List<object>();
-            foreach (var a in asteroids)
+                    // Serializa asteroides
+        var asteroidsState = new List<object>();
+        foreach (var a in asteroids)
+        {
+            asteroidsState.Add(new
             {
-                asteroidsState.Add(new
-                {
-                    x = a.getPosition().X,
-                    y = a.getPosition().Y,
-                    size = a.size
-                });
-            }
+                x = a.getPosition().X,
+                y = a.getPosition().Y,
+                size = a.size
+            });
+        }
 
-            // Serializa jogadores
+            // Serializa jogadores com IDs únicos
             var playersState = new List<object>();
+            int playerId = 0;
             foreach (var kv in players)
             {
                 var p = kv.Value;
                 playersState.Add(new
                 {
+                    id = playerId++,
                     x = p.pos.X,
-                    y = p.pos.Y
-                    // tirei o angulo por enquanto
-                    // angle = p.Angle
+                    y = p.pos.Y,
+                    angle = p.angle // Adicionar o ângulo de rotação
                 });
             }
 
-                    // Serializa jogadores
-                    playersState = new List<object>();
-                    foreach (var kv in players)
-                    {
-                        var p = kv.Value;
-                        playersState.Add(new
-                        {
-                            x = p.pos.X,
-                            y = p.pos.Y,
-                            // tirei o angulo por enquanto
-                            // angle = p.Angle 
-                        });
-                    }
-
-                    // Serializa balas
-                    var bulletsState = new List<object>();
-                    if (bullets != null)
-                    {
-                        foreach (var b in bullets)
-                        {
-                            bulletsState.Add(new {
-                                x = b.getPosition().X,
-                                y = b.getPosition().Y,
-                                vx = b.getVelocity().X,
-                                vy = b.getVelocity().Y
-                            });
-                        }
-                    }
+            // Serializa balas
+            var bulletsState = new List<object>();
+            if (bullets != null)
+            {
+                foreach (var b in bullets)
+                {
+                    bulletsState.Add(new {
+                        x = b.getPosition().X,
+                        y = b.getPosition().Y,
+                        vx = b.getVelocity().X,
+                        vy = b.getVelocity().Y
+                    });
+                }
+            }
 
             return new
             {
                 asteroids = asteroidsState,
                 players = playersState,
-                bullets = bulletsState
+                bullets = bulletsState,
+                playerCount = players.Count
             };
         }
 
@@ -113,10 +101,15 @@ namespace Server.ServerGame
                     ptero.Update(input.esquerda, input.direita, input.cima, input.baixo, width, height);
                 }
             }
+            
             // Atualiza asteroides
             UpdateAsteroids();
-            // Atualiza balas
-            UpdateBullets();
+            
+            // Atualiza balas apenas se houver balas ativas
+            if (bullets.Count > 0)
+            {
+                UpdateBullets();
+            }
         }
 
         // Atualiza todos os asteroides
@@ -169,10 +162,12 @@ namespace Server.ServerGame
         // Atualiza todas as balas
         public void UpdateBullets()
         {
+            // Usar loop reverso para remoção segura
             for (int i = bullets.Count - 1; i >= 0; i--)
             {
                 var b = bullets[i];
                 b.Update();
+                
                 // Remove se sair da tela usando método da entidade
                 if (b.OffScreen(height))
                 {
@@ -211,8 +206,8 @@ namespace Server.ServerGame
                     dir = new Vector2(-1f, (float)(rnd.NextDouble() - 0.5));
                     break;
             }
-            speed = 2f + (float)rnd.NextDouble() * 2f;
-            size = 30f + (float)rnd.NextDouble() * 70f;
+            speed = 1f + (float)rnd.NextDouble() * 1f;
+            size = 15f + (float)rnd.NextDouble() * 35f;
             dir = Vector2.Normalize(dir);
             return new Asteroid(new Vector2(x, y), dir * speed, size);
         }
@@ -233,7 +228,50 @@ namespace Server.ServerGame
         // Inicializa o jogador para um cliente
         public void InitPlayer(TcpClient client, Vector2 startPos)
         {
-            players[client] = new Pterosaur(startPos);
+            // Posicionar jogadores em posições diferentes para evitar sobreposição
+            var playerCount = players.Count;
+            Vector2 position;
+            
+            switch (playerCount)
+            {
+                case 0: // Primeiro jogador
+                    position = new Vector2(width / 4, height / 2);
+                    break;
+                case 1: // Segundo jogador
+                    position = new Vector2(3 * width / 4, height / 2);
+                    break;
+                case 2: // Terceiro jogador
+                    position = new Vector2(width / 2, height / 4);
+                    break;
+                case 3: // Quarto jogador
+                    position = new Vector2(width / 2, 3 * height / 4);
+                    break;
+                default: // Outros jogadores em posições aleatórias
+                    Random rnd = new Random();
+                    position = new Vector2(
+                        rnd.Next(100, width - 100),
+                        rnd.Next(100, height - 100)
+                    );
+                    break;
+            }
+            
+            players[client] = new Pterosaur(position);
+            
+            // Inicializar inputs do jogador
+            playerInputs[client] = (false, false, false, false);
+            
+            Console.WriteLine($"Jogador {playerCount + 1} inicializado na posição {position}");
+        }
+
+        // Remove um jogador do jogo
+        public void RemovePlayer(TcpClient client)
+        {
+            if (players.ContainsKey(client))
+            {
+                players.Remove(client);
+                playerInputs.Remove(client);
+                Console.WriteLine($"Jogador removido do ServerGame. Total restante: {players.Count}");
+            }
         }
 
         private void Reset()

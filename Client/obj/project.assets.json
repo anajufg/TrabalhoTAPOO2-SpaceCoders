@@ -4247,19 +4247,19 @@
     ]
   },
   "packageFolders": {
-    "/home/a2023952608/.nuget/packages/": {}
+    "C:\\Users\\FORMULA2\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/a2023952608/Área de Trabalho/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
+      "projectUniqueName": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
       "projectName": "Client",
-      "projectPath": "/home/a2023952608/Área de Trabalho/TrabalhoTAPOO2-SpaceCoders/Client/Client.csproj",
-      "packagesPath": "/home/a2023952608/.nuget/packages/",
-      "outputPath": "/home/a2023952608/Área de Trabalho/TrabalhoTAPOO2-SpaceCoders/Client/obj/",
+      "projectPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\Client.csproj",
+      "packagesPath": "C:\\Users\\FORMULA2\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\FORMULA2\\Desktop\\TrabalhoTAPOO2-SpaceCoders\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/a2023952608/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\FORMULA2\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4282,7 +4282,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -4313,16 +4314,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/256/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problema ao ler o arquivo de cache /home/a2023952608/Área de Trabalho/TrabalhoTAPOO2-SpaceCoders/Client/obj/project.nuget.cache: Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

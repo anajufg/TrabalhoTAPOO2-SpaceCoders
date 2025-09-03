@@ -71,34 +71,64 @@ public class GameScreenOnline
             return; // ou desenhe um estado padrão
         }
 
+        // Atualizar e desenhar partículas
         for (int i = particles.Count - 1; i >= 0; i--)
         {
-            particles[i].Draw(p);
+            particles[i].Update(this.p);
+            particles[i].Draw(this.p);
         }
 
         // Desenha asteroides
         if (gameState.TryGetProperty("asteroids", out var asteroids))
         {
-            Console.WriteLine("ok");
             foreach (var a in asteroids.EnumerateArray())
             {
                 float x = (float)a.GetProperty("x").GetDouble();
                 float y = (float)a.GetProperty("y").GetDouble();
                 
                 float size = (float)a.GetProperty("size").GetDouble();
-                Asteroid.Draw(p, x, y, size);
+                Asteroid.Draw(this.p, x, y, size);
             }
         }
 
-        // Desenha jogadores
+        // Desenha jogadores com identificação
         if (gameState.TryGetProperty("players", out var players))
         {
-            foreach (var p in players.EnumerateArray())
+            foreach (var player in players.EnumerateArray())
             {
-                float x = (float)p.GetProperty("x").GetDouble();
-                float y = (float)p.GetProperty("y").GetDouble();
-                Console.WriteLine(x +", "+y);
-                Pterosaur.Draw(this.p, new Vector2(x, y));
+                float x = (float)player.GetProperty("x").GetDouble();
+                float y = (float)player.GetProperty("y").GetDouble();
+                
+                // Obter ângulo de rotação do jogador se disponível
+                float angle = 0f;
+                if (player.TryGetProperty("angle", out var angleProp))
+                {
+                    angle = (float)angleProp.GetDouble();
+                }
+                
+                // Obter ID do jogador se disponível
+                string playerId = "P?";
+                if (player.TryGetProperty("id", out var idProp))
+                {
+                    int id = idProp.GetInt32();
+                    playerId = $"P{id + 1}";
+                }
+                
+                // Desenhar o jogador com rotação
+                DrawRotatedPlayer(x, y, angle);
+                
+                // Desenhar ID do jogador acima dele
+                this.p.fill(255, 255, 0); // Amarelo para IDs
+                this.p.textSize(16);
+                this.p.text(playerId, x, y - 60);
+            }
+            
+            // Debug: mostrar número total de jogadores
+            if (gameState.TryGetProperty("playerCount", out var playerCount))
+            {
+                this.p.fill(0, 255, 0); // Verde para contador
+                this.p.textSize(20);
+                this.p.text($"Jogadores Online: {playerCount}", 10, 30);
             }
         }
 
@@ -109,9 +139,19 @@ public class GameScreenOnline
             {
                 float x = (float)b.GetProperty("x").GetDouble();
                 float y = (float)b.GetProperty("y").GetDouble();
-                Bullet.Draw(p, new Vector2(x, y));
+                Bullet.Draw(this.p, new Vector2(x, y));
             }
         }
+    }
+
+    // Método para desenhar jogador com rotação
+    private void DrawRotatedPlayer(float x, float y, float angle)
+    {
+        this.p.push();
+        this.p.translate(x, y);
+        this.p.rotate(angle + MathF.PI / 2); // Ajustar ângulo para orientação correta
+        this.p.image(this.p.pterosaurSprite, -100, -50, 200, 100);
+        this.p.pop();
     }
 
     public void Update()

@@ -8,14 +8,14 @@ public class Pterosaur
 {
     public Vector2 pos;
     Vector2 velocity = Vector2.Zero;
-    float angle = -MathF.PI / 2; // Facing up
+    public float angle = -MathF.PI / 2; // Facing up - tornar público
     const float Acceleration = 0.99f;
     const float MaxSpeed = 6f;
     const float Friction = 0.99f;
     const float RotationSpeed = 0.07f;
     float animation;
 
-    const float HalfW = 10, HalfH = 10;
+    const float HalfW = 4, HalfH = 4;
 
     public Pterosaur(Vector2 start)
     {

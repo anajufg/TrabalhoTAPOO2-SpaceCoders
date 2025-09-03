@@ -87,6 +87,7 @@ public class ConnectionScreen
                     {
                         case ConnectionOption.Play:
                             string ip = ipInput.ToString();
+                            ip = "127.0.0.1";
                             if (ip.Length == 0) 
                             {
                                 isInvalidInput = true;

@@ -7,6 +7,7 @@ using Cliente.Screens;
 using Client.Rede;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading;
 
 public class GameAsteroids : Processing
 {
@@ -16,7 +17,8 @@ public class GameAsteroids : Processing
 
     /* --------------------- estado de jogo --------------------- */
     private ScreenManager currentScreen;
-    public JsonElement currentGameState;
+    private JsonElement currentGameState;
+    private readonly object gameStateLock = new object();
     public int level = 0;
 
     /* --------------------- telas de jogo ---------------------- */
@@ -135,7 +137,12 @@ public class GameAsteroids : Processing
                 gameScreen.Draw();
                 break;
             case ScreenManager.OnlinePlaying:
-                gameScreenOnline.Draw(currentGameState);
+                JsonElement gameState;
+                lock (gameStateLock)
+                {
+                    gameState = currentGameState;
+                }
+                gameScreenOnline.Draw(gameState);
                 break;
             case ScreenManager.StoryMode:
                 storyScreen.Draw();
@@ -157,6 +164,24 @@ public class GameAsteroids : Processing
         }
 
         Update();
+    }
+
+    // Método para atualizar o estado do jogo de forma thread-safe
+    public void UpdateGameState(JsonElement newState)
+    {
+        lock (gameStateLock)
+        {
+            currentGameState = newState;
+        }
+    }
+
+    // Método para obter o estado do jogo de forma thread-safe
+    public JsonElement GetGameState()
+    {
+        lock (gameStateLock)
+        {
+            return currentGameState;
+        }
     }
 
     /* ====================== fábrica de Asteroids =================== */
