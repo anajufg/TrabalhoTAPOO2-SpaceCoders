@@ -45,7 +45,6 @@ public class TcpClientWrapper
     public async Task SendAsync(object message)
     {
         if (_stream == null) return;
-        Console.WriteLine($"Enviando mensagem: {message}");
         await MessageFraming.SendMessageAsync(_stream, message, _cts.Token);
     }
 

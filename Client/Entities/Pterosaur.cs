@@ -84,7 +84,7 @@ public class Pterosaur
         g.image(g.pterosaurSprite, -100, -50, 200, 100);
         g.pop(); 
 
-        //animation+=.1f;
+        // animation+=.1f;
         //Console.WriteLine($"pos.X: {pos.X}, pos.Y: {pos.Y}, angle: {angle}");
     }
 

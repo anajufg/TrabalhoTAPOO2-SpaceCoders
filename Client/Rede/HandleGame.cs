@@ -18,7 +18,6 @@ public class HandleGame
 
     public async Task Action(bool left, bool right, bool up, bool down, bool shoot)
     {
-        Console.WriteLine("Enviando ação do jogador...");
         var msg = new
         {
             Action = "Move",

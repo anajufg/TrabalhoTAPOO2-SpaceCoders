@@ -8,7 +8,7 @@ public class Pterosaur
 {
     public Vector2 pos;
     Vector2 velocity = Vector2.Zero;
-    float angle = -MathF.PI / 2; // Facing up
+    public float angle = -MathF.PI / 2; // Facing up
     const float Acceleration = 0.99f;
     const float MaxSpeed = 6f;
     const float Friction = 0.99f;

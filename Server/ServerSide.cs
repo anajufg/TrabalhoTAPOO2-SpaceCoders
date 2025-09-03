@@ -194,6 +194,7 @@ public class ServerSide
                     bool baixo = message.Value.TryGetProperty("Down", out var d) && d.GetBoolean();
                     bool tiro = message.Value.TryGetProperty("Shoot", out var s) && s.GetBoolean();
 
+
                     // Atualiza o estado do jogador no game, incluindo tiro
                     game.ReceiveInput(client, esquerda, direita, cima, baixo, tiro);
                     Console.WriteLine($"Input recebido: E:{esquerda} D:{direita} C:{cima} B:{baixo} T:{tiro}");

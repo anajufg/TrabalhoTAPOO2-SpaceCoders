@@ -19,7 +19,7 @@ namespace Server.ServerGame
 
         // Entities
         public List<Asteroid> asteroids = new();
-        private const int MAX_ASTEROIDS = 6;
+        private const int MAX_ASTEROIDS = 1;
 
         // Lista de balas
         public List<Bullet> bullets = new();
@@ -57,40 +57,26 @@ namespace Server.ServerGame
                 playersState.Add(new
                 {
                     x = p.pos.X,
-                    y = p.pos.Y
+                    y = p.pos.Y,
                     // tirei o angulo por enquanto
-                    // angle = p.Angle
+                    angle = p.angle 
                 });
             }
 
-                    // Serializa jogadores
-                    playersState = new List<object>();
-                    foreach (var kv in players)
-                    {
-                        var p = kv.Value;
-                        playersState.Add(new
-                        {
-                            x = p.pos.X,
-                            y = p.pos.Y,
-                            // tirei o angulo por enquanto
-                            // angle = p.Angle 
-                        });
-                    }
-
-                    // Serializa balas
-                    var bulletsState = new List<object>();
-                    if (bullets != null)
-                    {
-                        foreach (var b in bullets)
-                        {
-                            bulletsState.Add(new {
-                                x = b.getPosition().X,
-                                y = b.getPosition().Y,
-                                vx = b.getVelocity().X,
-                                vy = b.getVelocity().Y
-                            });
-                        }
-                    }
+            // Serializa balas
+            var bulletsState = new List<object>();
+            if (bullets != null)
+            {
+                foreach (var b in bullets)
+                {
+                    bulletsState.Add(new {
+                        x = b.getPosition().X,
+                        y = b.getPosition().Y,
+                        vx = b.getVelocity().X,
+                        vy = b.getVelocity().Y
+                    });
+                }
+            }
 
             return new
             {
