@@ -17,21 +17,16 @@ public class ConnectionScreen
     private StringBuilder ipInput; 
     private bool isInvalidInput;
 
-    private enum ConnectionOption { Game_Level, Play, Menu, Exit };
+    private enum ConnectionOption {Play, Menu, Exit };
     private readonly ConnectionOption[] connectionOptions;
-    private enum GameLevelOption { Easy, Hard };
-    private readonly GameLevelOption[] gameLevelOptions;
     private int selectedIndex;
-    private int currentLevel;
     private bool wasKeyPressedLastFrame;
 
     public ConnectionScreen(GameAsteroids p)
     {
         this.p = p;
-        connectionOptions = [ConnectionOption.Game_Level, ConnectionOption.Play, ConnectionOption.Menu, ConnectionOption.Exit];
-        gameLevelOptions = [GameLevelOption.Easy, GameLevelOption.Hard];
+        connectionOptions = [ConnectionOption.Play, ConnectionOption.Menu, ConnectionOption.Exit];
         selectedIndex = 0;
-        currentLevel = 0;
         wasKeyPressedLastFrame = false;
 
         ipInput = new StringBuilder(); 
@@ -61,13 +56,8 @@ public class ConnectionScreen
         {
             string text;
             
-            if (connectionOptions[i] == ConnectionOption.Game_Level)
-            {
-                text = $"{string.Join(" ", connectionOptions[i].ToString().Split('_'))}: {gameLevelOptions[currentLevel].ToString()}";
-            }
-            else {
+            
                 text = string.Join(" ", connectionOptions[i].ToString().Split('_'));
-            }
 
             Vector2 textPos = new(basePos.X, basePos.Y + i * lineSpacing);
             Color textColor = (i == selectedIndex && (p.frameCount / 30) % 2 == 0) ? Color.Transparent : Color.LightGray;
@@ -95,9 +85,6 @@ public class ConnectionScreen
 
                     switch (currentOption)
                     {
-                        case ConnectionOption.Game_Level:
-                            p.level = (currentLevel + 1) % gameLevelOptions.Length;
-                            break;  
                         case ConnectionOption.Play:
                             string ip = ipInput.ToString();
                             if (ip.Length == 0) 
@@ -112,7 +99,7 @@ public class ConnectionScreen
                                     bool connected = await Connection.GetInstance(p).ConnectToServer(ip);
                                     if (connected)
                                     {
-                                        p.setCurrentScreen(ScreenManager.Playing);
+                                        p.setCurrentScreen(ScreenManager.OnlinePlaying);
                                     }
                                     else
                                     {

@@ -47,6 +47,28 @@ public class Asteroid
         rotation += rotationSpeed;
     }
 
+    public static void Draw(GameAsteroids g, float x, float y, float size)
+    {   
+        Random rnd = new Random();
+        PImage sprite;
+        sprite = g.gameAsteroidsSprites[1];
+        if (sprite != null)
+        {
+            g.push();
+            g.translate(x, y);
+            // g.rotate(rotation);
+            g.image(sprite, - size / 2, - size / 2, size, size);
+            g.pop();
+        }
+        else
+        {
+            g.fill(200);
+            g.circle(x, y, size);
+        }
+
+        // rotation += rotationSpeed;
+    }
+
     public bool Collide(Bullet t) => Vector2.Distance(t.pos, pos) < size;
     public bool Collide(Pterosaur n) => Vector2.Distance(n.pos, pos) < size-10;
 

@@ -19,6 +19,14 @@ public class Bullet
         g.strokeWeight(1);
     }
 
+    public static void Draw(Processing g, Vector2 pos)
+    {
+        g.strokeWeight(5);
+        g.stroke(255, 255, 0);
+        g.point(pos.X, pos.Y);
+        g.strokeWeight(1);
+    }
+
     public bool OffScreen(int h) => pos.Y < -5;
 }
 

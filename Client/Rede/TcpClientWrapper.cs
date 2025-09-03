@@ -5,6 +5,9 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
+
 
 namespace Client.Rede;
 
@@ -13,6 +16,7 @@ public class TcpClientWrapper
     private TcpClient _client;
     private NetworkStream _stream;
     private CancellationTokenSource _cts;
+
 
     public event Action<JsonElement>? OnMessageReceived;
     public event Action? OnDisconnected;
@@ -24,7 +28,18 @@ public class TcpClientWrapper
         _stream = _client.GetStream();
         _cts = new CancellationTokenSource();
 
-        _ = Task.Run(ReceiveLoop);
+        // _ = Task.Run(ReceiveLoop);
+    }
+
+
+    public async Task ConnectAsync(string ip, int port, GameAsteroids g)
+    {
+        _client = new TcpClient();
+        await _client.ConnectAsync(ip, port);
+        _stream = _client.GetStream();
+        _cts = new CancellationTokenSource();
+
+        _ = Task.Run(() => ReceiveLoop(g));
     }
 
     public async Task SendAsync(object message)
@@ -34,7 +49,7 @@ public class TcpClientWrapper
         await MessageFraming.SendMessageAsync(_stream, message, _cts.Token);
     }
 
-    public async Task ReceiveLoop()
+    public async Task ReceiveLoop(GameAsteroids g)
     {
         try
         {
@@ -43,7 +58,8 @@ public class TcpClientWrapper
                 var json = await MessageFraming.ReadAsync(_stream, _cts.Token);
                 if (json == null) break;
 
-                Console.WriteLine($"Mensagem recebida: {json}");
+                g.currentGameState = json.Value;
+
                 if (json.HasValue)
                 {
                     OnMessageReceived?.Invoke(json.Value);

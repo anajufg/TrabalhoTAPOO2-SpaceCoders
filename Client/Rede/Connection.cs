@@ -55,7 +55,7 @@ namespace Client.Rede
                 networkClient.OnMessageReceived += OnNetworkMessageReceived;
                 networkClient.OnDisconnected += OnNetworkDisconnected;
 
-                await networkClient.ConnectAsync(serverIP, serverPort);
+                await networkClient.ConnectAsync(serverIP, serverPort, p);
                 isConnected = true;
                 
                 return true;
@@ -84,7 +84,7 @@ namespace Client.Rede
         {
             try
             {
-                Console.WriteLine($"Mensagem recebida: {message}");
+                //Console.WriteLine($"Mensagem recebida: {message}");
                 
                 // Processar mensagens do servidor
                 if (message.TryGetProperty("type", out var typeProp) && 
@@ -133,8 +133,8 @@ namespace Client.Rede
 
         public async Task SendPlayerAction()
         {
-
-            if (isConnected && handleGame != null)
+ 
+            if (true)
             {
                 try
                 {

@@ -11,7 +11,6 @@ namespace Cliente.Screens;
 public class GameScreen
 {
     private GameAsteroids p;
-    private PImage backgroundImage;
 
     private Pterosaur pterosaur;
     private List<Bullet> bullets;
@@ -52,8 +51,6 @@ public class GameScreen
 
     public void LoadContent()
     {
-        backgroundImage = p.loadImage("./Content/Backgrounds/game_background.png");
-
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
         particles = new();
 
@@ -74,8 +71,7 @@ public class GameScreen
 
     public void Draw()
     {
-        //p.image(backgroundImage, 0, 0, p.width, p.height);
-        //p.background(0);
+        
         for (int i = particles.Count - 1; i >= 0; i--)
         {
             particles[i].Draw(p);
@@ -91,9 +87,6 @@ public class GameScreen
             asteroids[i].Draw(p);
         }
         
-
-        
-
         string scoreText = $"Score: {score}";
         Vector2 scoreSize = p.gameFont.MeasureString(scoreText);
         p.DrawText(scoreText, p.gameFont, new Vector2(scoreSize.X / 2f + 5f, 30f), Color.Yellow, 0.6f);

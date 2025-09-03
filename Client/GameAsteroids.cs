@@ -10,17 +10,20 @@ using System.Text.Json;
 
 public class GameAsteroids : Processing
 {
-    private SpriteBatch spriteBatch;
+    public SpriteBatch spriteBatch;
     public SpriteFont gameFont;
+    public TcpClientWrapper tcpClient;
 
     /* --------------------- estado de jogo --------------------- */
     private ScreenManager currentScreen;
+    public JsonElement currentGameState;
     public int level = 0;
 
     /* --------------------- telas de jogo ---------------------- */
     private MenuScreen menuScreen;
     private StoryScreen storyScreen;
     private GameScreen gameScreen;
+    private GameScreenOnline gameScreenOnline;
     private PauseScreen pauseScreen;
     private GameOverScreen gameOverScreen;
     private DisconnectionScreen disconnectionScreen;
@@ -30,9 +33,11 @@ public class GameAsteroids : Processing
     public bool esquerda, direita, cima, baixo, shoot;
 
     /* --------------------- sprites ----------------------------- */
+    public PImage pterosaurSprite;
     private PImage asteroidSpriteSmall;
-    private List<PImage> gameAsteroidsSprites;
-    private List<PImage> screenAsteroidsSprites;
+    public List<PImage> gameAsteroidsSprites;
+    public List<PImage> screenAsteroidsSprites;
+    
 
     private const int MAX_ASTEROIDS = 6;
     private const int NUM_ASTEROIDS_SPRITES = 4;
@@ -42,18 +47,23 @@ public class GameAsteroids : Processing
     {
         size(800, 600);
 
+         tcpClient = new TcpClientWrapper();
+
         spriteBatch = new SpriteBatch(GraphicsDevice);
         gameFont = Content.Load<SpriteFont>("PressStart");
+        currentGameState = new JsonElement();
 
         gameAsteroidsSprites = new();
         screenAsteroidsSprites = new();
 
+        pterosaurSprite = loadImage("./Content/Sprites/pterosaur.png");
         asteroidSpriteSmall = loadImage("./Content/Sprites/asteroid_small.png");
         for (int i = 0; i < NUM_ASTEROIDS_SPRITES; i++ )
         {
             gameAsteroidsSprites.Add(loadImage($"./Content/Sprites/GameAsteroids/asteroid{i+1}.png"));
             screenAsteroidsSprites.Add(loadImage($"./Content/Sprites/ScreenAsteroids/asteroid{i+1}.png"));
         }
+
 
         menuScreen = new MenuScreen(this);
         menuScreen.LoadContent();
@@ -63,6 +73,9 @@ public class GameAsteroids : Processing
 
         gameScreen = new GameScreen(this);
         gameScreen.LoadContent();
+
+        gameScreenOnline = new GameScreenOnline(this);
+        gameScreenOnline.LoadContent();
 
         pauseScreen = new PauseScreen(this);
 
@@ -87,6 +100,9 @@ public class GameAsteroids : Processing
                 break;
             case ScreenManager.Playing:
                 gameScreen.Update();
+                break;
+            case ScreenManager.OnlinePlaying:
+                gameScreenOnline.Update();
                 break;
             case ScreenManager.StoryMode:
                 storyScreen.Update(); 
@@ -117,6 +133,9 @@ public class GameAsteroids : Processing
                 break;
             case ScreenManager.Playing:
                 gameScreen.Draw();
+                break;
+            case ScreenManager.OnlinePlaying:
+                gameScreenOnline.Draw(currentGameState);
                 break;
             case ScreenManager.StoryMode:
                 storyScreen.Draw();
@@ -150,7 +169,7 @@ public class GameAsteroids : Processing
 
         if (isGame)
         {
-            int edge = rnd.Next((level == 0) ? 4 : 0);
+            int edge = rnd.Next(4);
             x = 0;
             y = 0;
             dir = Vector2.Zero;

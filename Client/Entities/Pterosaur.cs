@@ -65,16 +65,26 @@ public class Pterosaur
 
     public void Draw(Processing g)
     {
-        // Era pra rotar o sprite, mas não funciona
         g.push();
         g.translate(pos.X, pos.Y);
         //g.scale((float)1+g.cos(animation)/((velocity.X+velocity.Y+10)/1.0f), 1);
         g.rotate(angle + MathF.PI / 2);
-        // g.rect(pos.X, pos.Y, 10, 10);
         g.image(this.pterosaur, -100, -50, 200, 100);
         g.pop(); 
 
         animation+=.1f;
+    }
+
+    public static void Draw(GameAsteroids g, Vector2 pos)
+    {
+        g.push();
+        g.translate(pos.X, pos.Y);
+        //g.scale((float)1+g.cos(animation)/((velocity.X+velocity.Y+10)/1.0f), 1);
+        // g.rotate(angle + MathF.PI / 2);
+        g.image(g.pterosaurSprite, -100, -50, 200, 100);
+        g.pop(); 
+
+        //animation+=.1f;
         //Console.WriteLine($"pos.X: {pos.X}, pos.Y: {pos.Y}, angle: {angle}");
     }
 

@@ -9,6 +9,7 @@ using System.Net.Sockets;
 namespace Client.Rede;
 public static class MessageFraming
 {
+
     public static async Task SendMessageAsync(NetworkStream stream, object msg, CancellationToken ct)
     {
         try
@@ -25,7 +26,7 @@ public static class MessageFraming
             throw;
         }
     }
-
+    
     public static async Task<JsonElement?> ReadAsync(NetworkStream stream, CancellationToken ct)
     {
         try
@@ -51,7 +52,6 @@ public static class MessageFraming
             }
             
             var jsonString = Encoding.UTF8.GetString(jsonBuffer);
-            Console.WriteLine($"JSON recebido: {jsonString}");
             
             using var document = JsonDocument.Parse(jsonString);
             return document.RootElement.Clone();

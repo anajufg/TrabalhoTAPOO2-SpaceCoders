@@ -4,6 +4,7 @@ public enum ScreenManager
 {
     Menu,
     Playing,
+    OnlinePlaying,
     StoryMode,
     PauseScreen,
     GameOver, 
