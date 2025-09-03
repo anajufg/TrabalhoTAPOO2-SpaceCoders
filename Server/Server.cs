@@ -1,3 +1,4 @@
+using Server;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -14,6 +15,37 @@ public class Server
         listener.Start();
 
         Console.WriteLine($"Aguardando jogadores na porta {port}...");
+
+        // Instancia o jogo do servidor
+        // problema: talvez o jogo começa antes de ter jogadores
+        var game = new ServerGame();
+
+        // Loop de atualização do jogo
+        var gameLoop = new System.Timers.Timer(16);
+        gameLoop.Elapsed += (s, e) =>
+        {
+            game.Update();
+            // serialize e envia o estado do jogo para todos os jogadores
+            var gameState = game.GetGameState();
+            var json = System.Text.Json.JsonSerializer.Serialize(gameState);
+            lock (players)
+            {
+                foreach (var client in players)
+                {
+                    try
+                    {
+                        var stream = client.GetStream();
+                        var bytes = System.Text.Encoding.UTF8.GetBytes(json);
+                        var len = BitConverter.GetBytes(bytes.Length);
+                        stream.Write(len, 0, len.Length);
+                        stream.Write(bytes, 0, bytes.Length);
+                        stream.Flush();
+                    }
+                    catch {}
+                }
+            }
+        };
+        gameLoop.Start();
 
         _ = Task.Run(async () =>
         {
@@ -61,7 +93,10 @@ public class Server
                 players.Add(newClient);
             }
             Console.WriteLine($"Novo jogador conectado! Total: {players.Count}");
-            
+
+            // Inicializa o jogador no ServerGame ao conectar
+            game.InitPlayer(new System.Numerics.Vector2(game.width / 2, game.height / 2));
+
             await Send(newClient, new
             {
                 type = "Welcome",
@@ -157,27 +192,30 @@ public class Server
     private async Task ProcessMessage(TcpClient client, JsonElement? message)
     {
         if (message == null) return;
-        
         try
         {
-            if (message.Value.TryGetProperty("Action", out var actionProp) && 
+            // Espera-se que o cliente envie:
+            // { Action: "Move", Left: bool, Right: bool, Up: bool, Down: bool, Shoot: bool }
+            if (message.Value.TryGetProperty("Action", out var actionProp) &&
                 actionProp.ValueKind == JsonValueKind.String)
             {
                 string action = actionProp.GetString() ?? "";
-                
                 if (action == "Move")
                 {
-                    // Processar movimento do jogador
-                    if (message.Value.TryGetProperty("Direction", out var directionProp))
-                    {
-                        Console.WriteLine($"Jogador movendo: {directionProp}");
-                    }
+                    bool esquerda = message.Value.TryGetProperty("Left", out var l) && l.GetBoolean();
+                    bool direita = message.Value.TryGetProperty("Right", out var r) && r.GetBoolean();
+                    bool cima = message.Value.TryGetProperty("Up", out var u) && u.GetBoolean();
+                    bool baixo = message.Value.TryGetProperty("Down", out var d) && d.GetBoolean();
+                    bool tiro = message.Value.TryGetProperty("Shoot", out var s) && s.GetBoolean();
+
+                    // Atualiza o estado do jogador no game, incluindo tiro
+                    game.ReceiveInput(client, esquerda, direita, cima, baixo, tiro);
+                    Console.WriteLine($"Input recebido: E:{esquerda} D:{direita} C:{cima} B:{baixo} T:{tiro}");
                 }
             }
-            
-            await Send(client, new { 
-                type = "Ack", 
-                message = "Mensagem recebida com sucesso" 
+            await Send(client, new {
+                type = "Ack",
+                message = "Mensagem recebida com sucesso"
             });
         }
         catch (Exception ex)
