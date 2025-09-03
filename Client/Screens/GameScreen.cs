@@ -28,11 +28,11 @@ public class GameScreen
     /* ------- Estados do jogador ------- */
     public struct State
     {
-        public bool esq, dir, cim, baix;
+        public bool esq, dir, cim, baix, shoot;
 
         public static bool operator ==(State a, State b)
         {
-            return a.esq == b.esq && a.dir == b.dir && a.cim == b.cim && a.baix == b.baix;
+            return a.esq == b.esq && a.dir == b.dir && a.cim == b.cim && a.baix == b.baix && a.shoot == b.shoot;
         }
 
         public static bool operator !=(State a, State b)
@@ -177,6 +177,7 @@ public class GameScreen
         p.direita = false;
         p.cima = false;
         p.baixo = false;
+        p.shoot = false;
         isPause = false;
 
         var state = Keyboard.GetState();
@@ -192,6 +193,7 @@ public class GameScreen
             {
                 bullets.Add(pterosaur.Shoot());
                 lastShotFrame = p.frameCount;
+                p.shoot = true;
             }
         }
 

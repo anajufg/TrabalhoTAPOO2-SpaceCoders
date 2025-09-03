@@ -1,16 +1,21 @@
+
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
+using Server.Entities;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Server;
 
-using Server.Entities;
-
-namespace Server
+namespace Server.ServerGame
 {
     public class ServerGame
     {
         // Game state
         public int level = 0;
-        public ScreenManager currentScreen;
+        //public ScreenManager currentScreen;
 
         // Entities
         public List<Asteroid> asteroids = new();
@@ -19,8 +24,8 @@ namespace Server
         // Lista de balas
         public List<Bullet> bullets = new();
 
-    // Múltiplos jogadores
-    public Dictionary<TcpClient, Pterosaur> players = new();
+        // Múltiplos jogadores
+        public Dictionary<TcpClient, Pterosaur> players = new();
 
         // Inputs por jogador
         public Dictionary<TcpClient, (bool esquerda, bool direita, bool cima, bool baixo)> playerInputs = new();
@@ -38,9 +43,9 @@ namespace Server
             {
                 asteroidsState.Add(new
                 {
-                    x = a.Position.X,
-                    y = a.Position.Y,
-                    size = a.Size
+                    x = a.getPosition().X,
+                    y = a.getPosition().Y,
+                    size = a.size
                 });
             }
 
@@ -59,7 +64,7 @@ namespace Server
             }
 
                     // Serializa jogadores
-                    var playersState = new List<object>();
+                    playersState = new List<object>();
                     foreach (var kv in players)
                     {
                         var p = kv.Value;
@@ -79,10 +84,10 @@ namespace Server
                         foreach (var b in bullets)
                         {
                             bulletsState.Add(new {
-                                x = b.Position.X,
-                                y = b.Position.Y,
-                                vx = b.Velocity.X,
-                                vy = b.Velocity.Y
+                                x = b.getPosition().X,
+                                y = b.getPosition().Y,
+                                vx = b.getVelocity().X,
+                                vy = b.getVelocity().Y
                             });
                         }
                     }

@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
 using Monogame.Processing;
 
 namespace Server.Entities;
@@ -29,8 +29,9 @@ public class Asteroid
 
     public void Update() => pos += vel;
 
-    public bool Collide(Bullet t) => Vector2.Distance(t.pos, pos) < size;
+    public bool Collide(Bullet t) => Vector2.Distance(t.getPosition(), pos) < size;
     public bool Collide(Pterosaur n) => Vector2.Distance(n.pos, pos) < size-10;
 
     public Vector2 getPosition() => pos;
+    public Vector2 getVelocity() => vel;
 }

@@ -3,11 +3,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using Server.ServerGame;
 
-public class Server
+namespace Server.ServerSide;
+
+public class ServerSide
 {
     private List<TcpClient> players = new List<TcpClient>();
     private TcpListener? listener;
+    private ServerGame.ServerGame game;
 
     public async Task StartServer(int port)
     {
@@ -18,7 +22,7 @@ public class Server
 
         // Instancia o jogo do servidor
         // problema: talvez o jogo começa antes de ter jogadores
-        var game = new ServerGame();
+        game = new ServerGame.ServerGame();
 
         // Loop de atualização do jogo
         var gameLoop = new System.Timers.Timer(16);
@@ -27,23 +31,7 @@ public class Server
             game.Update();
             // serialize e envia o estado do jogo para todos os jogadores
             var gameState = game.GetGameState();
-            var json = System.Text.Json.JsonSerializer.Serialize(gameState);
-            lock (players)
-            {
-                foreach (var client in players)
-                {
-                    try
-                    {
-                        var stream = client.GetStream();
-                        var bytes = System.Text.Encoding.UTF8.GetBytes(json);
-                        var len = BitConverter.GetBytes(bytes.Length);
-                        stream.Write(len, 0, len.Length);
-                        stream.Write(bytes, 0, bytes.Length);
-                        stream.Flush();
-                    }
-                    catch {}
-                }
-            }
+            SendAll(gameState);
         };
         gameLoop.Start();
 
@@ -95,7 +83,7 @@ public class Server
             Console.WriteLine($"Novo jogador conectado! Total: {players.Count}");
 
             // Inicializa o jogador no ServerGame ao conectar
-            game.InitPlayer(new System.Numerics.Vector2(game.width / 2, game.height / 2));
+            game.InitPlayer(newClient, new System.Numerics.Vector2(game.width / 2, game.height / 2));
 
             await Send(newClient, new
             {
@@ -168,27 +156,25 @@ public class Server
         }
     }
     
-    // public async Task SendAll(string msg)
-    // {
-    //     var data = Encoding.ASCII.GetBytes(msg);
-    //     lock (players)
-    //     {
-    //         foreach (var player in players.ToList())
-    //         {
-    //             try
-    //             {
-    //                 var stream = player.GetStream();
-    //                 await stream.WriteAsync(data, 0, data.Length);
-    //             }
-    //             // caso o player se desconecte
-    //             catch
-    //             {
-    //                 players.Remove(player);
-    //             }
-    //         }
-    //     }
-    // }
-
+    public async Task SendAll(object msg)
+    {
+        lock (players)
+        {
+            foreach (var player in players.ToList())
+            {
+                try
+                {
+                    Send(player, msg);
+                }
+                // caso o player se desconecte
+                catch
+                {
+                    //players.Remove(player);
+                }
+            }
+        }
+    }
+     
     private async Task ProcessMessage(TcpClient client, JsonElement? message)
     {
         if (message == null) return;

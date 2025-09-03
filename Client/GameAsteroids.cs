@@ -14,20 +14,20 @@ public class GameAsteroids : Processing
     public SpriteFont gameFont;
 
     /* --------------------- estado de jogo --------------------- */
-    public ScreenManager currentScreen;
+    private ScreenManager currentScreen;
     public int level = 0;
 
     /* --------------------- telas de jogo ---------------------- */
-    public MenuScreen menuScreen;
-    public StoryScreen storyScreen;
-    public GameScreen gameScreen;
-    public PauseScreen pauseScreen;
-    public GameOverScreen gameOverScreen;
-    public DisconnectionScreen disconnectionScreen;
-    public ConnectionScreen connectionScreen;
+    private MenuScreen menuScreen;
+    private StoryScreen storyScreen;
+    private GameScreen gameScreen;
+    private PauseScreen pauseScreen;
+    private GameOverScreen gameOverScreen;
+    private DisconnectionScreen disconnectionScreen;
+    private ConnectionScreen connectionScreen;
 
     /* --------------------- teclado (flags) --------------------- */
-    public bool esquerda, direita, cima, baixo;
+    public bool esquerda, direita, cima, baixo, shoot;
 
     /* --------------------- sprites ----------------------------- */
     private PImage asteroidSpriteSmall;
@@ -252,6 +252,11 @@ public class GameAsteroids : Processing
         
         currentScreen = newScreen;
         delay(150);
+    }
+
+    public ScreenManager getCurrentScreen()
+    {
+        return currentScreen;
     }
 
     public void DrawText(string text, SpriteFont font, Vector2 position, Color color, float scale)
