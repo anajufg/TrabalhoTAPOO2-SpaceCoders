@@ -12,29 +12,15 @@ namespace Server
         public int level = 0;
         public ScreenManager currentScreen;
 
-    // Entities (example: asteroids)
-    public List<Asteroid> asteroids = new();
-    private const int MAX_ASTEROIDS = 6;
+        // Entities
+        public List<Asteroid> asteroids = new();
+        private const int MAX_ASTEROIDS = 6;
 
-    // Lista de balas
-    public List<Bullet> bullets = new();
-        // Atualiza todas as balas
-        public void UpdateBullets()
-        {
-            for (int i = bullets.Count - 1; i >= 0; i--)
-            {
-                var b = bullets[i];
-                b.Update();
-                // Remove se sair da tela
-                if (b.Position.X < 0 || b.Position.X > width || b.Position.Y < 0 || b.Position.Y > height)
-                {
-                    bullets.RemoveAt(i);
-                }
-            }
-        }
+        // Lista de balas
+        public List<Bullet> bullets = new();
 
-        // Múltiplos jogadores
-        public Dictionary<TcpClient, Pterosaur> players = new();
+    // Múltiplos jogadores
+    public Dictionary<TcpClient, Pterosaur> players = new();
 
         // Inputs por jogador
         public Dictionary<TcpClient, (bool esquerda, bool direita, bool cima, bool baixo)> playerInputs = new();
@@ -66,27 +52,40 @@ namespace Server
                 playersState.Add(new
                 {
                     x = p.pos.X,
-                    y = p.pos.Y,
+                    y = p.pos.Y
                     // tirei o angulo por enquanto
-                    // angle = p.Angle 
+                    // angle = p.Angle
                 });
             }
 
+                    // Serializa jogadores
+                    var playersState = new List<object>();
+                    foreach (var kv in players)
+                    {
+                        var p = kv.Value;
+                        playersState.Add(new
+                        {
+                            x = p.pos.X,
+                            y = p.pos.Y,
+                            // tirei o angulo por enquanto
+                            // angle = p.Angle 
+                        });
+                    }
 
-            // Serializa balas
-            var bulletsState = new List<object>();
-            if (bullets != null)
-            {
-                foreach (var b in bullets)
-                {
-                    bulletsState.Add(new {
-                        x = b.Position.X,
-                        y = b.Position.Y,
-                        vx = b.Velocity.X,
-                        vy = b.Velocity.Y
-                    });
-                }
-            }
+                    // Serializa balas
+                    var bulletsState = new List<object>();
+                    if (bullets != null)
+                    {
+                        foreach (var b in bullets)
+                        {
+                            bulletsState.Add(new {
+                                x = b.Position.X,
+                                y = b.Position.Y,
+                                vx = b.Velocity.X,
+                                vy = b.Velocity.Y
+                            });
+                        }
+                    }
 
             return new
             {
@@ -115,7 +114,7 @@ namespace Server
             UpdateBullets();
         }
 
-        // Asteroid logic (no graphics)
+        // Atualiza todos os asteroides
         public void UpdateAsteroids()
         {
             if (asteroids.Count < MAX_ASTEROIDS)
@@ -125,12 +124,54 @@ namespace Server
             {
                 var a = asteroids[i];
                 a.Update();
-                if (a.Position.Y > height + 50 ||
-                    a.Position.X < -50 ||
-                    a.Position.X > width + 50)
+
+                // Colisão com jogadores
+                foreach (var kv in players)
+                {
+                    var ptero = kv.Value;
+                    if (a.Collide(ptero))
+                    {
+                        // Remove jogador do jogo
+                        players.Remove(kv.Key);
+                        break;
+                    }
+                }
+
+                // Colisão com balas
+                for (int j = bullets.Count - 1; j >= 0; j--)
+                {
+                    var b = bullets[j];
+                    if (a.Collide(b))
+                    {
+                        bullets.RemoveAt(j);
+                        asteroids.RemoveAt(i);
+                        // Asteroide destruído, não precisa checar offscreen
+                        goto NextAsteroid;
+                    }
+                }
+
+                // Verifica se asteroide saiu da tela
+                var apos = a.getPosition();
+                if (apos.Y > height + 50 || apos.X < -50 || apos.X > width + 50)
                 {
                     asteroids.RemoveAt(i);
                     asteroids.Add(NovoAsteroid());
+                }
+                NextAsteroid:;
+            }
+        }
+
+        // Atualiza todas as balas
+        public void UpdateBullets()
+        {
+            for (int i = bullets.Count - 1; i >= 0; i--)
+            {
+                var b = bullets[i];
+                b.Update();
+                // Remove se sair da tela usando método da entidade
+                if (b.OffScreen(height))
+                {
+                    bullets.RemoveAt(i);
                 }
             }
         }
