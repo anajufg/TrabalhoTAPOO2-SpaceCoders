@@ -16,16 +16,85 @@ namespace Server
     public List<Asteroid> asteroids = new();
     private const int MAX_ASTEROIDS = 6;
 
-    // Múltiplos jogadores
-    public Dictionary<TcpClient, Pterosaur> players = new();
+    // Lista de balas
+    public List<Bullet> bullets = new();
+        // Atualiza todas as balas
+        public void UpdateBullets()
+        {
+            for (int i = bullets.Count - 1; i >= 0; i--)
+            {
+                var b = bullets[i];
+                b.Update();
+                // Remove se sair da tela
+                if (b.Position.X < 0 || b.Position.X > width || b.Position.Y < 0 || b.Position.Y > height)
+                {
+                    bullets.RemoveAt(i);
+                }
+            }
+        }
 
-    // Inputs por jogador
-    public Dictionary<TcpClient, (bool esquerda, bool direita, bool cima, bool baixo)> playerInputs = new();
+        // Múltiplos jogadores
+        public Dictionary<TcpClient, Pterosaur> players = new();
+
+        // Inputs por jogador
+        public Dictionary<TcpClient, (bool esquerda, bool direita, bool cima, bool baixo)> playerInputs = new();
 
         // Game dimensions
         public int width = 800;
         public int height = 600;
 
+        // Serializa o estado do jogo para enviar aos clientes
+        public object GetGameState()
+        {
+            // Serializa asteroides
+            var asteroidsState = new List<object>();
+            foreach (var a in asteroids)
+            {
+                asteroidsState.Add(new
+                {
+                    x = a.Position.X,
+                    y = a.Position.Y,
+                    size = a.Size
+                });
+            }
+
+            // Serializa jogadores
+            var playersState = new List<object>();
+            foreach (var kv in players)
+            {
+                var p = kv.Value;
+                playersState.Add(new
+                {
+                    x = p.pos.X,
+                    y = p.pos.Y,
+                    // tirei o angulo por enquanto
+                    // angle = p.Angle 
+                });
+            }
+
+
+            // Serializa balas
+            var bulletsState = new List<object>();
+            if (bullets != null)
+            {
+                foreach (var b in bullets)
+                {
+                    bulletsState.Add(new {
+                        x = b.Position.X,
+                        y = b.Position.Y,
+                        vx = b.Velocity.X,
+                        vy = b.Velocity.Y
+                    });
+                }
+            }
+
+            return new
+            {
+                asteroids = asteroidsState,
+                players = playersState,
+                bullets = bulletsState
+            };
+        }
 
         // Game update logic
         public void Update()
@@ -42,6 +111,8 @@ namespace Server
             }
             // Atualiza asteroides
             UpdateAsteroids();
+            // Atualiza balas
+            UpdateBullets();
         }
 
         // Asteroid logic (no graphics)
@@ -101,9 +172,16 @@ namespace Server
         }
 
         // Recebe input de um jogador específico
-        public void ReceiveInput(TcpClient client, bool esquerda, bool direita, bool cima, bool baixo)
+        public void ReceiveInput(TcpClient client, bool esquerda, bool direita, bool cima, bool baixo, bool shoot = false)
         {
             playerInputs[client] = (esquerda, direita, cima, baixo);
+            //se ele atirou, coloca a bala na lista
+            if (shoot && players.ContainsKey(client))
+            {
+                var bullet = players[client].Shoot();
+                if (bullet != null)
+                    bullets.Add(bullet);
+            }
         }
 
         // Inicializa o jogador para um cliente
@@ -112,41 +190,12 @@ namespace Server
             players[client] = new Pterosaur(startPos);
         }
 
-        // Example: change screen
-        public void SetCurrentScreen(ScreenManager newScreen, bool restart = false)
-        {
-            if ((newScreen == ScreenManager.Playing || newScreen == ScreenManager.Menu) && restart)
-            {
-                Reset();
-            }
-            currentScreen = newScreen;
-        }
-
         private void Reset()
         {
             asteroids.Clear();
             level = 0;
-            // Reset other game state as needed
+            // Reseta outras coisas se precisar
         }
     }
 
-    // Minimal asteroid class for server
-    public class Asteroid
-    {
-        public Vector2 Position;
-        public Vector2 Velocity;
-        public float Size;
-
-        public Asteroid(Vector2 position, Vector2 velocity, float size)
-        {
-            Position = position;
-            Velocity = velocity;
-            Size = size;
-        }
-
-        public void Update()
-        {
-            Position += Velocity;
-        }
-    }
 }

@@ -16,15 +16,34 @@ public class Server
 
         Console.WriteLine($"Aguardando jogadores na porta {port}...");
 
-    // Instancia o jogo do servidor
-    var game = new ServerGame();
+        // Instancia o jogo do servidor
+        // problema: talvez o jogo começa antes de ter jogadores
+        var game = new ServerGame();
 
         // Loop de atualização do jogo
         var gameLoop = new System.Timers.Timer(16);
         gameLoop.Elapsed += (s, e) =>
         {
-            game.Update(); // Chama Update do ServerGame, que chama player.Update e UpdateAsteroids
-            // Falta serializar e enviar o estado do jogo para os clientes (screenshot)
+            game.Update();
+            // serialize e envia o estado do jogo para todos os jogadores
+            var gameState = game.GetGameState();
+            var json = System.Text.Json.JsonSerializer.Serialize(gameState);
+            lock (players)
+            {
+                foreach (var client in players)
+                {
+                    try
+                    {
+                        var stream = client.GetStream();
+                        var bytes = System.Text.Encoding.UTF8.GetBytes(json);
+                        var len = BitConverter.GetBytes(bytes.Length);
+                        stream.Write(len, 0, len.Length);
+                        stream.Write(bytes, 0, bytes.Length);
+                        stream.Flush();
+                    }
+                    catch {}
+                }
+            }
         };
         gameLoop.Start();
 
@@ -48,8 +67,6 @@ public class Server
                             {
                                 Console.WriteLine($"Mensagem recebida: {msg}");
                                 await ProcessMessage(client, msg);
-                                 // Exemplo: aplicar input recebido no game
-                                 // game.ReceiveInput(...);
                             }
                         }
                         catch (Exception ex)
@@ -191,13 +208,8 @@ public class Server
                     bool baixo = message.Value.TryGetProperty("Down", out var d) && d.GetBoolean();
                     bool tiro = message.Value.TryGetProperty("Shoot", out var s) && s.GetBoolean();
 
-                    // Atualiza o estado do jogador no game
-                    game.ReceiveInput(esquerda, direita, cima, baixo);
-                    // Exemplo: se quiser processar tiro, adicione lógica aqui
-                    if (tiro)
-                    {
-                        // game.Atirar(); // Implemente esse método no ServerGame
-                    }
+                    // Atualiza o estado do jogador no game, incluindo tiro
+                    game.ReceiveInput(client, esquerda, direita, cima, baixo, tiro);
                     Console.WriteLine($"Input recebido: E:{esquerda} D:{direita} C:{cima} B:{baixo} T:{tiro}");
                 }
             }
