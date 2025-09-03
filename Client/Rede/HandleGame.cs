@@ -16,18 +16,18 @@ public class HandleGame
         this.client = client;
     }
 
-    public async Task Action(bool left, bool right, bool up, bool down, int w, int h)
+    public async Task Action(bool left, bool right, bool up, bool down, bool shoot)
     {
-
         Console.WriteLine("Enviando ação do jogador...");
         var msg = new
         {
             Action = "Move",
-            Direction = new { Left = left, Right = right, Up = up, Down = down },
-            Width = w,
-            Height = h
+            Left = left,
+            Right = right,
+            Up = up,
+            Down = down,
+            Shoot = shoot
         };
-
         await client.SendAsync(msg);
     }
 }
