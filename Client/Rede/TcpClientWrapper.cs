@@ -1,85 +1,61 @@
-using System;
-using System.ComponentModel;
 using System.Net.Sockets;
-using System.Runtime.Serialization;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
 
-
-namespace Client.Rede;
-
-public class TcpClientWrapper
+namespace Client.Rede
 {
-    private TcpClient _client;
-    private NetworkStream _stream;
-    private CancellationTokenSource _cts;
-
-
-    public event Action<JsonElement>? OnMessageReceived;
-    public event Action? OnDisconnected;
-
-    public async Task ConnectAsync(string ip, int port)
+    public class TcpClientWrapper
     {
-        _client = new TcpClient();
-        await _client.ConnectAsync(ip, port);
-        _stream = _client.GetStream();
-        _cts = new CancellationTokenSource();
+        private TcpClient? client;
+        private NetworkStream? stream;
+        private CancellationTokenSource? cts;
 
-        // _ = Task.Run(ReceiveLoop);
-    }
+        public event Action<JsonElement>? OnMessageReceived;
+        public event Action? OnDisconnected;
 
-
-    public async Task ConnectAsync(string ip, int port, GameAsteroids g)
-    {
-        _client = new TcpClient();
-        await _client.ConnectAsync(ip, port);
-        _stream = _client.GetStream();
-        _cts = new CancellationTokenSource();
-
-        _ = Task.Run(() => ReceiveLoop(g));
-    }
-
-    public async Task SendAsync(object message)
-    {
-        if (_stream == null) return;
-        await MessageFraming.SendMessageAsync(_stream, message, _cts.Token);
-    }
-
-    public async Task ReceiveLoop(GameAsteroids g)
-    {
-        try
+        public async Task ConnectAsync(string ip, int port)
         {
-            while (!_cts.Token.IsCancellationRequested)
+            client = new TcpClient();
+            await client.ConnectAsync(ip, port);
+            stream = client.GetStream();
+            cts = new CancellationTokenSource();
+
+            _ = Task.Run(ReceiveLoop);
+        }
+
+        public async Task SendAsync(object message)
+        {
+            if (stream == null || cts == null) return;
+            await MessageFraming.SendMessageAsync(stream, message, cts.Token);
+        }
+
+        private async Task ReceiveLoop()
+        {
+            try
             {
-                var json = await MessageFraming.ReadAsync(_stream, _cts.Token);
-                if (json == null) break;
-
-                g.currentGameState = json.Value;
-
-                if (json.HasValue)
+                while (cts != null && !cts.Token.IsCancellationRequested)
                 {
+                    if (stream == null) break;
+                    var json = await MessageFraming.ReadAsync(stream, cts.Token);
+                    if (json == null) break;
+
                     OnMessageReceived?.Invoke(json.Value);
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro no ReceiveLoop: {ex.Message}");
+            }
+            finally
+            {
+                OnDisconnected?.Invoke();
+                client?.Close();
+            }
         }
-        catch (Exception ex)
+
+        public void Disconnect()
         {
-            Console.WriteLine($"Error in ReceiveLoop: {ex.Message}");
-        }
-        finally
-        {
-            OnDisconnected?.Invoke();
-            _client?.Close();
+            cts?.Cancel();
+            client?.Close();
         }
     }
-
-    public void Disconnect()
-    {
-        _cts?.Cancel();
-        _client?.Close();
-    }
-
 }

@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Text;
-using Client.Entities;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Client.Entities;
 using Client.Rede;
 
-namespace Cliente.Screens;
+namespace Client.Screens;
 
-public class ConnectionScreen
+public class ConnectionScreen : IScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
@@ -39,7 +40,7 @@ public class ConnectionScreen
         backgroundImage = p.loadImage("./Content/Scenes/scene4.png");
     }
 
-    public void Draw()
+    public void Draw(JsonElement? state = null)
     {
         p.image(backgroundImage, 0, 0, p.width, p.height);
 

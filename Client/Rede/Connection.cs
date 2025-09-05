@@ -1,48 +1,33 @@
-using Client.Rede;
 using System.Text.Json;
-using Cliente.Screens;
+using Client.Screens;
 
 namespace Client.Rede
 {
     public sealed class Connection
     {
-        /* --------------------- Globals -------------------------------- */
-        private GameAsteroids p;
-        private string? serverIP;
-
-        private Connection(GameAsteroids p)
-        {
-            this.p = p;
-        }
-
-        private static Connection _instance;
-
-        private static readonly object _lock = new object();
-
-        public static Connection GetInstance(GameAsteroids p)
-        {
-            if (_instance == null)
-            {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new Connection(p);
-                    }
-                }
-            }
-            return _instance;
-        }
-    
-
-        /* --------------------- sistema de rede --------------------- */
+        private readonly GameAsteroids game;
         private TcpClientWrapper? networkClient;
         private HandleGame? handleGame;
-        private bool isConnected = false;
-        private int serverPort = 9000;
 
+        private bool isConnected;
+        private string? serverIP;
+        private readonly int serverPort = 9000;
 
-        /* --------------------- sistema de rede --------------------- */
+        private Connection(GameAsteroids game)
+        {
+            this.game = game;
+        }
+
+        private static Connection? _instance;
+        private static readonly object _lock = new();
+
+        public static Connection GetInstance(GameAsteroids game)
+        {
+            lock (_lock)
+            {
+                return _instance ??= new Connection(game);
+            }
+        }
 
         public async Task<bool> ConnectToServer(string serverIP)
         {
@@ -55,9 +40,8 @@ namespace Client.Rede
                 networkClient.OnMessageReceived += OnNetworkMessageReceived;
                 networkClient.OnDisconnected += OnNetworkDisconnected;
 
-                await networkClient.ConnectAsync(serverIP, serverPort, p);
+                await networkClient.ConnectAsync(serverIP, serverPort);
                 isConnected = true;
-                
                 return true;
             }
             catch (Exception ex)
@@ -71,43 +55,35 @@ namespace Client.Rede
         public void DisconnectFromServer()
         {
             Console.WriteLine("Desconectando do servidor...");
-            if (networkClient != null)
-            {
-                networkClient.Disconnect();
-                networkClient = null;
-                handleGame = null;
-                isConnected = false;
-            }
+            networkClient?.Disconnect();
+            networkClient = null;
+            handleGame = null;
+            isConnected = false;
         }
 
         private void OnNetworkMessageReceived(JsonElement message)
         {
             try
             {
-                //Console.WriteLine($"Mensagem recebida: {message}");
-                
-                // Processar mensagens do servidor
-                if (message.TryGetProperty("type", out var typeProp) && 
+                if (message.TryGetProperty("type", out var typeProp) &&
                     typeProp.ValueKind == JsonValueKind.String)
                 {
                     string messageType = typeProp.GetString() ?? "";
-                    
+
                     switch (messageType)
                     {
                         case "Welcome":
-                            if (message.TryGetProperty("message", out var welcomeMsg))
-                            {
-                                Console.WriteLine($"Servidor: {welcomeMsg.GetString()}");
-                            }
+                            Console.WriteLine($"Servidor: {message.GetProperty("message").GetString()}");
                             break;
-                            
+
                         case "Ack":
-                            if (message.TryGetProperty("message", out var ackMsg))
-                            {
-                                Console.WriteLine($"Confirmação: {ackMsg.GetString()}");
-                            }
+                            Console.WriteLine($"Confirmação: {message.GetProperty("message").GetString()}");
                             break;
-                            
+
+                        case "GameState":
+                            this.game.currentGameState = message;
+                            break;
+
                         default:
                             Console.WriteLine($"Tipo de mensagem desconhecido: {messageType}");
                             break;
@@ -125,31 +101,31 @@ namespace Client.Rede
             Console.WriteLine("Desconectado do servidor");
             isConnected = false;
 
-            if (p.getCurrentScreen() != ScreenManager.GameOver)
+            if (game.getCurrentScreen() != ScreenManager.GameOver)
             {
-                p.setCurrentScreen(ScreenManager.Disconnection);
+                game.setCurrentScreen(ScreenManager.Disconnection);
             }
         }
 
         public async Task SendPlayerAction()
         {
- 
-            if (true)
+            if (!isConnected || handleGame == null) return;
+
+            try
             {
-                try
-                {
-                    await handleGame.Action(p.esquerda, p.direita, p.cima, p.baixo, p.shoot);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Erro ao enviar ação: {ex.Message}");
-                    isConnected = false;
-                }
+                await handleGame.SendPlayerActionAsync(
+                    game.input.esquerda, game.input.direita,
+                    game.input.cima, game.input.baixo, game.input.shoot
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao enviar ação: {ex.Message}");
+                isConnected = false;
             }
         }
 
         public bool IsConnected() => isConnected;
-
         public string? GetServerIP() => serverIP;
     }
 }

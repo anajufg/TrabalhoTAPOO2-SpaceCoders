@@ -6,27 +6,29 @@ namespace Client.Entities;
 
 public class Particle
 {
-    public Vector2 pos, vel;
+    public Vector2 Position { get; private set; }
+    public Vector2 Velocity { get; }
 
-    public Particle(Vector2 p, Vector2 v) {
-        
-        pos = p;
-        vel = v;
+    public Particle(Vector2 pos, Vector2 vel)
+    {
+        Position = pos;
+        Velocity = vel;
     }
 
-    public void Update(Processing g){
-        pos += vel;
-        if(pos.Y>g.height){ 
-            pos.X = g.random(g.width);
-            pos.Y = g.random(-g.height*2);
+    public void Update(Processing g)
+    {
+        Position += Velocity;
+
+        if (Position.Y > g.height)
+        {
+            Position = new Vector2(g.random(g.width), g.random(-g.height * 2));
         }
     }
 
     public void Draw(Processing g)
-    {   
-        g.fill(255, 255, 255);
+    {
+        g.fill(250, 250, 250);
         g.noStroke();
-        g.ellipse(pos.X, pos.Y, 2, 2);
+        g.ellipse(Position.X, Position.Y, 2, 2);
     }
 }
-

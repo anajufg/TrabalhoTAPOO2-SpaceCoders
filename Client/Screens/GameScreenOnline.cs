@@ -5,12 +5,11 @@ using Microsoft.Xna.Framework.Input;
 using Client.Entities;
 using System.Threading.Tasks;
 using System.Text.Json;
-
 using Client.Rede;
 
-namespace Cliente.Screens;
+namespace Client.Screens;
 
-public class GameScreenOnline
+public class GameScreenOnline : IScreen
 {
     private GameAsteroids p;
 
@@ -63,12 +62,12 @@ public class GameScreenOnline
     }
 
     // Recebe o JsonElement do servidor e desenha tudo na tela
-    public void Draw(JsonElement gameState)
+    public void Draw(JsonElement? gameState)
     {   
-        if (gameState.ValueKind != JsonValueKind.Object)
+        if (gameState?.ValueKind != JsonValueKind.Object)
         {
             Console.WriteLine("Estado do jogo inválido recebido do servidor.");
-            return; // ou desenhe um estado padrão
+            return; 
         }
 
         for (int i = particles.Count - 1; i >= 0; i--)
@@ -77,9 +76,8 @@ public class GameScreenOnline
         }
 
         // Desenha asteroides
-        if (gameState.TryGetProperty("asteroids", out var asteroids))
+        if (gameState?.TryGetProperty("asteroids", out var asteroids) != null)
         {
-            Console.WriteLine("ok");
             foreach (var a in asteroids.EnumerateArray())
             {
                 float x = (float)a.GetProperty("x").GetDouble();
@@ -91,7 +89,7 @@ public class GameScreenOnline
         }
 
         // Desenha jogadores
-        if (gameState.TryGetProperty("players", out var players))
+        if (gameState?.TryGetProperty("players", out var players) != null)
         {
             foreach (var p in players.EnumerateArray())
             {
@@ -103,7 +101,7 @@ public class GameScreenOnline
         }
 
         // Desenha balas
-        if (gameState.TryGetProperty("bullets", out var bullets))
+        if (gameState?.TryGetProperty("bullets", out var bullets) != null)
         {
             foreach (var b in bullets.EnumerateArray())
             {
@@ -128,26 +126,26 @@ public class GameScreenOnline
     /* ====================== input ============================= */
     public void Teclas()
     {
-        p.esquerda = false;
-        p.direita = false;
-        p.cima = false;
-        p.baixo = false;
-        p.shoot = false;
+        p.input.esquerda = false;
+        p.input.direita = false;
+        p.input.cima = false;
+        p.input.baixo = false;
+        p.input.shoot = false;
         isPause = false;
 
         var state = Keyboard.GetState();
 
-        if (state.IsKeyDown(Keys.A)) p.esquerda = true;
-        if (state.IsKeyDown(Keys.D)) p.direita = true;
-        if (state.IsKeyDown(Keys.W)) p.cima = true;
-        if (state.IsKeyDown(Keys.S)) p.baixo = true;
+        if (state.IsKeyDown(Keys.A)) p.input.esquerda = true;
+        if (state.IsKeyDown(Keys.D)) p.input.direita = true;
+        if (state.IsKeyDown(Keys.W)) p.input.cima = true;
+        if (state.IsKeyDown(Keys.S)) p.input.baixo = true;
 
         if (state.IsKeyDown(Keys.Space))
         {
             if (p.frameCount - lastShotFrame >= fireRate)
             {
                 lastShotFrame = p.frameCount;
-                p.shoot = true;
+                p.input.shoot = true;
             }
         }
 

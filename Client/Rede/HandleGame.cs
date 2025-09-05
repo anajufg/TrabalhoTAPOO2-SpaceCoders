@@ -1,32 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Client.Rede;
-
-public class HandleGame
+namespace Client.Rede
 {
-
-    TcpClientWrapper client;
-
-    public HandleGame(TcpClientWrapper client)
+    public class HandleGame
     {
-        this.client = client;
-    }
+        private readonly TcpClientWrapper client;
 
-    public async Task Action(bool left, bool right, bool up, bool down, bool shoot)
-    {
-        var msg = new
+        public HandleGame(TcpClientWrapper client)
         {
-            Action = "Move",
-            Left = left,
-            Right = right,
-            Up = up,
-            Down = down,
-            Shoot = shoot
-        };
-        await client.SendAsync(msg);
+            this.client = client;
+        }
+
+        public async Task SendPlayerActionAsync(bool left, bool right, bool up, bool down, bool shoot)
+        {
+            var msg = new
+            {
+                type = "PlayerAction",
+                left,
+                right,
+                up,
+                down,
+                shoot
+            };
+
+            await client.SendAsync(msg);
+        }
     }
 }

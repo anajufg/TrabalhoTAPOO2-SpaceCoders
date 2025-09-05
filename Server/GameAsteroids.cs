@@ -19,8 +19,8 @@ public class GameAsteroids
     // Serializa o estado atual
     public object GetGameState() => new
     {
-        asteroids = asteroids.Select(a => new { x = a.getPosition().X, y = a.getPosition().Y, size = a.size }),
-        players = players.Values.Select(p => new { x = p.pos.X, y = p.pos.Y, angle = p.angle }),
+        asteroids = asteroids.Select(a => new { x = a.getPosition().X, y = a.getPosition().Y, Size = a.Size }),
+        players = players.Values.Select(p => new { x = p.Position.X, y = p.Position.Y, Angle = p.Angle }),
         bullets = bullets.Select(b => new { x = b.getPosition().X, y = b.getPosition().Y, vx = b.getVelocity().X, vy = b.getVelocity().Y })
     };
 
@@ -62,7 +62,7 @@ public class GameAsteroids
     {
         foreach (var (client, player) in players)
         {
-            if (asteroid.Collide(player))
+            if (asteroid.CollidesWith(player))
             {
                 players.Remove(client);
                 return true;
@@ -75,7 +75,7 @@ public class GameAsteroids
     {
         for (int j = bullets.Count - 1; j >= 0; j--)
         {
-            if (asteroid.Collide(bullets[j]))
+            if (asteroid.CollidesWith(bullets[j]))
             {
                 bullets.RemoveAt(j);
                 asteroids.RemoveAt(index);

@@ -1,4 +1,4 @@
-namespace Cliente.Screens;
+namespace Client.Screens;
 
 public enum ScreenManager
 {
