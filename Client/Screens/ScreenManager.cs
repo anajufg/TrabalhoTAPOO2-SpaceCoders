@@ -1,9 +1,10 @@
-namespace Cliente.Screens;
+namespace Client.Screens;
 
 public enum ScreenManager
 {
     Menu,
     Playing,
+    OnlinePlaying,
     StoryMode,
     PauseScreen,
     GameOver, 

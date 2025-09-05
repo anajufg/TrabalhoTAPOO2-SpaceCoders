@@ -2,11 +2,12 @@ using Monogame.Processing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Text.Json;
 using System.Text;
 
-namespace Cliente.Screens;
+namespace Client.Screens;
 
-public class PauseScreen
+public class PauseScreen : IScreen
 {
     private GameAsteroids p;
     
@@ -23,7 +24,9 @@ public class PauseScreen
         wasKeyPressedLastFrame = false;
     }
 
-    public void Draw()
+    public void LoadContent() {}
+
+    public void Draw(JsonElement? state = null)
     {
         Vector2 basePos = new(p.width / 2f, p.height * 0.4f);
         float lineSpacing = 40f; 

@@ -2,11 +2,12 @@ using Monogame.Processing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Text.Json;
 using System.Text;
 
-namespace Cliente.Screens;
+namespace Client.Screens;
 
-public class StoryScreen
+public class StoryScreen : IScreen
 {
     private GameAsteroids p;
     private readonly List<PImage> scenes;
@@ -40,7 +41,7 @@ public class StoryScreen
         scenesDescription.Add("O pterossauro ativa a máquina do tempo e voa rumo ao passado, direto para o Cretáceo, minutos antes da chuva de asteroides. Seu objetivo: destruir cada rocha cósmica e salvar os dinossauros da extinção.");
     }
 
-    public void Draw()
+    public void Draw(JsonElement? state = null)
     {
         if (currentSceneIndex < 0 || currentSceneIndex >= NUM_SCENES) return;
 

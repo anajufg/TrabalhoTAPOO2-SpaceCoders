@@ -1,4 +1,5 @@
-﻿const int port = 9000;
-Server server = new Server();
+﻿using Server.GameServer;
 
-await server.StartServer(port);
+const int Port = 9000;
+var server = new GameServer();
+await server.StartServer(Port);

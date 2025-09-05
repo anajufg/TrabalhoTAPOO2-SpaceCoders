@@ -1,87 +1,83 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;   // só para comparar com Keys.*
+using Microsoft.Xna.Framework.Input;  
 using Monogame.Processing;
 
 namespace Client.Entities;
 
 public class Pterosaur
 {
-    public Vector2 pos;
-    Vector2 velocity = Vector2.Zero;
-    float angle = -MathF.PI / 2; // Facing up
-    const float Acceleration = 0.99f;
-    const float MaxSpeed = 6f;
-    const float Friction = 0.99f;
-    const float RotationSpeed = 0.07f;
-    float animation;
+    public Vector2 Position;
+    private Vector2 Velocity = Vector2.Zero;
+    private static float Angle = -MathF.PI / 2; 
+    private const float Acceleration = 0.99f;
+    private const float MaxSpeed = 6f;
+    private const float Friction = 0.99f;
+    private const float RotationSpeed = 0.07f;
+    private const float ShipWidth = 200f;
+    private const float ShipHeight = 100f;
 
-    PImage pterosaur;
-    const float HalfW = 10, HalfH = 10;
+    private static PImage sprite;
 
     public Pterosaur(Vector2 start, Processing g)
     {
-        pos = start;
-        pterosaur = g.loadImage("./Content/Sprites/pterosaur.png");
+        Position = start;
+        sprite = g.loadImage("./Content/Sprites/pterosaur.png");
     }
 
-    public void Update(bool left, bool right, bool up, bool down, int w , int h)
+    public void Update(bool left, bool right, bool up, bool down, int w, int h)
     {
-        // Rotation
-        if (left) angle -= RotationSpeed;
-        if (right) angle += RotationSpeed;
+        if (left) Angle -= RotationSpeed;
+        if (right) Angle += RotationSpeed;
 
-        // Acceleration (thrust)
         if (up)
         {
-            velocity.X += MathF.Cos(angle) * Acceleration;
-            velocity.Y += MathF.Sin(angle) * Acceleration;
+            Velocity.X += MathF.Cos(Angle) * Acceleration;
+            Velocity.Y += MathF.Sin(Angle) * Acceleration;
         }
-        // Decelerate
+
         if (down)
         {
-            // Aumenta o atrito
-            if (velocity.Length() > 0.1f)
-                velocity *= 0.92f; 
-            // Para completamente
-            if (velocity.Length() < 0.15f)
-                velocity = Vector2.Zero;
+            if (Velocity.Length() > 0.1f) Velocity *= 0.92f;
+            if (Velocity.Length() < 0.15f) Velocity = Vector2.Zero;
         }
 
-        // Limit speed
-        if (velocity.Length() > MaxSpeed)
-            velocity = Vector2.Normalize(velocity) * MaxSpeed;
+        if (Velocity.Length() > MaxSpeed)
+            Velocity = Vector2.Normalize(Velocity) * MaxSpeed;
 
-        // Friction
-        velocity *= Friction;
+        Velocity *= Friction;
+        Position += Velocity;
 
-        pos += velocity;
-        
-        // Wrap around screen
+        Vector2 pos = Position;
+
         if (pos.X < 0) pos.X += w;
         if (pos.X > w) pos.X -= w;
         if (pos.Y < 0) pos.Y += h;
         if (pos.Y > h) pos.Y -= h;
+
+        Position = pos;
     }
 
     public void Draw(Processing g)
     {
-        // Era pra rotar o sprite, mas não funciona
         g.push();
-        g.translate(pos.X, pos.Y);
-        //g.scale((float)1+g.cos(animation)/((velocity.X+velocity.Y+10)/1.0f), 1);
-        g.rotate(angle + MathF.PI / 2);
-        // g.rect(pos.X, pos.Y, 10, 10);
-        g.image(this.pterosaur, -100, -50, 200, 100);
-        g.pop(); 
+        g.translate(Position.X, Position.Y);
+        g.rotate(Angle + MathF.PI / 2);
+        g.image(sprite, -ShipWidth / 2, -ShipHeight / 2, ShipWidth, ShipHeight);
+        g.pop();
+    }
 
-        animation+=.1f;
-        //Console.WriteLine($"pos.X: {pos.X}, pos.Y: {pos.Y}, angle: {angle}");
+    public static void Draw(Processing g, Vector2 Position)
+    {
+        g.push();
+        g.translate(Position.X, Position.Y);
+        g.rotate(Angle + MathF.PI / 2);
+        g.image(sprite, -ShipWidth / 2, -ShipHeight / 2, ShipWidth, ShipHeight);
+        g.pop();
     }
 
     public Bullet Shoot()
     {
-        // Shoot in the direction the ship is facing
-        Vector2 dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
-        return new Bullet(pos + dir * 24, dir * 8);
+        Vector2 dir = new(MathF.Cos(Angle), MathF.Sin(Angle));
+        return new Bullet(Position + dir * 24, dir * 8);
     }
 }

@@ -2,11 +2,12 @@ using Monogame.Processing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Text.Json;
 using Client.Entities;
 
-namespace Cliente.Screens;
+namespace Client.Screens;
 
-public class GameOverScreen
+public class GameOverScreen : IScreen
 {
     private GameAsteroids p;
     private PImage backgroundImage;
@@ -35,7 +36,7 @@ public class GameOverScreen
         backgroundImage = p.loadImage("./Content/Backgrounds/gameOver_background.png");
     }
 
-    public void Draw()
+    public void Draw(JsonElement? state = null)
     {
         p.image(backgroundImage, 0, 0, p.width, p.height);
 
@@ -93,7 +94,7 @@ public class GameOverScreen
         
         wasKeyPressedLastFrame = isKeyPressedNow;
     }
-
+    
     public void Reset()
     {
         asteroids = new();

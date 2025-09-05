@@ -2,16 +2,16 @@ using Monogame.Processing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Client.Entities;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Client.Entities;
 using Client.Rede;
 
-namespace Cliente.Screens;
+namespace Client.Screens;
 
-public class GameScreen
+public class GameScreen : IScreen
 {
     private GameAsteroids p;
-    private PImage backgroundImage;
 
     private Pterosaur pterosaur;
     private List<Bullet> bullets;
@@ -28,11 +28,11 @@ public class GameScreen
     /* ------- Estados do jogador ------- */
     public struct State
     {
-        public bool esq, dir, cim, baix;
+        public bool esq, dir, cim, baix, shoot;
 
         public static bool operator ==(State a, State b)
         {
-            return a.esq == b.esq && a.dir == b.dir && a.cim == b.cim && a.baix == b.baix;
+            return a.esq == b.esq && a.dir == b.dir && a.cim == b.cim && a.baix == b.baix && a.shoot == b.shoot;
         }
 
         public static bool operator !=(State a, State b)
@@ -52,8 +52,6 @@ public class GameScreen
 
     public void LoadContent()
     {
-        backgroundImage = p.loadImage("./Content/Backgrounds/game_background.png");
-
         pterosaur = new Pterosaur(new Vector2(p.width / 2f, p.height - 60), p);
         particles = new();
 
@@ -72,10 +70,9 @@ public class GameScreen
         wasKeyPressedLastFrame = false;
     }
 
-    public void Draw()
+    public void Draw(JsonElement? state = null)
     {
-        //p.image(backgroundImage, 0, 0, p.width, p.height);
-        //p.background(0);
+        
         for (int i = particles.Count - 1; i >= 0; i--)
         {
             particles[i].Draw(p);
@@ -91,9 +88,6 @@ public class GameScreen
             asteroids[i].Draw(p);
         }
         
-
-        
-
         string scoreText = $"Score: {score}";
         Vector2 scoreSize = p.gameFont.MeasureString(scoreText);
         p.DrawText(scoreText, p.gameFont, new Vector2(scoreSize.X / 2f + 5f, 30f), Color.Yellow, 0.6f);
@@ -109,15 +103,15 @@ public class GameScreen
     {
         /* ----- pterosaur ----- */
         Teclas();
-        pterosaur.Update(p.esquerda, p.direita, p.cima, p.baixo, p.width, p.height);
+        pterosaur.Update(p.input.esquerda, p.input.direita, p.input.cima, p.input.baixo, p.width, p.height);
 
         /* ----- enviar ações para o servidor se conectado ----- */
         currentState = new State
         {
-            esq = p.esquerda,
-            dir = p.direita,
-            cim = p.cima,
-            baix = p.baixo
+            esq = p.input.esquerda,
+            dir = p.input.direita,
+            cim = p.input.cima,
+            baix = p.input.baixo
         };
         previousState = currentState;
 
@@ -149,7 +143,7 @@ public class GameScreen
             /* colisão bullet × Asteroid */
             for (int j = bullets.Count - 1; j >= 0; j--)
             {
-                if (!a.Collide(bullets[j])) continue;
+                if (!a.Collides(bullets[j])) continue;
                 score += 10;
                 bullets.RemoveAt(j);
                 asteroids.RemoveAt(i);
@@ -157,7 +151,7 @@ public class GameScreen
             }
 
             /* colisão pterosaur × Asteroid */
-            if (a.Collide(pterosaur))
+            if (a.Collides(pterosaur))
             {
                 p.setCurrentScreen(ScreenManager.GameOver);
             }
@@ -173,18 +167,19 @@ public class GameScreen
     /* ====================== input ============================= */
     public void Teclas()
     {
-        p.esquerda = false;
-        p.direita = false;
-        p.cima = false;
-        p.baixo = false;
+        p.input.esquerda = false;
+        p.input.direita = false;
+        p.input.cima = false;
+        p.input.baixo = false;
+        p.input.shoot = false;
         isPause = false;
 
         var state = Keyboard.GetState();
 
-        if (state.IsKeyDown(Keys.A)) p.esquerda = true;
-        if (state.IsKeyDown(Keys.D)) p.direita = true;
-        if (state.IsKeyDown(Keys.W)) p.cima = true;
-        if (state.IsKeyDown(Keys.S)) p.baixo = true;
+        if (state.IsKeyDown(Keys.A)) p.input.esquerda = true;
+        if (state.IsKeyDown(Keys.D)) p.input.direita = true;
+        if (state.IsKeyDown(Keys.W)) p.input.cima = true;
+        if (state.IsKeyDown(Keys.S)) p.input.baixo = true;
 
         if (state.IsKeyDown(Keys.Space))
         {
@@ -192,6 +187,7 @@ public class GameScreen
             {
                 bullets.Add(pterosaur.Shoot());
                 lastShotFrame = p.frameCount;
+                p.input.shoot = true;
             }
         }
 
