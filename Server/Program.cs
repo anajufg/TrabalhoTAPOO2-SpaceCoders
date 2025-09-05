@@ -1,6 +1,5 @@
-﻿using Server.ServerSide;
+﻿using Server.GameServer;
 
-const int port = 9000;
-ServerSide server = new ServerSide();
-
-await server.StartServer(port);
+const int Port = 9000;
+var server = new GameServer();
+await server.StartServer(Port);
